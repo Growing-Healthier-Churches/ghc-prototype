@@ -229,8 +229,16 @@ h1, h2, h3, h4 {
   #timeline:before {
     left: 0;
   }
-  #timeline .timeline-item .timeline-content {
+  #timeline .timeline-item {
+      flex-wrap: wrap;
+  }
+  #timeline .timeline-item .timeline-content,
+  #timeline .timeline-item .timeline-help {
     width: 90%;
+    margin-left: 10%;
+  }
+  #timeline .timeline-item .timeline-help {
+      margin-top: 20px;
   }
   #timeline .timeline-item .timeline-content:before, #timeline .timeline-item .timeline-content.right:before {
     left: 10%;
