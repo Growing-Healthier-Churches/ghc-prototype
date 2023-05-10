@@ -1,0 +1,178 @@
+.tablepress-id-onboard .column-1 {
+	width: 40px;
+	border-left: #757575 6px solid;
+}
+
+.tablepress-id-onboard tbody tr:last-child .column-1 {
+	border-left: none !important;
+}
+
+.tablepress-id-onboard {
+	margin-left: 30px;
+}
+
+.tablepress-id-onboard td p {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+.tablepress-id-onboard td {
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 35px;
+	padding-top: 0;
+}
+
+.tablepress-id-onboard,
+.tablepress-id-onboard tr,
+.tablepress-id-onboard tbody td {
+	border-top: none;
+	border-bottom: none;
+}
+
+.tablepress-id-Transfer-Ownership {
+	max-width: 600px;
+}
+
+.tablepress-id-Transfer-Ownership .row-1 td,
+.tablepress-id-Transfer-Ownership .row-3 td {
+	text-align: center;
+	font-size: 20px;
+}
+
+.tablepress-id-Transfer-Ownership .column-1,
+.tablepress-id-Transfer-Ownership .column-2 {
+	width: 50%;
+}
+
+.tablepress-id-Transfer-Ownership,
+.tablepress-id-Transfer-Ownership tr,
+.tablepress-id-Transfer-Ownership tbody td,
+.tablepress-id-Transfer-Ownership thead th,
+.tablepress-id-Transfer-Ownership tfoot th {
+	border: none;
+}
+
+.tablepress-id-PCO-setup,
+.tablepress-id-elvanto-setup {
+	background-color: WhiteSmoke;
+}
+
+.tablepress-id-PCO-setup .column-1,
+.tablepress-id-elvanto-setup .column-1 {
+	width: 350px;
+}
+
+.tablepress-id-PCO-setup td,
+.tablepress-id-elvanto-setup td {
+	padding: 20px;
+}
+
+.tablepress-id-PCO-setup tr,
+.tablepress-id-elvanto-setup tr {
+	border-width: 10px;
+	border-spacing: 20px;
+	border-color: white;
+	border-collapse: separate;
+}
+
+.tablepress .row-hover tr:hover td {
+	background-color: #e6e6e6;
+}
+
+/* SETUP TABLES v2 */
+.tablepress-id-setup-v2,
+.tablepress-id-setup-v2 tr,
+.tablepress-id-setup-v2 tbody td {
+	border: none;
+}
+
+.tablepress-id-setup-v2 {
+	margin-left: 40px;
+	width: 450px;
+}
+
+.tablepress-id-setup-v2 .column-1 {
+	padding: 0;
+	width: 40px;
+}
+
+.tablepress-id-setup-v2 .row-2 .column-1,
+.tablepress-id-setup-v2 .row-3 .column-1,
+.tablepress-id-setup-v2 .row-4 .column-1 {
+	border-left: solid 10px lightgray !important;
+}
+
+/* ONBOARD */
+/*
+.tablepress-id-pricing .column-2 {
+	background-color: #c7e1ff;
+}
+
+.tablepress-id-pricing .row-1 .column-2 {
+	background-color: #0070f5;
+}
+*/
+.tablepress-id-pricing .column-2 {
+	background-color: #aacaf0;
+}
+
+.tablepress-id-pricing .row-1 .column-2 {
+	background-color: #0070f5;
+}
+
+.tablepress-id-pricing .column-3 {
+	background-color: #ffdbc4;
+}
+
+.tablepress-id-pricing .row-1 .column-3 {
+	background-color: #ff6100;
+}
+
+.tablepress-id-pricing .column-4 {
+	background-color: #ffebc9;
+}
+
+.tablepress-id-pricing .row-1 .column-4 {
+	background-color: #ffa200;
+}
+
+.tablepress-id-pricing .column-5 {
+	background-color: #c9edab;
+}
+
+.tablepress-id-pricing .row-1 .column-5 {
+	background-color: #67b426;
+}
+
+.tablepress-id-pricing .row-1 td {
+	font-size: 20px;
+	text-align: center;
+	vertical-align: middle;
+	color: white;
+	font-weight: 700;
+}
+
+.tablepress-id-pricing .row-1 td p {
+	font-size: 12px !important;
+	font-weight: 300 !important;
+}
+
+.tablepress-id-pricing .row-2 td {
+	font-weight: 700;
+	text-align: center;
+}
+
+.tablepress-id-pricing td {
+	padding: 15px;
+}
+
+.tablepress-id-pricing .column-1 {
+	text-align: right !important;
+}
+
+.tablepress-id-pricing,
+.tablepress-id-pricing th,
+.tablepress-id-pricing td {
+	border: 1px solid white;
+}
