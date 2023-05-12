@@ -1,4 +1,6 @@
-/* @import "https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700"; */
+/*  Credit to Bruno Rodrigues:
+    https://codepen.io/itbruno/pen/KwarLp/
+*/
 #timeline .timeline-item:after, header:after, #timeline .timeline-item:before, header:before {
   content: "";
   display: block;
@@ -114,7 +116,7 @@ h1, h2, h3, h4 {
 }
 #timeline .timeline-item .timeline-help,
 #timeline .timeline-item .timeline-content {
-    padding: 20px 20px 0 20px;
+    padding: 20px;
     -webkit-box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
     -ms-box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
@@ -134,13 +136,22 @@ h1, h2, h3, h4 {
  
   margin-left: 15%;
   flex: 2;
- 
+  min-width: 300px;
 }
 
 #timeline .timeline-item .timeline-help {
     flex: 1;
     margin-left: 20px;
     background-color: #fff;
+    min-width: 200px;
+}
+#timeline .timeline-item .timeline-help h4 {
+    margin: 3em 0 .5em;
+}
+#timeline .timeline-item .timeline-help iframe{
+    width: 100%;
+    height: auto;   
+    aspect-ratio: 7 / 4;
 }
 #timeline .timeline-item .timeline-content h2 {
   padding: 15px;
@@ -211,13 +222,39 @@ h1, h2, h3, h4 {
     
 }
 
-.timeline-content-inner {
-    padding-bottom: 20px;
-    /*
-    height: 0;
-    overflow: hidden;
-    */
+/* inactive states */
+
+#timeline .closed .timeline-content-inner,
+#timeline .closed .timeline-help  {
+    display: none;
 }
+#timeline .closed .timeline-content{
+    padding-bottom: 0;
+}
+#timeline .timeline-item.closed  h2,
+#timeline .timeline-item.closed .timeline-icon{
+    background: #ddd;
+}
+#timeline .timeline-item.closed .timeline-content:before {
+    border-right-color: #ddd
+} 
+
+/* Completed states */
+#timeline .done .timeline-content-inner,
+#timeline .done .timeline-help  {
+    display: none;
+}
+#timeline .done .timeline-content {
+    padding-bottom: 0;
+}
+
+#timeline .timeline-item.done  h2,
+#timeline .timeline-item.done .timeline-icon{
+    background: rgb(0, 118, 31)
+}
+#timeline .timeline-item.done .timeline-content:before {
+    border-right-color: rgb(0, 118, 31)
+} 
 
 
 @media screen and (max-width: 768px) {
@@ -250,3 +287,42 @@ h1, h2, h3, h4 {
     left: 0;
   }
 }
+
+/* Modal - might want to extract styles to elsewhere */
+/* trying to use unique names so as not to conflict with other modals */
+.mymodal-overlay {
+    display: none;
+    position: fixed;
+    background: #0070f5;
+    min-height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+.mymodal-overlay.show {
+    display: flex;
+}
+.mymodal-overlay .mymodal-inner {
+    width: 80ch;
+    height: calc(100vh - 40px);
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+.mymodal-overlay .mymodal-content {
+    overflow: scroll;
+    height: calc(100vh - 80px)
+}
+.mymodal-overlay .mymodal-content img {
+    max-width: 70%;
+    margin: 10px auto;
+}
+.mymodal-overlay .mymodal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+} 

@@ -836,18 +836,15 @@ font-family: 'Montserrat';
 <div class="container">
     
     <div class="intro-content">
-        <h1 class="project-name">In the beginning...</h1>
+        <h1 class="project-name">Getting started...</h1>
         <p>There are a few things we need you to set up before you can get up-and-running with GHC. But don’t worry this guide will take you through the process step by step.</p>
         <p>If you’re still struggling, remember you can always <a href="https://growinghealthierchurches.com/support/">contact support</a>. </p> 
         <p>However if you would really like some one-on-one guidance then sign up to one of our <a href="https://growinghealthierchurches.com/pricing/">subscription plans</a> which include a meeting with our Growth Catalyst Cam who will personally onboard you.</p>
     </div>
 
 		<div id="timeline">
-			<div class="timeline-item">
-				<div class="timeline-icon">
-					1
-
-				</div>
+			<div class="timeline-item" id="step1">
+				<div class="timeline-icon">1</div>
 				<div class="timeline-content">
 					<h2>Gather your credentials</h2>
 					    <div class="timeline-content-inner">
@@ -858,16 +855,14 @@ font-family: 'Montserrat';
                             <li>The <strong>google account</strong> login you used when signing up to GHC</li>
                             <li>The ability to <strong>change category names</strong> in Elvanto</li>
                             </ul>
-					        <a href="#" class="btn done-btn">✓ Done</a>
+					        <a href="#" class="btn done-btn" data-step="1">✓ Done</a>
                         </div>
 				</div>
                 
 			</div>
 
-			<div class="timeline-item">
-				<div class="timeline-icon">
-					2
-				</div>
+			<div class="timeline-item closed" id="step2">
+				<div class="timeline-icon">2</div>
 				<div class="timeline-content">
 					<h2>Prepare your database</h2>
                     <div class="timeline-content-inner">
@@ -884,18 +879,18 @@ font-family: 'Montserrat';
                         <li><strong>Copy your API key</strong> from to the clipboard. 
                             You can find this in Admin Area > Settings > API </li>
                     </ul>
-					<a href="#" class="btn done-btn">✓ Done</a>
+					<a href="#" class="btn done-btn" data-step="2">✓ Done</a>
                 </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p>Why do I need to distinguish between new people and members?</p>
-                    <p>How do I edit my People and Group categories?</p>
-                    <p>Where do I access my API key?</p>
+                    <p><a class="modal-link" data-help="1">Why do I need to distinguish between new people and members?</a></p>
+                    <p><a class="modal-link" data-help="2">How do I edit my People and Group categories?</a></p>
+                    <p><a class="modal-link" data-help="3">Where do I access my API key?</a></p>
                 </div>
 			</div>
 
-			<div class="timeline-item">
+			<div class="timeline-item closed" id="step3">
 				<div class="timeline-icon">3</div>
 				<div class="timeline-content">
 					<h2>Access and improve your data</h2>
@@ -909,18 +904,18 @@ font-family: 'Montserrat';
                     </ul>
 					<a href="#" class="btn">Access health checkup</a>
                     <p>If you want actionable insights you may first need to do a little work to <strong>clean up your data</strong>. Don’t worry, this is just standard house-keeping and at GHC we have some tools to make this process much smoother for you. You can check you're set up properly by opening the Setup page in the dashboard.</p>
-                    <a href="#" class="btn done-btn">✓ Done</a>
+                    <a href="#" class="btn done-btn" data-step="3">✓ Done</a>
                 </div>
                 </div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p>First time Looker Studio login</p>
-                    <p>Where is the setup checklist?</p>
-                    <p>Where can I check my data quality?</p>
+                    <p><a href="" class="modal-link" data-help="4">First time Looker Studio login</a></p>
+                    <p><a href="" class="modal-link" data-help="5">Where is the setup checklist?</a></p>
+                    <p><a href="" class="modal-link" data-help="6">Where can I check my data quality?</a></p>
                 </div>
 			</div>
 
-            <div class="timeline-item">
+            <div class="timeline-item closed" id="step4">
 				<div class="timeline-icon">4</div>
 				<div class="timeline-content">
 					<h2>Analyse data, action insights</h2>
@@ -941,18 +936,20 @@ font-family: 'Montserrat';
                             <li>Create a share link with our instructions</li>
                             <li>Or better yet, create a team login on our subscription plans</li>
                         </ul>
-					<a href="#" class="btn done-btn">✓ Done</a>
+					<a href="#" class="btn done-btn" data-step="4">✓ Done</a>
                 </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p>I don't understand these graphs - please help!</p>
-                    <p>How can I download a pdf?</p>
-                    <p>How can I share my dashboard?</p>
+                    <p><a href="" class="modal-link" data-help="7">I don't understand these graphs - please help!</a></p>
+                    <p><a href="" class="modal-link" data-help="8">How can I download a pdf?</a></p>
+                    <p><a href="" class="modal-link" data-help="9">How can I share my dashboard?</a></p>
+                    <h4>Creating a shareable copy</h4>
+                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 			</div>
 
-            <div class="timeline-item">
+            <div class="timeline-item closed" id="step5">
 				<div class="timeline-icon">5</div>
 				<div class="timeline-content">
 					<h2>Subscribe to unlock the power</h2>
@@ -975,6 +972,19 @@ font-family: 'Montserrat';
 	</div>
 
 <!-- end timeline -->
+
+<!-- modal -->
+<div class="mymodal-overlay">
+    <div class="mymodal-inner">
+        <button id="mymodalClose" aria-label="close" class="mymodal-close"><svg width="10" height="10" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+            <path d="M0.549989 4.44999L4.44999 0.549988L43.45 39.55L39.55 43.45L0.549989 4.44999Z" />
+            <path d="M39.55 0.549988L43.45 4.44999L4.44999 43.45L0.549988 39.55L39.55 0.549988Z" />
+            </svg></button>
+            <div class="mymodal-content">   
+                <!-- content to go here -->
+            </div>
+    </div>
+</div>
 
 
 </span></div><div id="code_block-90-810" class="ct-code-block"></div></div></section><div id="div_block-59-13" class="ct-div-block"><section id="section-60-13" class=" ct-section"><div class="ct-section-inner-wrap"><a id="link-139-1105" class="ct-link" href="https://growinghealthierchurches.com/"><img id="image-62-13" alt="Growing Healthier Churches Logo" src="./Onboard - Growing Healthier Churches_files/logo-reverse.svg" class="ct-image" srcset="" sizes="(max-width: 1px) 100vw, 1px"></a>
@@ -1014,6 +1024,9 @@ font-family: 'Montserrat';
         </div>
 
         </div>
+
+        <!-- timeline JS -->
+        <script type="text/javascript" src="onboarding.js"></script>
 
 		<script type="text/javascript">
 			jQuery('#-pro-menu-79-13 .oxy-pro-menu-show-dropdown .menu-item-has-children > a', 'body').each(function(){
