@@ -154,6 +154,7 @@ h1, h2, h3, h4 {
     aspect-ratio: 7 / 4;
 }
 #timeline .timeline-item .timeline-content h2 {
+    position: relative;
   padding: 15px;
   background: #0070f5;
   color: #fff;
@@ -248,6 +249,8 @@ h1, h2, h3, h4 {
     padding-bottom: 0;
 }
 
+
+
 #timeline .timeline-item.done  h2,
 #timeline .timeline-item.done .timeline-icon{
     background: rgb(0, 118, 31)
@@ -255,6 +258,28 @@ h1, h2, h3, h4 {
 #timeline .timeline-item.done .timeline-content:before {
     border-right-color: rgb(0, 118, 31)
 } 
+
+#timeline .timeline-item.done  h2:after {
+    content: "⌃";
+    transform: rotate(-180deg);
+    position: absolute;
+    right: 20px;
+    top: 8px;
+    cursor: pointer;
+}
+
+/* Opened completed states */
+#timeline .done .timeline-content.open {
+    padding-bottom: 20px;
+}
+#timeline .done .timeline-content.open .timeline-content-inner,
+#timeline .done .timeline-content.open ~ .timeline-help {
+    display: block;
+}
+#timeline .done .timeline-content.open h2:after {
+    transform: rotate(0deg);
+    top: 20px;
+}
 
 
 @media screen and (max-width: 768px) {
