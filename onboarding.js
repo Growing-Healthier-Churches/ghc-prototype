@@ -2,6 +2,49 @@ const doneBtn = document.querySelectorAll(".done-btn")
 const modalClose = document.getElementById("mymodalClose")
 const modalLink = document.querySelectorAll(".modal-link")
 
+
+// Set states from urls
+const queryString = window.location.search
+const urlParams = new URLSearchParams(queryString);
+const step = urlParams.get('step')
+console.log(queryString)
+if (step == "1") {
+    // do nothing, default state of page
+} else if (step == "2") {
+    document.getElementById("step1").classList.add("done")
+    document.getElementById("step1").classList.add("completed-closed")
+    document.getElementById("step2").classList.remove("closed")
+} else if (step == "3") {
+    document.getElementById("step1").classList.add("done")
+    document.getElementById("step1").classList.add("completed-closed")
+    document.getElementById("step2").classList.add("done")
+    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step3").classList.remove("closed")
+} else if (step == "4") {
+    document.getElementById("step1").classList.add("done")
+    document.getElementById("step1").classList.add("completed-closed")
+    document.getElementById("step2").classList.add("done")
+    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step3").classList.add("done")
+    document.getElementById("step3").classList.add("completed-closed")
+    document.getElementById("step4").classList.remove("closed")
+} else if (step == "5") {
+    document.getElementById("step1").classList.add("done")
+    document.getElementById("step1").classList.add("completed-closed")
+    document.getElementById("step2").classList.add("done")
+    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step3").classList.add("done")
+    document.getElementById("step3").classList.add("completed-closed")
+    document.getElementById("step4").classList.add("done")
+    document.getElementById("step4").classList.add("completed-closed")
+    document.getElementById("step5").classList.remove("closed")
+}
+
+
+
+let doneItems = document.querySelectorAll(".timeline-item.done")
+
+
 const helpModalContent = [
     {
         order: 1,
@@ -92,14 +135,26 @@ const helpModalContent = [
 doneBtn.forEach(element => {
     element.addEventListener("click", function(e){
         e.preventDefault()
+        e.stopPropagation()
         let thisItem = e.target
         let thisStep =  Number(thisItem.dataset['step'])
         // add done class to timeline container
         thisItem.closest(".timeline-item").classList.add("done")
+        thisItem.closest(".timeline-item").classList.add("completed-closed")
         thisStep ++
+        
         // remove closed class from next step
         document.getElementById("step" + thisStep).classList.remove("closed")
+        // update done button text and styles
+        element.innerHTML = "completed"
+        element.classList.remove("done-btn")
+        element.classList.add("complete-btn")
+
+        // update done items
+        doneItems = document.querySelectorAll(".timeline-item.done")
+        accordion()
     })
+
 });
 
 modalLink.forEach(element => {
@@ -111,7 +166,23 @@ modalLink.forEach(element => {
     })
 })
 
-modalClose.addEventListener("click", function(e){
-    
+modalClose.addEventListener("click", function(e){   
     e.target.closest(".mymodal-overlay").classList.remove("show")
 })
+
+function accordion() {
+    doneItems.forEach(el => {
+        let thisContent = el.children[1]
+        thisContent.addEventListener("click", function(e) {
+            e.preventDefault()
+            console.log(e.target.innerHTML)
+            e.target.closest(".timeline-item").classList.remove("completed-closed")
+        })
+       
+    })
+}
+
+accordion()
+
+
+
