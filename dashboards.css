@@ -1,0 +1,332 @@
+#my-dashboards * {
+  line-height: 1.5;
+}
+
+#my-dashboards .card .meta {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display:  flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+
+
+
+/*--------------
+      Cards
+---------------*/
+
+#my-dashboards .ui.cards {
+  display: flex;
+  margin: -0.875em -0.5em;
+  flex-wrap: wrap;
+}
+#my-dashboards .ui.cards > .card {
+  display: flex;
+  margin: 0.875em 0.5em;
+  float: none;
+}
+
+/* Clearing */
+#my-dashboards .ui.cards:after,
+#my-dashboards .ui.card:after {
+  display: block;
+  content: ' ';
+  height: 0px;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/* Consecutive Card Groups Preserve Row Spacing */
+#my-dashboards .ui.cards ~ .ui.cards {
+  margin-top: 0.875em;
+}
+
+/*--------------
+  Rounded Edges
+---------------*/
+
+#my-dashboards .ui.cards > .card > :first-child,
+#my-dashboards .ui.card > :first-child {
+  border-radius: 0.28571429rem 0.28571429rem 0em 0em !important;
+  border-top: none !important;
+}
+#my-dashboards .ui.cards > .card > :last-child,
+#my-dashboards .ui.card > :last-child {
+  border-radius: 0em 0em 0.28571429rem 0.28571429rem !important;
+}
+#my-dashboards .ui.cards > .card > :only-child,
+#my-dashboards .ui.card > :only-child {
+  border-radius: 0.28571429rem !important;
+}
+
+/*--------------
+     Images
+---------------*/
+
+#my-dashboards .ui.cards > .card > .image,
+#my-dashboards .ui.card > .image {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  padding: 0em;
+  background: rgba(0, 0, 0, 0.05);
+}
+#my-dashboards .ui.cards > .card > .image > img,
+#my-dashboards .ui.card > .image > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+#my-dashboards .ui.cards > .card > .image:not(.ui) > img,
+#my-dashboards .ui.card > .image:not(.ui) > img {
+  border: none;
+}
+
+/*!
+ * # Semantic UI 2.5.0 - Item
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+
+/*******************************
+            Standard
+*******************************/
+
+
+/*--------------
+      Card
+---------------*/
+
+.ui.cards > .card,
+.ui.card {
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 290px;
+  min-height: 0px;
+  background: #FFFFFF;
+  padding: 0em;
+  border: none;
+  border-radius: 0.28571429rem;
+  box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+  z-index: '';
+}
+.ui.card {
+  margin: 1em 0em;
+}
+.ui.cards > .card a,
+.ui.card a {
+  cursor: pointer;
+}
+.ui.card:first-child {
+  margin-top: 0em;
+}
+.ui.card:last-child {
+  margin-bottom: 0em;
+}
+
+
+
+
+
+/*--------------
+     Content
+---------------*/
+
+.ui.cards > .card > .content,
+.ui.card > .content {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
+  background: none;
+  margin: 0em;
+  padding: 1em 1em;
+  box-shadow: none;
+  font-size: 1em;
+  border-radius: 0em;
+}
+.ui.cards > .card > .content:after,
+.ui.card > .content:after {
+  display: block;
+  content: ' ';
+  height: 0px;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+.ui.cards > .card > .content > .header,
+.ui.card > .content > .header {
+  display: block;
+  margin: '';
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Default Header Size */
+.ui.cards > .card > .content > .header:not(.ui),
+.ui.card > .content > .header:not(.ui) {
+  font-weight: bold;
+  font-size: 1.28571429em;
+  margin-top: -0.21425em;
+  line-height: 1.28571429em;
+}
+.ui.cards > .card > .content > .meta + .description,
+.ui.cards > .card > .content > .header + .description,
+.ui.card > .content > .meta + .description,
+.ui.card > .content > .header + .description {
+  margin-top: 0.5em;
+}
+
+
+#my-dashboards .dimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  padding: 20px 10px;
+  text-align: center;
+  
+}
+
+#my-dashboards .dimmer ul {
+  color: #fff;
+  text-align: left;
+}
+
+#my-dashboards .dimmer a {
+  margin: 0 auto 10px auto;
+  color: #fff;
+  text-decoration: none;
+}
+
+#my-dashboards .dimmer a:hover {
+  text-decoration: underline;
+}
+
+#my-dashboards .dimmable:hover .dimmer {
+  display:block;
+  cursor: pointer;
+}
+
+#my-dashboards .dimmable:hover + .meta {
+  display: none;  
+}
+
+
+#my-dashboards .button {
+  background-color: #2185d0;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+  box-shadow: 0 0 0 0 rgba(34,36,38,.15) inset;
+  cursor: pointer;
+  display: inline-block;
+  min-height: 1em;
+  padding: 11px 21px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* tags */
+
+#my-dashboards .card .tag {
+  display: block;
+  background-color: #eee;
+  padding: 7px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  width: fit-content;
+  box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+}
+
+
+#my-dashboards .tag.core {
+  color: #fff;
+  background-color: oklab(0.5 -0.3 -0.4)
+}
+
+#my-dashboards .tag.holistic {
+  color: #fff;
+  background-color: oklab(0.7 -0.3 -0.4);
+}
+
+#my-dashboards .tag.utility {
+  color: #fff;
+  background-color: oklab(0.53 0 0);
+}
+
+#my-dashboards .tag.rostering {
+  color: #fff;
+  background-color: #ee6a00;
+}
+
+#my-dashboards .tag.pastoral {
+  color: #fff;
+  background-color: rgb(0, 118, 31);
+}
+
+#my-dashboards .tag.engagement {
+  color: #fff;
+  background-color: #c9007d;
+}
+
+#my-dashboards .tag.long-range {
+  color: #fff;
+  background-color: #f29f00
+}
+
+#my-dashboards .tag.elvanto {
+  color: #fff;
+  background-color: #659236
+}
+
+#my-dashboards .tag.attendance {
+  color: #fff;
+  background-color: #d93025
+}
+
+#my-dashboards .tag.evangelism {
+  color: #fff;
+  background-color:  #a900ad;
+}
+
+
+
+
+
+#my-dashboards .highlight {
+    display: inline-block;
+    text-shadow: 1px 1px rgba(255, 0, 4, 0.92);
+    text-decoration: underline;
+    border-radius: 3em 0 3em 0;
+    background-image: linear-gradient(
+    -100deg,
+    rgba(255, 0, 4, 0.2),
+    rgba(255, 0, 4, 1) 95%,
+    rgba(255, 0, 4, 0.1)
+    );
+    color: #fff;
+    margin: 0 20px;
+    padding: 0 10px;
+}
+
+#my-dashboards .highlight a {
+  color: #fff
+}
