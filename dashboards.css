@@ -4,12 +4,25 @@
 
 #my-dashboards .card .meta {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
-  z-index: 1;
   display:  flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#my-dashboards h1,
+#my-dashboards h2.subtitle {
+  font-size: 30px;
+  width: 100%;
+}
+#my-dashboards h1 {
+  margin-bottom: 1em;
+}
+
+#my-dashboards h2.subtitle  {
+  margin-top: 1em;
 }
 
 
@@ -22,12 +35,11 @@
 
 #my-dashboards .ui.cards {
   display: flex;
-  margin: -0.875em -0.5em;
+  gap: 20px;
   flex-wrap: wrap;
 }
 #my-dashboards .ui.cards > .card {
   display: flex;
-  margin: 0.875em 0.5em;
   float: none;
 }
 
@@ -115,7 +127,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 290px;
+  width: 255px;
   min-height: 0px;
   background: #FFFFFF;
   padding: 0em;
@@ -149,7 +161,7 @@
 
 .ui.cards > .card > .content,
 .ui.card > .content {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   border: none;
   border-top: 1px solid rgba(34, 36, 38, 0.1);
   background: none;
@@ -170,10 +182,15 @@
 }
 .ui.cards > .card > .content > .header,
 .ui.card > .content > .header {
-  display: block;
+  display: inline;
   margin: '';
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
+  padding-right: 10px;
+}
+
+.ui.cards > .card > .content.extra {
+  padding-bottom : 50px;
 }
 
 /* Default Header Size */
@@ -221,13 +238,12 @@
 }
 
 #my-dashboards .dimmable:hover .dimmer {
-  display:block;
+  display:flex;
+  align-items: center;
   cursor: pointer;
 }
 
-#my-dashboards .dimmable:hover + .meta {
-  display: none;  
-}
+
 
 
 #my-dashboards .button {
@@ -251,7 +267,6 @@
   background-color: #eee;
   padding: 7px;
   border-radius: 7px;
-  margin-bottom: 10px;
   width: fit-content;
   box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
 }
@@ -308,25 +323,67 @@
 }
 
 
-
-
-
-#my-dashboards .highlight {
-    display: inline-block;
-    text-shadow: 1px 1px rgba(255, 0, 4, 0.92);
-    text-decoration: underline;
-    border-radius: 3em 0 3em 0;
-    background-image: linear-gradient(
-    -100deg,
-    rgba(255, 0, 4, 0.2),
-    rgba(255, 0, 4, 1) 95%,
-    rgba(255, 0, 4, 0.1)
-    );
-    color: #fff;
-    margin: 0 20px;
-    padding: 0 10px;
+/* Tooltip */
+#my-dashboards .dashicons {
+  position: relative;
+}
+#my-dashboards .title-tip {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: .7em
 }
 
-#my-dashboards .highlight a {
-  color: #fff
+
+#my-dashboards .title-tip[title]:hover:before {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 99999;
+  content: attr(title);
+  margin-top: 0.5em;
+  padding: 0.5em;
+  width: 200px;    /* change it */
+  overflow: hidden;
+  word-wrap: break-word;
+  font-size: inherit;
+  color: #FFF;
+  text-align: center;
+  background-color: #222;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+#my-dashboards .title-tip[title]:hover:after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 99999;
+  content: '';
+  margin-left: -0.125em;
+  width: 0;
+  height: 0;
+  border: 0.25em dashed transparent;
+  border-bottom: 0.25em solid #222;
+  font-size: inherit;
+}
+
+
+
+#my-dashboards .title-tip-up[title]:hover:before {
+  
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+#my-dashboards .title-tip-up[title]:hover:after {
+  top: auto;
+  bottom: 100%;
+  border: 0.25em dashed transparent;
+  border-top: 0.25em solid #222;
 }
