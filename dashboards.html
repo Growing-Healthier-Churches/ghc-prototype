@@ -834,11 +834,84 @@ font-family: 'Montserrat';
 <!-- start dashboards -->
 
 <div id="my-dashboards">
+    <h2 class="subtitle">My Shared Dashboards</h2>
+    <section class="ui cards admin-cards">
+          <article class="card">
+            <div class="content">
+                <h2 class="header">Check-up</h2>
+                <h3>Secondary name if exists</h3>
+                <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/06/Checkup-Thumbnail.jpg">
+                
+            </div>
+            <div class="content">
+                <ul>
+                    <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
+                    <li><a href="#"><span class="dashicons dashicons-dashboard"></span>Sync dashboard with master</a></li>
+                    <li><a href="#"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+                </ul> 
+                <a class="button">Open dashboard</a>
+                <div class="extra content">
+                    <strong>owner:</strong> mike@tac.church
+                </div>
+                <div class="meta">
+                    <span class="tag release">New release available</span>
+                </div>
+            </div>
+          </article>
+        </section>
 
-    <h1>My dashboards</h1>
+    <h2 class="subtitle">My Team Dashboards</h2>
+    <section class="ui cards team-cards">
+        <article class="card">
+            <div class="content">
+                <h2 class="header">Check-up</h2>
+                <div class="dimmable image">
+                    <div class="dimmer">
+                          <a class="button">Open dashboard</a>
+                          <a class="button secondary">Read docs</a>
+                    </div>
+                    <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/06/Checkup-Thumbnail.jpg">
+                </div>
+            </div>
+            <div class="content"> 
+              <p>Designed to help you explore rich data. Suited to churches not using attendance tracking in either services or groups.</p>
+              <div class="extra content">
+                <strong>measures:</strong> visitor ratio, stay ratio, group ratio, volunteer ratio
+                <div class="meta">
+                    <span class="tag core">Core</span>
+                    <span class="tag holistic">Holistic</span>
+                </div>
+                </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="content">
+                <h2 class="header">Check-up</h2>
+                <div class="dimmable image">
+                    <div class="dimmer">
+                          <a class="button">Open dashboard</a>
+                          <a class="button secondary">Read docs</a>
+                    </div>
+                    <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/06/Checkup-Thumbnail.jpg">
+                </div>
+            </div>
+            <div class="content"> 
+              <p>Designed to help you explore rich data. Suited to churches not using attendance tracking in either services or groups.</p>
+              <div class="extra content">
+                <strong>measures:</strong> visitor ratio, stay ratio, group ratio, volunteer ratio
+                <div class="meta">
+                    <span class="tag core">Core</span>
+                    <span class="tag holistic">Holistic</span>
+                </div>
+                </div>
+            </div>
+          </article>
+        </section>
+
+    
 
     <section class="ui special cards">
-
+        <h2 class="subtitle">Dashboards & Tools</h2>
         <article class="card">
             <div class="content"><h2 class="header">Check-up</h2>
                 <a class="dashicons dashicons-info"><span class="title-tip title-tip-up" title="Documentation"></span></a>
@@ -946,7 +1019,7 @@ font-family: 'Montserrat';
             </div>
           </article>
 
-          <h2 class="subtitle">Other dashboards / tools</h2>
+          <h2 class="subtitle">Upgrade to unlock more</h2>
           <article class="card">
               <div class="content">
                 <h2 class="header">GHC Notify</h2>
@@ -1197,8 +1270,7 @@ font-family: 'Montserrat';
 
         </div>
 
-        <!-- timeline JS -->
-        <script type="text/javascript" src="onboarding.js"></script>
+        
 
 		<script type="text/javascript">
 			jQuery('#-pro-menu-79-13 .oxy-pro-menu-show-dropdown .menu-item-has-children > a', 'body').each(function(){
@@ -1580,6 +1652,6 @@ acf.doAction( 'prepare' );
         });
     });
 </script><!-- /WP_FOOTER --> 
-
+<script type="text/javascript" src="dashboards.js" />
 
 </body></html>

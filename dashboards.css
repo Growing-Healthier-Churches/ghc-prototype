@@ -231,18 +231,27 @@
   margin: 0 auto 10px auto;
   color: #fff;
   text-decoration: none;
+  display: block;
+  
 }
 
 #my-dashboards .dimmer a:hover {
   text-decoration: underline;
 }
 
-#my-dashboards .dimmable:hover .dimmer {
+#my-dashboards .dimmable:hover .dimmer,
+#my-dashboards  .team-cards .card:hover .dimmer {
   display:flex;
   align-items: center;
   cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.4s;
 }
 
+#my-dashboards  .team-cards .card:hover .meta {
+  visibility: hidden;
+}
 
 
 
@@ -258,6 +267,11 @@
   padding: 11px 21px;
   border-radius: 4px;
   margin-bottom: 20px;
+}
+
+#my-dashboards .button.secondary {
+  background-color: #D4D4D5;
+  color:rgba(0, 0, 0, 0.95)
 }
 
 /* tags */
@@ -386,4 +400,55 @@
   bottom: 100%;
   border: 0.25em dashed transparent;
   border-top: 0.25em solid #222;
+}
+
+
+/* team cards */
+
+#my-dashboards  .team-cards .card,
+#my-dashboards  .admin-cards .card  {
+  flex-direction: row;
+  width: 48%;
+  padding-bottom: 60px;
+
+}
+#my-dashboards .admin-cards .card .content:first-of-type {
+  width: 35%;
+}
+
+#my-dashboards .admin-cards .card h3 {
+  font-size: 1em;
+}
+
+#my-dashboards .admin-cards .card ul {
+  list-style-type: none;
+  padding: 0px;
+}
+
+#my-dashboards .admin-cards .card ul li {
+  margin-bottom: .5em;
+}
+
+#my-dashboards .admin-cards .card ul li a {
+  text-decoration: none;
+  color: inherit
+}
+
+#my-dashboards .admin-cards .card ul li a:hover {
+  color: #0070f5
+}
+
+#my-dashboards .admin-cards .card .dashicons {
+  line-height: 1;
+  margin-right: 10px;
+}
+
+.dashicons-update {
+  color: #469525
+}
+.dashicons-dashboard {
+  color: #c96922
+}
+.dashicons-remove {
+  color: #db1313
 }
