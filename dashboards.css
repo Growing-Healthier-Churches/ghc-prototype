@@ -409,7 +409,7 @@
 #my-dashboards  .admin-cards .card  {
   flex-direction: row;
   width: 48%;
-  padding-bottom: 60px;
+  padding-bottom: 40px;
 
 }
 #my-dashboards .admin-cards .card .content:first-of-type {
