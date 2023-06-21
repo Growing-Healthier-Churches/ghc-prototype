@@ -4,7 +4,7 @@
 const userCHMS = "elvanto_user"
 const userSubscription = "free" //free
 let extraDashboards = ""
-const sharedDashboardIds = [] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
+const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
 const userRoles = ["team_billing"]
 
 
@@ -115,7 +115,6 @@ function renderShared(data) {
                 <a href="${item.info_link}">Read the docs</a>
                 <ul>
                     <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
-                    <li><a href="#"><span class="dashicons dashicons-dashboard"></span>Sync dashboard with master</a></li>
                     <li><a href="#"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 </ul> 
                 <div class="meta">
@@ -179,7 +178,7 @@ function renderTeam(data) {
 }
 
 
-
+// change buttons
 function renderAvailable(data) {
     
     // Loop through JSON data to return html for dashboard cards
