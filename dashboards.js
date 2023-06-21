@@ -1,8 +1,10 @@
+// Extra logic for GHC notify - how is it indicated in meta data
+
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user"
-const userSubscription = "free"
+const userSubscription = "free" //free
 let extraDashboards = ""
-const sharedDashboardIds = [1171]
+const sharedDashboardIds = [] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
 const userRoles = ["team_billing"]
 
 
@@ -12,6 +14,7 @@ async function getJSONData() {
     const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan&order=plan"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
    
+    // piece together url
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
     //render(jsonData)
@@ -20,7 +23,7 @@ async function getJSONData() {
 
 getJSONData()
 
-//Filter data base to return different arrays
+//Filter database to return different arrays
 function filterData(data) {
 
     //allow ourselves to mutate data
@@ -29,7 +32,10 @@ function filterData(data) {
     //filter data for subscription-type
     if (userSubscription === "free") {
         newData =  data.filter(dashboard => dashboard.plan === "Free")
-        extraDashboards = data.filter(dashboard => dashboard.plan !== "Free")
+        extraDashboards = data.filter(dashboard => dashboard.plan !== "Free" )
+    // remove separate subscriptions e.g. GHC notify from standard display
+    } else {
+        newData =  data.filter(dashboard => dashboard.plan !== "Separate subscription")
     }
 
     // Different chMSes
@@ -43,7 +49,6 @@ function filterData(data) {
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))
         renderShared(sharedDashboards)
     }
-   
 
     // Team dashbaords
     if (userRoles.includes("team_member")) {
@@ -86,12 +91,12 @@ function renderShared(data) {
 
     // When no dashboards have been shared
     if (data.length == 0) {
-        document.getElementById("admin-cards").innerHTML += `<p>You have not shared any dashboards yet.</p>`
+        document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
     }
 
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
-        console.log("test")
+       
         return (
             `
             <article class="card">
@@ -215,6 +220,7 @@ function renderSubscribe(data) {
     
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
+        
         return (
             `
             <article class="card">
@@ -223,7 +229,8 @@ function renderSubscribe(data) {
                 </div>
                 <div class="dimmable image">
                   <div class="dimmer">
-                    <a href="https://growinghealthierchurches.com/account/#payments" class="button">Upgrade plan</a>
+                    ${(item.plan == "Separate subscription") ? ` <a href="https://growinghealthierchurches.com/ghc-notify/#subscribe" class="button">Subscribe</a>`
+                    : `<a href="https://growinghealthierchurches.com/account/#payments" class="button">Upgrade plan</a>` }
                   </div>
                   <img src="${item.thumb}">
                 </div>
@@ -243,7 +250,8 @@ function renderSubscribe(data) {
     )}).join('')
 
     // Insert HTML into page
-    document.getElementById("available-dashboards").innerHTML += `<h2 class="subtitle">Upgrade to unlock more</h2>`
-    document.getElementById("available-dashboards").innerHTML += cardsHtml
+    document.getElementById("extra-dashboards").innerHTML += `<h2 class="subtitle">Upgrade to unlock more</h2>`
+    document.getElementById("extra-dashboards").innerHTML += `<p class="dashboards-description">These are dashboards that are available on other plans</p>`
+    document.getElementById("extra-dashboards").innerHTML += cardsHtml
 }
 
