@@ -1,11 +1,15 @@
 // Extra logic for GHC notify - how is it indicated in meta data
+// Team members can only view docs for available dashboards
+// Table with info up top
 
 //Example variables - in live loaded from php
-const userCHMS = "elvanto_user"
+const userCHMS = "elvanto_user" //elvanto_user, pco_user
 const userSubscription = "free" //free
-let extraDashboards = ""
 const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
-const userRoles = ["team_billing"]
+const userRoles = ["team_member"] //team_billing, team_member, team_admin
+const ghcNotify = ["active"] //relevant value: active
+let extraDashboards = ""
+
 
 
 //Get data from supabase database
@@ -33,10 +37,15 @@ function filterData(data) {
     if (userSubscription === "free") {
         newData =  data.filter(dashboard => dashboard.plan === "Free")
         extraDashboards = data.filter(dashboard => dashboard.plan !== "Free" )
-    // remove separate subscriptions e.g. GHC notify from standard display
-    } else {
-        newData =  data.filter(dashboard => dashboard.plan !== "Separate subscription")
+    } 
+
+    //Handle GHC_notify
+    if (ghcNotify.includes("active")) {  
+        let additionalDashboards = data.filter(dashboard => dashboard.plan === "Separate subscription")      
+        newData.push(additionalDashboards[0])
+        extraDashboards = extraDashboards.filter(dashboard => dashboard.plan !== "Separate subscription")
     }
+    
 
     // Different chMSes
     const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
@@ -45,13 +54,13 @@ function filterData(data) {
     const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
 
     // Shared dashboards
-    if (userRoles.includes("team_billing")) {
+    if (userRoles.includes("team_billing" || "team_admin")) {
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))
         renderShared(sharedDashboards)
     }
 
     // Team dashbaords
-    if (userRoles.includes("team_member")) {
+    if (userRoles.includes("team_member")) {   
         const teamDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))
         renderTeam(teamDashboards)
     }
@@ -191,8 +200,11 @@ function renderAvailable(data) {
                 </div>
                 <div class="dimmable image">
                   <div class="dimmer">
-                    <a href="${item.dashboard_link}" class="button">Open dashboard</a>
-                    <a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>
+                  ${(item.plan == "Separate subscription" || userRoles.includes("team_member")) 
+                    ? ` <a href="${item.info_link}"" class="button">Read docs</a>`
+                    : ` <a href="${item.dashboard_link}" class="button">Open dashboard</a>
+                    <a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>` }
+                   
                   </div>
                   <img src="${item.thumb}">
                 </div>
