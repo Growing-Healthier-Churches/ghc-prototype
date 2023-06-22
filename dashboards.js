@@ -1,16 +1,33 @@
-// Extra logic for GHC notify - how is it indicated in meta data
-// Team members can only view docs for available dashboards
-// Table with info up top
+
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
 const userSubscription = "free" //free
 const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
-const userRoles = ["team_member"] //team_billing, team_member, team_admin
+const userRoles = ["team_billing"] //team_billing, team_member, team_admin
 const ghcNotify = ["active"] //relevant value: active
 let extraDashboards = ""
 
+const helpModalContent = [
+    {
+        order: 1,
+        html: `
+        <h2>Are you sure you want to delete this dashboard?</h2>
+        <p>Deelting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
+        <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
+        <a class="button" href="">Yes, delete</a>
+        `
+    },
+    {
+        order: 2,
+        html: `
+        <h2>Placeholder content</h2>
+        <p>This will contain all the information about the latest release and a call to action</p>   
+        
+        `
+    }
 
+]
 
 //Get data from supabase database
 async function getJSONData() {
@@ -90,6 +107,7 @@ function filterData(data) {
         }
     }
     
+    setModals() 
 
 }
 
@@ -107,30 +125,26 @@ function renderShared(data) {
     const cardsHtml = data.map(item => {
        
         return (
-            `
-            <article class="card">
-            <div class="content">
-                <h2 class="header">${item.name}</h2>
-                <h3>Secondary name if exists</h3>
-                <img src="${item.thumb}">
-                <div class="extra content">
-                    <strong>owner:</strong> mike@tac.church
-                </div>
+            `<article  class="strip">
+            <span class="dashicons dashicons-analytics"></span>
+            <div>
+              <h3>${item.name}
+                <span>(Secondary name if exists)</span>
+              </h3>
+             
             </div>
-            <div class="content">
-                <br>
-                <a href="${item.dashboard_link}" class="button">Open dashboard</a>
-                <br>
-                <a href="${item.info_link}">Read the docs</a>
-                <ul>
-                    <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
-                    <li><a href="#"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
-                </ul> 
-                <div class="meta">
-                    <span class="tag release">New release available</span>
-                </div>
-            </div>
-          </article>
+            <a class="button" href="${item.dashboard_link}">Open dashboard</a>  
+            <nav role="navigation" class="actions tag">
+              Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
+              <ul>
+                <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
+                <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+                <li><a href="${item.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
+              </ul>   
+            </nav>
+            <p>Owner: mike@tac.com</p>
+            <a class="tag release modal-link" href="" data-modal="2">New release available</a>
+        </article>
             `
     )}).join('')
 
@@ -265,4 +279,31 @@ function renderSubscribe(data) {
     document.getElementById("extra-dashboards").innerHTML += `<p class="dashboards-description">These are dashboards that are available on other plans</p>`
     document.getElementById("extra-dashboards").innerHTML += cardsHtml
 }
+
+
+
+
+
+
+function setModals() {
+
+    const modalClose = document.getElementById("mymodalClose")
+    const modalLink = document.querySelectorAll(".modal-link")  
+
+    modalLink.forEach(element => {
+        
+        element.addEventListener("click", function(e){
+            e.preventDefault()
+            let i = Number(e.target.dataset['modal']) - 1
+            document.querySelector(".mymodal-overlay").classList.add("show")
+            document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
+            console.log(helpModalContent[i].html)
+        })
+    })
+    
+    modalClose.addEventListener("click", function(e){   
+        e.target.closest(".mymodal-overlay").classList.remove("show")
+    })
+}
+
 

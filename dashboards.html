@@ -93,6 +93,7 @@ body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: 
 
 <!-- Added styles -->
 <link rel="stylesheet" href="dashboards.css" type="text/css" media="all">
+<link rel="stylesheet" href="modal.css" type="text/css" media="all">
 
 
 <script type="text/javascript" data-cfasync="false" src="./wordpress_files/jquery.js" id="jquery-core-js"></script>
@@ -836,33 +837,47 @@ font-family: 'Montserrat';
 <div id="my-dashboards">
     <h2 class="subtitle">My Shared Dashboards</h2>
     <section class="ui cards admin-cards">
-          <article class="card">
-            <div class="content">
-                <h2 class="header">Check-up</h2>
-                <h3>Secondary name if exists</h3>
-                <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/06/Checkup-Thumbnail.jpg">
-                <div class="extra content">
-                    <strong>owner:</strong> mike@tac.church
-                </div>
-            </div>
-            <div class="content">
-                <br>
-                <a class="button">Open dashboard</a>
-                <br>
-                <a href="#">Read the docs</a>
-                <ul>
-                    <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
-                    <li><a href="#"><span class="dashicons dashicons-dashboard"></span>Sync dashboard with master</a></li>
-                    <li><a href="#"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
-                </ul> 
-                
-                
-                <div class="meta">
-                    <span class="tag release">New release available</span>
-                </div>
-            </div>
-          </article>
-        </section>
+        <article  class="strip">
+          <span class="dashicons dashicons-analytics"></span>
+          <div>
+            <h3>Check-up 
+              <span>(Secondary name if exists)</span>
+            </h3>
+           
+          </div>
+          <a class="button">Open dashboard</a>  
+          <nav role="navigation" class="actions tag">
+            Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
+            <ul>
+              <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
+              <li><a href="#" class="modal-link"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+              <li><a href="#"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
+            </ul>   
+          </nav>
+         
+        <a class="tag release">New release available</a>
+      </article>
+      <article  class="strip">
+        <span class="dashicons dashicons-analytics"></span>
+        <div>
+          <h3>Check-up 
+            <span>(Secondary name if exists)</span>
+          </h3>
+         
+        </div>
+        <a class="button">Open dashboard</a>  
+        <nav role="navigation" class="actions tag">
+          Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
+          <ul>
+            <li><a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a></li>
+            <li><a href="#"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+            <li><a href="#"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
+          </ul>   
+        </nav>
+       <p>Owner: mike@tac.com</p>
+      <a class="tag release" href="">New release available</a>
+    </article>
+    </section>
 
     <h2 class="subtitle">My Team Dashboards</h2>
     <section class="ui cards team-cards">
@@ -1234,6 +1249,19 @@ font-family: 'Montserrat';
    
 
 <!-- end dashboards -->
+
+<!-- modal -->
+<div class="mymodal-overlay">
+  <div class="mymodal-inner">
+      <button id="mymodalClose" aria-label="close" class="mymodal-close"><svg width="10" height="10" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+          <path d="M0.549989 4.44999L4.44999 0.549988L43.45 39.55L39.55 43.45L0.549989 4.44999Z" />
+          <path d="M39.55 0.549988L43.45 4.44999L4.44999 43.45L0.549988 39.55L39.55 0.549988Z" />
+          </svg></button>
+          <div class="mymodal-content">   
+              <!-- content to go here -->
+          </div>
+  </div>
+</div>
 
 </span></div><div id="code_block-90-810" class="ct-code-block"></div></div></section><div id="div_block-59-13" class="ct-div-block"><section id="section-60-13" class=" ct-section"><div class="ct-section-inner-wrap"><a id="link-139-1105" class="ct-link" href="https://growinghealthierchurches.com/"><img id="image-62-13" alt="Growing Healthier Churches Logo" src="./wordpress_files/logo-reverse.svg" class="ct-image" srcset="" sizes="(max-width: 1px) 100vw, 1px"></a>
 		<div id="-pro-menu-78-13" class="oxy-pro-menu "><div class="oxy-pro-menu-mobile-open-icon " data-off-canvas-alignment=""><svg id="-pro-menu-78-13-open-icon"><use xlink:href="#FontAwesomeicon-ellipsis-v"></use></svg>Menu</div>

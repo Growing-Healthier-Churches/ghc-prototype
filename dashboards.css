@@ -257,9 +257,8 @@
   visibility: hidden;
 }
 
-
-
-#my-dashboards .button {
+#my-dashboards .button,
+.button {
   background-color: #2185d0;
   color: #fff;
   text-shadow: none;
@@ -271,6 +270,7 @@
   padding: 11px 21px;
   border-radius: 4px;
   margin-bottom: 20px;
+  text-decoration: none;
 }
 
 #my-dashboards .button.secondary {
@@ -280,7 +280,7 @@
 
 /* tags */
 
-#my-dashboards .card .tag {
+#my-dashboards .tag {
   display: block;
   background-color: #eee;
   padding: 7px;
@@ -340,6 +340,11 @@
   background-color:  #a900ad;
 }
 
+#my-dashboards .tag.release {
+  color: #fff;
+  background-color: #f29f00
+}
+
 
 /* Tooltip */
 #my-dashboards .dashicons {
@@ -389,8 +394,6 @@
   font-size: inherit;
 }
 
-
-
 #my-dashboards .title-tip-up[title]:hover:before {
   
   top: auto;
@@ -406,46 +409,114 @@
   border-top: 0.25em solid #222;
 }
 
+/* admin */
+#my-dashboards  .ui.cards.admin-cards {
+  gap: 0;
+}
+#my-dashboards  .ui.cards.admin-cards .dashboards-description {
+  margin-top: 0;
+}
+#my-dashboards  .admin-cards .strip:first-of-type {
+  border-top-left-radius: 0.28571429rem;
+  border-top-right-radius: 0.28571429rem;
+  margin-top: 1em;
+}
+#my-dashboards  .admin-cards .strip {
+  display: flex;
+  padding: 10px;
+  box-shadow: 0px 1px 0 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+  gap: 20px;
+  align-items: center;
+  background: #fff;
+  width: 100%;
+  
+}
+#my-dashboards  .admin-cards .strip:last-of-type {
+  box-shadow: 0px 1px 0 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+  border-bottom-left-radius: 0.28571429rem;
+  border-bottom-right-radius: 0.28571429rem;
+}
+#my-dashboards  .admin-cards .strip .button,
+#my-dashboards  .admin-cards .strip .tag{
+  margin-bottom: 0;
+}
+
+#my-dashboards  .admin-cards .strip h3 {
+  font-size: 16px;
+}
+#my-dashboards  .admin-cards .strip h3 span {
+  font-size: 14px;
+  display: block;
+}
+#my-dashboards  .admin-cards .strip a {
+  display: block;
+}
+#my-dashboards  .admin-cards .strip  p {
+  margin: 0;
+}
+
+
+#my-dashboards .strip .actions {
+  width: 200px;
+  cursor: pointer;
+  overflow: visible;
+  height: 37px;
+  
+}
+
+#my-dashboards .strip .actions .dashicons-arrow-down-alt2 {
+  float: right
+}
+#my-dashboards .strip .actions ul {
+  list-style-type: none;
+  margin: 0 -7px 0 -7px;
+  background-color: #eee;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s ease;
+  display: none;
+  padding: 12px 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  box-shadow: 1px 2px 3px  #D4D4D5;
+}
+
+
+#my-dashboards .strip .actions a {
+  text-decoration: none;
+  padding: 4px;
+}
+#my-dashboards .strip .actions .dashicons {
+  line-height: 1;
+  margin-right: 5px;
+}
+#my-dashboards .strip .dashicons-analytics {
+  font-size: 2em;
+  align-self: flex-start;
+}
+
+#my-dashboards .strip .actions:hover {
+  z-index: 10;
+  isolation: isolate;
+}
+
+#my-dashboards .strip .actions:hover ul {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+
 
 /* team cards */
 
-#my-dashboards  .team-cards .card,
-#my-dashboards  .admin-cards .card  {
+#my-dashboards  .team-cards .card  {
   flex-direction: row;
   width: 48%;
   padding-bottom: 40px;
 
 }
-#my-dashboards .admin-cards .card .content:first-of-type {
-  width: 35%;
-}
 
-#my-dashboards .admin-cards .card h3 {
-  font-size: 1em;
-}
 
-#my-dashboards .admin-cards .card ul {
-  list-style-type: none;
-  padding: 0px;
-}
-
-#my-dashboards .admin-cards .card ul li {
-  margin-bottom: .5em;
-}
-
-#my-dashboards .admin-cards .card ul li a {
-  text-decoration: none;
-  color: inherit
-}
-
-#my-dashboards .admin-cards .card ul li a:hover {
-  color: #0070f5
-}
-
-#my-dashboards .admin-cards .card .dashicons {
-  line-height: 1;
-  margin-right: 10px;
-}
 
 .dashicons-update {
   color: #469525
