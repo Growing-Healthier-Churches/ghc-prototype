@@ -13,7 +13,7 @@ const sharedDashboardInfo = [
         is_turbo: false,
         looker_studio_url: "https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB",
         wp_post_id: 1171, //from post_id to wp_post_id
-        save_date: "06/23/2023"
+        save_date: "06/23/2023" //change to correct format
     }
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
@@ -27,14 +27,6 @@ const helpModalContent = [
         <p>Deelting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
         <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
         <a class="button" href="">Yes, delete</a>
-        `
-    },
-    {
-        order: 2,
-        html: `
-        <h2>Placeholder content</h2>
-        <p>This will contain all the information about the latest release and a call to action</p>   
-        
         `
     }
 
@@ -51,8 +43,7 @@ async function getJSONData() {
     // piece together url
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
-    //render(jsonData)
-    filterData(jsonData)
+    
 
      //versioning info for shared dashboards
      const baseurl2 = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboard_versions?"
@@ -60,14 +51,17 @@ async function getJSONData() {
      // piece together url
      const response2 = await fetch(baseurl2 + queryString2 + myApiKey)
      const jsonData2 = await response2.json();
-     filterVersionData(jsonData2, sharedDashboardIds)
+
+    //render(jsonData)
+    filterVersionData(jsonData2, sharedDashboardIds)
+    filterData(jsonData)
+    
  
   }
 
 getJSONData()
 
 function filterVersionData(data, sharedDashboardIds) {
-    
     // sharedDashboardIds e.g. [1171]
     let dashboardVersionNotes = data.filter((releaseNote) => sharedDashboardIds.includes(releaseNote.wp_post_id))
     dashboardModalContent = [].concat(dashboardVersionNotes)
@@ -76,6 +70,9 @@ function filterVersionData(data, sharedDashboardIds) {
 
 //Filter database to return different arrays
 function filterData(data) {
+
+
+    
 
     //allow ourselves to mutate data
     let newData = data;
@@ -157,7 +154,9 @@ function filterChms(userType, newData) {
 
 function renderShared(data, linkedDashboards) {
 
-    let updateNeeded = false;
+    
+
+    let updateNeeded = true;
 
     // Hide team dashboards container
     document.getElementById("team-cards").style.display = "none"
@@ -170,12 +169,15 @@ function renderShared(data, linkedDashboards) {
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
 
-        
-        const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
-        
-        console.log("this dash is")
-        console.log(thisDash)
        
+       
+        const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
+        const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
+
+        console.log(thisReleaseInfo[0].updated)
+        console.log(item.save_date)
+
+
         return (
             `<article  class="strip">
             <span class="dashicons dashicons-analytics"></span>
@@ -194,9 +196,9 @@ function renderShared(data, linkedDashboards) {
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
               </ul>   
             </nav>
-            <p>Owner:  ${item.created_by}</p>
+            <p>Owner:  ${item.created_by} </p>
             ${updateNeeded ?
-                `<a class="tag release modal-link" href="" data-modal="${item.id}">New release available</a>`
+                `<a class="tag release modal-link" href="" data-modal="${thisDash.id}">New release available</a>`
             : ``}
         </article>
             `
@@ -348,10 +350,23 @@ function setModals() {
         
         element.addEventListener("click", function(e){
             e.preventDefault()
-            let i = Number(e.target.dataset['modal']) - 1
             document.querySelector(".mymodal-overlay").classList.add("show")
-            document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
-            console.log(helpModalContent[i].html)
+            //dynamic content modals
+            if(e.target.classList.contains("release")) {
+                console.log(dashboardModalContent)
+                let thisContent = dashboardModalContent.filter(note => note.dashboard_id == e.target.dataset['modal'])       
+                document.querySelector(".mymodal-content").innerHTML = `
+                <h2>Updates available to dashboard:</h2>
+                <p>Last updated: ${thisContent[0].updated}</p>
+                <p>${thisContent[0].changes_made}</p>
+                <a class="button" href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${thisContent[0].wp_post_id}">Create a new share copy</a>
+                `
+
+            } else {
+                // static content modals
+                let i = Number(e.target.dataset['modal']) - 1
+                document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
+            }
         })
     })
     
@@ -360,3 +375,4 @@ function setModals() {
     })
 }
 
+     
