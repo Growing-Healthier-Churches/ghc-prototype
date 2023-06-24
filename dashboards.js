@@ -18,7 +18,7 @@ const sharedDashboardInfo = [
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
-
+// Used just for delete functionality
 const helpModalContent = [
     {
         order: 1,
@@ -29,33 +29,35 @@ const helpModalContent = [
         <a class="button" href="">Yes, delete</a>
         `
     }
-
 ]
 
+// dynamically populated from supabase
+// Lists version notes
 let dashboardModalContent = []
 
 //Get data from supabase database
 async function getJSONData() {
+
+    // This is a little messy and could be done better with a join
+    // Limited supabase / postgress knowledge at this point
+
+    // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
     const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan&order=plan"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
-   
-    // piece together url
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
     
 
-     //versioning info for shared dashboards
+     // dashboard versions table
      const baseurl2 = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboard_versions?"
      const queryString2 = "select=*"
-     // piece together url
      const response2 = await fetch(baseurl2 + queryString2 + myApiKey)
      const jsonData2 = await response2.json();
 
-    //render(jsonData)
+    // filter response and render parts of page
     filterVersionData(jsonData2, sharedDashboardIds)
     filterData(jsonData)
-    
  
   }
 
@@ -70,9 +72,6 @@ function filterVersionData(data, sharedDashboardIds) {
 
 //Filter database to return different arrays
 function filterData(data) {
-
-
-    
 
     //allow ourselves to mutate data
     let newData = data;
@@ -154,13 +153,15 @@ function filterChms(userType, newData) {
 
 function renderShared(data, linkedDashboards) {
 
-    
-
+    // set variable to show new release tag
     let updateNeeded = true;
 
     // Hide team dashboards container
-    document.getElementById("team-cards").style.display = "none"
-
+    // done with PHP in final version
+    if (document.getElementById("team-cards")) {
+        document.getElementById("team-cards").style.display = "none"
+    }
+    
     // When no dashboards have been shared
     if (data.length == 0) {
         document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
@@ -169,14 +170,11 @@ function renderShared(data, linkedDashboards) {
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
 
-       
-       
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
 
         console.log(thisReleaseInfo[0].updated)
         console.log(item.save_date)
-
 
         return (
             `<article  class="strip">
@@ -185,7 +183,6 @@ function renderShared(data, linkedDashboards) {
               <h3>${thisDash.name}
                 <span>(Secondary name if exists)</span>
               </h3>
-             
             </div>
             <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
             <nav role="navigation" class="actions tag">
@@ -203,7 +200,6 @@ function renderShared(data, linkedDashboards) {
         </article>
             `
     )}).join('')
-
 
     // Insert HTML into page
     document.getElementById("admin-cards").innerHTML += cardsHtml
@@ -336,11 +332,7 @@ function renderSubscribe(data) {
     document.getElementById("extra-dashboards").innerHTML += cardsHtml
 }
 
-
-
-
-
-
+// Modal dialogs
 function setModals() {
 
     const modalClose = document.getElementById("mymodalClose")
@@ -361,13 +353,14 @@ function setModals() {
                 <p>${thisContent[0].changes_made}</p>
                 <a class="button" href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${thisContent[0].wp_post_id}">Create a new share copy</a>
                 `
-
-            } else {
-                // static content modals
+            } 
+            // static content modals
+            else {
                 let i = Number(e.target.dataset['modal']) - 1
                 document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
             }
         })
+        
     })
     
     modalClose.addEventListener("click", function(e){   
