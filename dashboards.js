@@ -3,7 +3,10 @@
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
 const userSubscription = "free" //free
-//const sharedDashboardIds = [1169, 1171] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
+// const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
+const userRoles = ["team_billing"] //team_billing, team_member, team_admin
+const ghcNotify = ["active"] //relevant value: active
+let extraDashboards = ""
 const sharedDashboardInfo = [
     {
         created_by: "GHC007",
@@ -13,12 +16,10 @@ const sharedDashboardInfo = [
         save_date: "06/23/2023"
     }
 ]
-const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.post_id) // [1171]
-const userRoles = ["team_billing"] //team_billing, team_member, team_admin
-const ghcNotify = ["active"] //relevant value: active
-let extraDashboards = ""
+const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
-let helpModalContent = [
+
+const helpModalContent = [
     {
         order: 1,
         html: `
@@ -28,13 +29,21 @@ let helpModalContent = [
         <a class="button" href="">Yes, delete</a>
         `
     },
+    {
+        order: 2,
+        html: `
+        <h2>Placeholder content</h2>
+        <p>This will contain all the information about the latest release and a call to action</p>   
+        
+        `
+    }
+
 ]
 
 let dashboardModalContent = []
 
 //Get data from supabase database
 async function getJSONData() {
-    //all dashboards
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
     const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan&order=plan"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
@@ -45,19 +54,18 @@ async function getJSONData() {
     //render(jsonData)
     filterData(jsonData)
 
-    //versioning info for shared dashboards
-    const baseurl2 = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboard_versions?"
-    const queryString2 = "select=*"
-    // piece together url
-    const response2 = await fetch(baseurl2 + queryString2 + myApiKey)
-    const jsonData2 = await response2.json();
-    filterVersionData(jsonData2, sharedDashboardIds)
-
+     //versioning info for shared dashboards
+     const baseurl2 = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboard_versions?"
+     const queryString2 = "select=*"
+     // piece together url
+     const response2 = await fetch(baseurl2 + queryString2 + myApiKey)
+     const jsonData2 = await response2.json();
+     filterVersionData(jsonData2, sharedDashboardIds)
+ 
   }
 
 getJSONData()
 
-// Data to populate modals
 function filterVersionData(data, sharedDashboardIds) {
     
     // sharedDashboardIds e.g. [1171]
@@ -84,10 +92,17 @@ function filterData(data) {
         newData.push(additionalDashboards[0])
         extraDashboards = extraDashboards.filter(dashboard => dashboard.plan !== "Separate subscription")
     }
+    
+
+    // Different chMSes
+    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
+    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
+    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
+    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
 
     // Shared dashboards
     if (userRoles.includes("team_billing" || "team_admin")) {
-        const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))
+        const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))        
         renderShared(sharedDashboardInfo, sharedDashboards)
     }
 
@@ -103,7 +118,6 @@ function filterData(data) {
     setModals() 
 
 }
-
 
 // Filter data based on CHMS
 function filterChms(userType, newData) {
@@ -141,8 +155,9 @@ function filterChms(userType, newData) {
     }
 }
 
-
 function renderShared(data, linkedDashboards) {
+
+    let updateNeeded = false;
 
     // Hide team dashboards container
     document.getElementById("team-cards").style.display = "none"
@@ -155,46 +170,18 @@ function renderShared(data, linkedDashboards) {
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
 
-        // link with supabase data
+        
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
-        console.log(linkedDashboards)
+        
         console.log("this dash is")
         console.log(thisDash)
-
-        
-        dashboardModalContent = filterVersionData(data, [1171])
-        console.log("dashboard modal inside function")
-        console.log(filterVersionData(data, [1171]))
-        console.log("dashboard modal inside function above")
        
-        // link with version data from supabase
-        //const thisDashVersion = dashboardModalContent.filter(note => note.dashboard_id === thisDash.id)
-        // console.log("dash modal content is ")
-        // console.log(dashboardModalContent)
-        
-        
-        
-
-        // compare dates for new release
-        let updateNeeded = false
-        // const dateSaved = Date.parse(item.save_date);
-        // const dateUpdated = Date.parse(thisDash[0].updated);
-        // // get updated date
-        
-        // //console.log("this dashboard " + thisDash[0].id) 
-        
-
-        // if (dateSaved < dateUpdated) {
-        //     console.log("updated needed");
-        //     updateNeeded = true
-        // }
-        
         return (
             `<article  class="strip">
             <span class="dashicons dashicons-analytics"></span>
             <div>
-              <h3>${thisDash.name} ${thisDashVersion[0]}
-                <!-- <span>(Secondary name if exists)</span> -->
+              <h3>${thisDash.name}
+                <span>(Secondary name if exists)</span>
               </h3>
              
             </div>
@@ -202,12 +189,12 @@ function renderShared(data, linkedDashboards) {
             <nav role="navigation" class="actions tag">
               Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
-               <li>${thisDash.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
+              <li>${thisDash.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
                 <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
               </ul>   
             </nav>
-            <p>Owner: ${item.created_by}</p>
+            <p>Owner:  ${item.created_by}</p>
             ${updateNeeded ?
                 `<a class="tag release modal-link" href="" data-modal="${item.id}">New release available</a>`
             : ``}
@@ -361,24 +348,10 @@ function setModals() {
         
         element.addEventListener("click", function(e){
             e.preventDefault()
+            let i = Number(e.target.dataset['modal']) - 1
             document.querySelector(".mymodal-overlay").classList.add("show")
-
-            //dynamic content modals
-            if(e.target.classList.contains("release")) {
-                let thisContent = helpModalContent.filter(notes => notes.dashboard_id == e.target.dataset['modal'])       
-                document.querySelector(".mymodal-content").innerHTML = `
-                <h2>Updates available to dashboard:</h2>
-                <p>Last updated: ${thisContent[0].updated}</p>
-                <p>${thisContent[0].changes_made}</p>
-                <a class="button" href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${thisContent[0].wp_post_id}">Create a new share copy</a>
-                `
-
-            } else {
-                // static content modals
-                let i = Number(e.target.dataset['modal']) - 1
-                document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
-            }
-            
+            document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
+            console.log(helpModalContent[i].html)
         })
     })
     
@@ -386,5 +359,4 @@ function setModals() {
         e.target.closest(".mymodal-overlay").classList.remove("show")
     })
 }
-
 
