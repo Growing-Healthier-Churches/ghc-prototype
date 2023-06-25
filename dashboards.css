@@ -1,3 +1,6 @@
+/* Messy over specific selectors to reduce any conflict with existing
+wordpress styles. Please clean-up if moving into a new environment */
+
 #my-dashboards * {
   line-height: 1.5;
 }
@@ -455,7 +458,9 @@
 #my-dashboards  .admin-cards .strip  p {
   margin: 0;
 }
-
+#my-dashboards  .admin-cards .strip-title {
+  width: 200px;
+}
 
 #my-dashboards .strip .actions {
   width: 200px;
@@ -514,10 +519,7 @@
   flex-direction: row;
   width: 48%;
   padding-bottom: 40px;
-
 }
-
-
 
 .dashicons-update {
   color: #469525

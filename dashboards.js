@@ -2,7 +2,7 @@
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "free" //free
+const userSubscription = "subscribed" //free
 // const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
 const userRoles = ["team_billing"] //team_billing, team_member, team_admin
 const ghcNotify = ["active"] //relevant value: active
@@ -12,8 +12,15 @@ const sharedDashboardInfo = [
         created_by: "GHC007",
         is_turbo: false,
         looker_studio_url: "https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB",
-        wp_post_id: 1171, //from post_id to wp_post_id
-        save_date: "06/23/2023" //change to correct format
+        wp_post_id: 1171, 
+        save_date: "2017-02-23" 
+    },
+    {
+        created_by: "GHC007",
+        is_turbo: true,
+        looker_studio_url: "https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB",
+        wp_post_id: 756, //2987, 2858, 756, 1676, 2350, 467, 1823 does not work
+        save_date: "2023-06-24" 
     }
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
@@ -84,8 +91,8 @@ function filterData(data) {
 
     //Handle GHC_notify
     if (ghcNotify.includes("active")) {  
-        let additionalDashboards = data.filter(dashboard => dashboard.plan === "Separate subscription")      
-        newData.push(additionalDashboards[0])
+        let extraDashboards = data.filter(dashboard => dashboard.plan === "Separate subscription")      
+        newData.push(extraDashboards[0])
         extraDashboards = extraDashboards.filter(dashboard => dashboard.plan !== "Separate subscription")
     }
     
@@ -153,9 +160,6 @@ function filterChms(userType, newData) {
 
 function renderShared(data, linkedDashboards) {
 
-    // set variable to show new release tag
-    let updateNeeded = true;
-
     // Hide team dashboards container
     // done with PHP in final version
     if (document.getElementById("team-cards")) {
@@ -170,25 +174,38 @@ function renderShared(data, linkedDashboards) {
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
 
+        // 3219(8) = GHC Notify
+        // fails: 2987(10) Lomnge range, 2858(11) Group health, 756(12) Serving loads, 1676(13) People flow health, 2350(15) Song health, 467(14) front door back door does not work
+
+        // set variable to show new release tag
+        let updateNeeded = false;
+
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
 
-        console.log(thisReleaseInfo[0].updated)
-        console.log(item.save_date)
+        console.log(thisDash.wp_post_id)
+        const latestReleaseDate = Date.parse(thisReleaseInfo[0].updated);
+        const savedDashboardDate = Date.parse(item.save_date);
+
+
+        if (latestReleaseDate > savedDashboardDate) {
+            updateNeeded = true;
+        }
+
 
         return (
             `<article  class="strip">
             <span class="dashicons dashicons-analytics"></span>
-            <div>
+            <div class="strip-title">
               <h3>${thisDash.name}
-                <span>(Secondary name if exists)</span>
+                <!-- <span>(Secondary name if exists)</span> -->
               </h3>
             </div>
             <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
             <nav role="navigation" class="actions tag">
               Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
-              <li>${thisDash.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
+              <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
                 <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
               </ul>   
@@ -360,7 +377,7 @@ function setModals() {
                 document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
             }
         })
-        
+
     })
     
     modalClose.addEventListener("click", function(e){   
