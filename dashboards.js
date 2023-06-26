@@ -1,27 +1,91 @@
 
+// To DO:
+// if user shares dashboard which is no longer available on plan logic fails
+// -- consider addition logic inside .map function
+// update code to display only relevant version histories in modal
+// -- currently just ne matching entry
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "subscribed" //free
-// const sharedDashboardIds = [1169] //1169 - check-up (elvanto), 1171 - toolkit (elvanto)
-const userRoles = ["team_billing"] //team_billing, team_member, team_admin
-const ghcNotify = ["active"] //relevant value: active
-let extraDashboards = ""
+const userSubscription = "subscription" //free
+const userRoles = ["team_billing", "team_admin"] //team_billing, team_member, team_admin
+const ghcNotify = ["active"] //relevant value: "active"
+let  extraDashboards =[]
 const sharedDashboardInfo = [
+    // paid: 2858, 756, 1676, 2350, 467, 1823
+    // free: 1171, 1169
     {
-        created_by: "GHC007",
-        is_turbo: false,
-        looker_studio_url: "https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB",
-        wp_post_id: 1171, 
-        save_date: "2017-02-23" 
+        "wp_post_id": 756,
+        "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
+        "save_date": "2022-01-23",
+        "created_by": "GHC31861737",
+        "is_turbo": true
     },
     {
-        created_by: "GHC007",
-        is_turbo: true,
-        looker_studio_url: "https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB",
-        wp_post_id: 756, //2987, 2858, 756, 1676, 2350, 467, 1823 does not work
-        save_date: "2023-06-24" 
+        "wp_post_id": 467,
+        "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
+        "save_date": "2022-03-21",
+        "created_by": "GHC31861737",
+        "is_turbo": false
+    },
+    {
+        "wp_post_id": 2002,
+        "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
+        "save_date": "2022-03-21",
+        "created_by": "GHC31861737",
+        "is_turbo": false
+    },
+    {
+        "wp_post_id": 1171,
+        "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
+        "save_date": "2023-02-11",
+        "created_by": "GHC31861737",
+        "is_turbo": true
+    },
+    {
+        "wp_post_id": 2858,
+        "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
+        "save_date": "2022-11-17",
+        "created_by": "GHC31861737",
+        "is_turbo": true
     }
+    /*
+    {
+            "wp_post_id": 756,
+            "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
+            "save_date": "2022-01-23",
+            "created_by": "GHC31861737",
+            "is_turbo": true
+        },
+        {
+            "wp_post_id": 467,
+            "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
+            "save_date": "2022-03-21",
+            "created_by": "GHC31861737",
+            "is_turbo": false
+        },
+        {
+            "wp_post_id": 2002,
+            "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
+            "save_date": "2022-03-21",
+            "created_by": "GHC31861737",
+            "is_turbo": false
+        },
+        {
+            "wp_post_id": 1171,
+            "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
+            "save_date": "2023-02-11",
+            "created_by": "GHC31861737",
+            "is_turbo": true
+        },
+        {
+            "wp_post_id": 2858,
+            "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
+            "save_date": "2022-11-17",
+            "created_by": "GHC31861737",
+            "is_turbo": true
+        }
+        */
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
@@ -64,7 +128,7 @@ async function getJSONData() {
 
     // filter response and render parts of page
     filterVersionData(jsonData2, sharedDashboardIds)
-    filterData(jsonData)
+    filterData(jsonData) 
  
   }
 
@@ -85,15 +149,23 @@ function filterData(data) {
 
     //filter data for subscription-type
     if (userSubscription === "free") {
-        newData =  data.filter(dashboard => dashboard.plan === "Free")
+        newData = data.filter(dashboard => dashboard.plan === "Free")
         extraDashboards = data.filter(dashboard => dashboard.plan !== "Free" )
     } 
 
     //Handle GHC_notify
     if (ghcNotify.includes("active")) {  
-        let extraDashboards = data.filter(dashboard => dashboard.plan === "Separate subscription")      
-        newData.push(extraDashboards[0])
-        extraDashboards = extraDashboards.filter(dashboard => dashboard.plan !== "Separate subscription")
+        //remove from extraDashbaord
+        extraDashboards = extraDashboards.filter(dashboard => dashboard.plan !== "Separate subscription") 
+        //add to included in plan dashhboards
+        let includedNotify = data.filter(dashboard => dashboard.plan === "Separate subscription")   
+        newData.push(includedNotify[0])
+    } else {
+        newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
+        let includedNotify = data.filter(dashboard => dashboard.plan === "Separate subscription") 
+        if (userSubscription !== "free") {
+            extraDashboards.push(includedNotify[0])  
+        }    
     }
     
 
@@ -169,13 +241,11 @@ function renderShared(data, linkedDashboards) {
     // When no dashboards have been shared
     if (data.length == 0) {
         document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
+        return
     }
 
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
-
-        // 3219(8) = GHC Notify
-        // fails: 2987(10) Lomnge range, 2858(11) Group health, 756(12) Serving loads, 1676(13) People flow health, 2350(15) Song health, 467(14) front door back door does not work
 
         // set variable to show new release tag
         let updateNeeded = false;
