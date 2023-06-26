@@ -7,7 +7,7 @@
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "subscription" //free
+const userSubscription = "free" //free
 const userRoles = ["team_billing", "team_admin"] //team_billing, team_member, team_admin
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
@@ -230,7 +230,7 @@ function filterChms(userType, newData) {
     }
 }
 
-function renderShared(data, linkedDashboards) {
+function renderShared(userDataShared, linkedDashboards) {
 
     // Hide team dashboards container
     // done with PHP in final version
@@ -239,21 +239,27 @@ function renderShared(data, linkedDashboards) {
     }
     
     // When no dashboards have been shared
-    if (data.length == 0) {
+    if (userDataShared.length == 0) {
         document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
         return
     }
 
-    // Loop through JSON data to return html for dashboard cards
-    const cardsHtml = data.map(item => {
+    // Loop through JSON userData to return html for dashboard cards
+    const cardsHtml = userDataShared.map(item => {
 
         // set variable to show new release tag
         let updateNeeded = false;
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
+
+        // if previously shared dashboard is no longer available on plan
+        if (!thisDash) {
+            console.log(`dashboard not available ${item.wp_post_id}`)
+            return (`<article  class="strip">Previously shared dashboard not available on current plan</article>`)
+        }
+
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
 
-        console.log(thisDash.wp_post_id)
         const latestReleaseDate = Date.parse(thisReleaseInfo[0].updated);
         const savedDashboardDate = Date.parse(item.save_date);
 
