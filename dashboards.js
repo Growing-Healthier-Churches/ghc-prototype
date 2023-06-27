@@ -9,8 +9,8 @@
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "large" // free, small, medium, large
-const userRoles = ["team_member"] //team_billing, team_member, team_admin
+const userSubscription = "medium" // free, small, medium, large
+const userRoles = ["team_billing"] //team_billing, team_member, team_admin
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
 const sharedDashboardInfo = [
@@ -144,7 +144,7 @@ function filterData(data) {
     
 
     // Shared dashboards info
-    if (userRoles.includes("team_member", "team_admin", "team_billing")) { 
+    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing")) { 
         console.log("shared dashboards")
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))          
         renderShared(sharedDashboardInfo, sharedDashboards)
@@ -202,9 +202,10 @@ function renderShared(userDataShared, linkedDashboards) {
         return
     }
 
-    //deafault container to insert generated html into
-    if (userRoles.includes("team_admin", "team_billing")) {
-        let containerEl = document.getElementById("admin-cards")
+    //default container to insert generated html into
+    
+    if (userRoles.includes("team_billing" || "team_admin")) {
+        containerEl = document.getElementById("admin-cards")
     } else {
         containerEl = document.getElementById("team-cards")
     }
@@ -213,11 +214,7 @@ function renderShared(userDataShared, linkedDashboards) {
     const cardsHtml = userDataShared.map(item => {
 
         // set variable to show new release tag
-        let updateNeeded = false;
-        
-
-        
-        
+        let updateNeeded = false;  
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
 
@@ -244,7 +241,6 @@ function renderShared(userDataShared, linkedDashboards) {
         } 
 
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
-
         const latestReleaseDate = Date.parse(thisReleaseInfo[0].updated);
         const savedDashboardDate = Date.parse(item.save_date);
 
@@ -269,10 +265,10 @@ function renderShared(userDataShared, linkedDashboards) {
             <nav role="navigation" class="actions tag">
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
-              <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
+              <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
                 <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
-                <li>Owner:  ${item.created_by}</li>
+                <li class="owner">Owner:  ${item.created_by}</li>
                 </ul>   
             </nav>   
         </article>
@@ -298,11 +294,19 @@ function renderAvailable(data) {
                 </div>
                 <div class="dimmable image">
                   <div class="dimmer">
-                  ${(item.plan == "Separate subscription" || userRoles.includes("team_member")) 
+                  ${(item.plan == "Separate subscription" || userRoles.includes("team_member"))
+                    /* these dashboards cannot be shared */ 
                     ? ` <a href="${item.info_link}"" class="button">Read docs</a>`
                     : ` <a href="${item.dashboard_link}" class="button">Open dashboard</a>
-                    <a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>` }
-                   
+                        ` 
+                    }
+                    ${
+                        /* logic to display turbo share or ordinary share */
+                        (userSubscription === "large" && item.turbo_setup_url && userRoles.includes("team_billing")) ?  
+                            `<a href="${item.turbo_setup_url}" class="button secondary">Share turbo version</a>` :
+                        (userRoles.includes("team_billing") && item.plan !== "Separate subscription") && 
+                            `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>`  
+                    }  
                   </div>
                   <img src="${item.thumb}">
                 </div>

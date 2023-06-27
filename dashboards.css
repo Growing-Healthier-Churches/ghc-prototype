@@ -409,7 +409,7 @@ wordpress styles. Please clean-up if moving into a new environment */
   border-top: 0.25em solid #222;
 }
 
-/* admin */
+/* admin & team display */
 #my-dashboards  .ui.cards.admin-cards {
   gap: 0;
 }
@@ -467,6 +467,10 @@ wordpress styles. Please clean-up if moving into a new environment */
   margin-left: auto;
 }
 
+#my-dashboards .strip .actions .owner {
+  font-size: .8em;
+}
+
 #my-dashboards .strip .actions .dashicons-arrow-down-alt2 {
   float: right
 }
@@ -509,6 +513,15 @@ wordpress styles. Please clean-up if moving into a new environment */
   display: block;
 }
 
+.dashicons-update {
+  color: #469525
+}
+.dashicons-dashboard {
+  color: #c96922
+}
+.dashicons-remove {
+  color: #db1313
+}
 
 /* messages */
 #my-dashboards .info-msg {
