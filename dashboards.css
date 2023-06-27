@@ -259,7 +259,7 @@ wordpress styles. Please clean-up if moving into a new environment */
 
 #my-dashboards .button,
 .button {
-  background-color: #2185d0;
+  background-color: #0070f5;
   color: #fff;
   text-shadow: none;
   background-image: none;
@@ -271,12 +271,26 @@ wordpress styles. Please clean-up if moving into a new environment */
   border-radius: 4px;
   margin-bottom: 20px;
   text-decoration: none;
+  transition: 0.2s;
 }
 
 #my-dashboards .button.secondary {
   background-color: #D4D4D5;
   color:rgba(0, 0, 0, 0.95)
 }
+
+#my-dashboards .button:hover,
+.button:hover {
+  background-color: #0452af;
+  color: #fff;
+}
+
+#my-dashboards .button.secondary:hover {
+  background-color: #ebebeb;
+  color:rgba(0, 0, 0, 0.95);
+}
+
+
 
 /* tags */
 
@@ -350,6 +364,7 @@ wordpress styles. Please clean-up if moving into a new environment */
 #my-dashboards .dashicons {
   position: relative;
 }
+
 #my-dashboards .title-tip {
   display: inline-block;
   width: 20px;
@@ -395,7 +410,6 @@ wordpress styles. Please clean-up if moving into a new environment */
 }
 
 #my-dashboards .title-tip-up[title]:hover:before {
-  
   top: auto;
   bottom: 100%;
   margin-top: 0;
@@ -408,6 +422,8 @@ wordpress styles. Please clean-up if moving into a new environment */
   border: 0.25em dashed transparent;
   border-top: 0.25em solid #222;
 }
+
+
 
 /* admin & team display */
 #my-dashboards  .ui.cards.admin-cards {
@@ -465,6 +481,8 @@ wordpress styles. Please clean-up if moving into a new environment */
   overflow: visible;
   height: 37px;
   margin-left: auto;
+  transition: 0.2s;
+  border: 1px solid transparent;
 }
 
 #my-dashboards .strip .actions .owner {
@@ -476,7 +494,7 @@ wordpress styles. Please clean-up if moving into a new environment */
 }
 #my-dashboards .strip .actions ul {
   list-style-type: none;
-  margin: 0 -7px 0 -7px;
+  margin: 0 -8px 0 -8px;
   background-color: #eee;
   visibility: hidden;
   opacity: 0;
@@ -486,6 +504,7 @@ wordpress styles. Please clean-up if moving into a new environment */
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   box-shadow: 1px 2px 3px  #D4D4D5;
+  transition: 0.2s;
 }
 
 
@@ -500,17 +519,23 @@ wordpress styles. Please clean-up if moving into a new environment */
 #my-dashboards .strip .dashicons-analytics {
   font-size: 2em;
   align-self: flex-start;
+  color: #6b6b6b;
 }
 
 #my-dashboards .strip .actions:hover {
   z-index: 10;
   isolation: isolate;
+  background-color: #dbefff;
+  border: 1px solid #0070f5;
 }
 
 #my-dashboards .strip .actions:hover ul {
   visibility: visible;
   opacity: 1;
   display: block;
+  background-color: #dbefff;
+  border: 1px solid #0070f5;
+  border-width: 0 1px 1px 1px;
 }
 
 .dashicons-update {
@@ -523,6 +548,14 @@ wordpress styles. Please clean-up if moving into a new environment */
   color: #db1313
 }
 
+/* turbo label */
+#my-dashboards .dashicons i {
+  position: absolute;
+  top: 0;
+  left: -10px;
+  text-shadow: 1px 1px #6b6b6b;
+}
+
 /* messages */
 #my-dashboards .info-msg {
   background: aliceblue;
@@ -530,3 +563,4 @@ wordpress styles. Please clean-up if moving into a new environment */
   border: 1px solid #0070f5;
   border-radius: 4px;
 }
+

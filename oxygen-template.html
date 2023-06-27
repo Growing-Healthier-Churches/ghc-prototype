@@ -1,4 +1,55 @@
 
+<?php
+//USER
+	$user_id = get_current_user_id();
+	$central_user = get_billing_user();
+	$user_meta = get_user_meta($central_user);
+	$roles = wp_get_current_user()->roles;
+	$isPCQ = in_array('pcq',$roles);
+	$isTeamMember = in_array('team_member',$roles) || in_array('coach',$roles);
+	$isTeamBilling = in_array('team_billing',$roles);
+	$SSOlogin = get_user_meta( $user_id, 'logged_in_with_SSO',true);
+
+	$GHC_ID = get_user_meta($user_id,'GHC_ID',true);
+	$GHC_team = get_user_meta($user_id,'GHC_team',true);
+	
+	//$share_dashboards = get_user_meta($user_id, 'share_dashboards_'.$post_id,true);
+	$user_shared = get_user_meta($user_id,'share_post_id');
+	$user_sub = get_user_meta($user_id,'ghc_subscription');
+	$user_notify = get_user_meta($user_id,'ghc_notify_subscription');
+	
+	// Do we need to be able to create $share_dashboards as an empty array if
+	// no dashboards shared?
+
+ // Loop through each metadata	
+if ($user_meta){	
+ foreach ($user_meta as $meta_key => $meta_values) {	
+	 // Check if the meta key matches the pattern	
+	 if (strpos($meta_key, 'share_dashboards_') === 0) {	
+		$share_meta_data = unserialize($meta_values[0]);	
+		$post_id = (int) substr($meta_key, strlen('share_dashboards_'));	
+		 	
+		$args = array('meta_query' => array(array('key' => 'GHC_ID','value' => $share_meta_data['created_by'],'compare' => '=')));	
+		$created_by = get_users($args)[0];	
+		 	
+		 $share_dashboards[] = array(	
+			 'wp_post_id' => $post_id,	
+			 'looker_studio_url' => $share_meta_data['share_link'],	
+			 'save_date' =>  date("Y-m-d", strtotime($share_meta_data['share_date'])),	
+			 'created_by' => $created_by->user_email,	
+			 'is_turbo' => $share_meta_data['is_turbo']	
+		 );	
+	 }	
+ }	
+}
+
+
+?>
+
+
+
+<script>
+
 // To DO:
 // if user shares dashboard which is no longer available on plan logic fails
 // -- consider addition logic inside .map function
@@ -7,50 +58,35 @@
 //
 
 //Example variables - in live loaded from php
-const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "large" // free, small, medium, large
-const userRoles = ["team_member"] //team_billing, team_member, team_admin
-const ghcNotify = ["active"] //relevant value: "active"
+const userRoles = <?php echo json_encode($roles); ?>; //team_billing, team_member, team_admin
+let userCHMS = "elvanto_user";
+
+if (userRoles.includes("pco_user")) {
+	userCHMS = "pco_user"
+}
+if (userRoles.includes("ccb_user")) {
+	userCHMS = "ccb_user"
+}
+if (userRoles.includes("fluro_user")) {
+	userCHMS = "fluro_user"
+}
+
+
+let userSubscription = "free" // free, small, medium, large
+
+<?php if (returnSubscriptionAccess('medium')) {
+	echo 'userSubscription = "medium"';
+} ?>
+
+<?php if (returnSubscriptionAccess('large')) {
+	echo 'userSubscription = "large"';
+} ?>
+
+const ghcNotify = <?php echo json_encode($user_notify); ?> //relevant value: "active"  -- GHC_notify_subscription
+
 let  extraDashboards =[]
-const sharedDashboardInfo = [
-    // paid: 2858, 756, 1676, 2350, 467, 1823
-    // free: 1171, 1169
-    {
-        "wp_post_id": 756,
-        "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
-        "save_date": "2022-01-23",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    },
-    {
-        "wp_post_id": 467,
-        "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
-        "save_date": "2022-03-21",
-        "created_by": "GHC31861737",
-        "is_turbo": false
-    },
-    {
-        "wp_post_id": 2002,
-        "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
-        "save_date": "2022-03-21",
-        "created_by": "GHC31861737",
-        "is_turbo": false
-    },
-    {
-        "wp_post_id": 1171,
-        "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
-        "save_date": "2023-02-11",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    },
-    {
-        "wp_post_id": 2858,
-        "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
-        "save_date": "2019-11-17",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    }
-]
+const sharedDashboardInfo = <?php echo json_encode($share_dashboards); ?>;
+
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
 // Used just for delete functionality
@@ -59,7 +95,7 @@ const helpModalContent = [
         order: 1,
         html: `
         <h2>Are you sure you want to delete this dashboard?</h2>
-        <p>Deelting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
+        <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
         <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
         <a class="button" href="">Yes, delete</a>
         `
@@ -233,7 +269,7 @@ function renderShared(userDataShared, linkedDashboards) {
                         <!-- <span>(Secondary name if exists)</span> -->
                     </h3>
                     </div>
-                    <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
+                    <a class="button" target="_blank" href="${item.looker_studio_url}">Open dashboard</a>  
                 </article>
                 `
             )
@@ -259,7 +295,7 @@ function renderShared(userDataShared, linkedDashboards) {
                 <!-- <span>(Secondary name if exists)</span> -->
               </h3>
             </div>
-            <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
+            <a class="button" target="_blank" href="${item.looker_studio_url}">Open dashboard</a>  
             ${updateNeeded ?
                 `<a class="tag release modal-link" href="" data-modal="${thisDash.id}">New release available</a>`
             : ``}
@@ -313,7 +349,7 @@ function renderAvailable(data) {
                 </div>
                 <div class="content"> 
                   <p>${item.description}</p>
-                  ${(item.additional_setup && userRoles.includes("team_billing")) ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` }
+				  ${(userRoles.includes("team_billing") || userRoles.includes("team_admin")) && item.additional_setup ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` }
                 </div>
                 <div class="extra content">
                     <strong>measures:</strong> ${item.example_metrics}
@@ -350,6 +386,7 @@ function renderSubscribe(data) {
                 </div>
                 <div class="content"> 
                   <p>${item.description}</p>
+				  <!--not needed if not available ${(userRoles.includes("team_billing") || userRoles.includes("team_admin")) && item.additional_setup ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` } -->
                 </div>
                 <div class="extra content">
                     <strong>measures:</strong> ${item.example_metrics}
@@ -405,3 +442,5 @@ function setModals() {
 }
 
      
+
+</script>
