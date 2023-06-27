@@ -4,11 +4,13 @@
 // -- consider addition logic inside .map function
 // update code to display only relevant version histories in modal
 // -- currently just ne matching entry
+// Match shared link to open dashboard URL for teams
+//
 
 //Example variables - in live loaded from php
 const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "free" //free
-const userRoles = ["team_billing", "team_admin"] //team_billing, team_member, team_admin
+const userSubscription = "large" // free, small, medium, large
+const userRoles = ["team_member"] //team_billing, team_member, team_admin
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
 const sharedDashboardInfo = [
@@ -45,47 +47,10 @@ const sharedDashboardInfo = [
     {
         "wp_post_id": 2858,
         "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
-        "save_date": "2022-11-17",
+        "save_date": "2019-11-17",
         "created_by": "GHC31861737",
         "is_turbo": true
     }
-    /*
-    {
-            "wp_post_id": 756,
-            "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
-            "save_date": "2022-01-23",
-            "created_by": "GHC31861737",
-            "is_turbo": true
-        },
-        {
-            "wp_post_id": 467,
-            "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
-            "save_date": "2022-03-21",
-            "created_by": "GHC31861737",
-            "is_turbo": false
-        },
-        {
-            "wp_post_id": 2002,
-            "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
-            "save_date": "2022-03-21",
-            "created_by": "GHC31861737",
-            "is_turbo": false
-        },
-        {
-            "wp_post_id": 1171,
-            "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
-            "save_date": "2023-02-11",
-            "created_by": "GHC31861737",
-            "is_turbo": true
-        },
-        {
-            "wp_post_id": 2858,
-            "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
-            "save_date": "2022-11-17",
-            "created_by": "GHC31861737",
-            "is_turbo": true
-        }
-        */
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
@@ -114,7 +79,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan&order=plan"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url&order=plan"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -175,17 +140,16 @@ function filterData(data) {
     const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
     const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
 
-    // Shared dashboards
-    if (userRoles.includes("team_billing" || "team_admin")) {
-        const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))        
+    // Shared dashboards used 
+    
+
+    // Shared dashboards info
+    if (userRoles.includes("team_member", "team_admin", "team_billing")) { 
+        console.log("shared dashboards")
+        const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))          
         renderShared(sharedDashboardInfo, sharedDashboards)
     }
 
-    // Team dashbaords
-    if (userRoles.includes("team_member")) {   
-        const teamDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))
-        renderTeam(teamDashboards)
-    }
 
     // Filter data for CHMS
     filterChms(userCHMS, newData)
@@ -231,17 +195,18 @@ function filterChms(userType, newData) {
 }
 
 function renderShared(userDataShared, linkedDashboards) {
-
-    // Hide team dashboards container
-    // done with PHP in final version
-    if (document.getElementById("team-cards")) {
-        document.getElementById("team-cards").style.display = "none"
-    }
-    
+   
     // When no dashboards have been shared
     if (userDataShared.length == 0) {
         document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
         return
+    }
+
+    //deafault container to insert generated html into
+    if (userRoles.includes("team_admin", "team_billing")) {
+        let containerEl = document.getElementById("admin-cards")
+    } else {
+        containerEl = document.getElementById("team-cards")
     }
 
     // Loop through JSON userData to return html for dashboard cards
@@ -249,6 +214,10 @@ function renderShared(userDataShared, linkedDashboards) {
 
         // set variable to show new release tag
         let updateNeeded = false;
+        
+
+        
+        
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
 
@@ -257,6 +226,22 @@ function renderShared(userDataShared, linkedDashboards) {
             console.log(`dashboard not available ${item.wp_post_id}`)
             return (`<article  class="strip">Previously shared dashboard not available on current plan</article>`)
         }
+
+        // simple display for team members
+        if(userRoles.includes("team_member")) {
+            return (
+                `<article  class="strip">
+                    <span class="dashicons dashicons-analytics"></span>
+                    <div class="strip-title">
+                    <h3>${thisDash.name}
+                        <!-- <span>(Secondary name if exists)</span> -->
+                    </h3>
+                    </div>
+                    <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
+                </article>
+                `
+            )
+        } 
 
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
 
@@ -278,73 +263,27 @@ function renderShared(userDataShared, linkedDashboards) {
               </h3>
             </div>
             <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
+            ${updateNeeded ?
+                `<a class="tag release modal-link" href="" data-modal="${thisDash.id}">New release available</a>`
+            : ``}
             <nav role="navigation" class="actions tag">
-              Actions <span class="dashicons dashicons-arrow-down-alt2"></span>
+              More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
               <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>`}</li>
                 <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
-              </ul>   
-            </nav>
-            <p>Owner:  ${item.created_by} </p>
-            ${updateNeeded ?
-                `<a class="tag release modal-link" href="" data-modal="${thisDash.id}">New release available</a>`
-            : ``}
+                <li>Owner:  ${item.created_by}</li>
+                </ul>   
+            </nav>   
         </article>
             `
     )}).join('')
 
     // Insert HTML into page
-    document.getElementById("admin-cards").innerHTML += cardsHtml
+
+    containerEl.innerHTML += cardsHtml
 
 }
-
-function renderTeam(data) {
-
-    // Hide admin dashboards container
-    document.getElementById("admin-cards").style.display = "none"
-
-    // When no dashboards have been shared
-    if (data.length == 0) {
-        document.getElementById("admin-cards").innerHTML += `<p>You have no team dashbaords shared. Speak to your team admin</p>`
-    }
-
-    // Loop through JSON data to return html for dashboard cards
-    const cardsHtml = data.map(item => {
-     
-        return (
-            `
-            <article class="card">
-            <div class="content">
-                <h2 class="header">${item.name}</h2>
-                <div class="dimmable image">
-                    <div class="dimmer">
-                          <a href="${item.dashboard_link}" class="button">Open dashboard</a>
-                          <a class="button secondary" href="${item.info_link}">Read docs</a>
-                    </div>
-                    <img src="${item.thumb}">
-                </div>
-            </div>
-            <div class="content"> 
-            <p>${item.description}</p>
-              <div class="extra content">
-                <strong>measures:</strong> ${item.example_metrics}
-                <div class="meta">
-                ${item.health_category_id1 ? `<span class="tag ${item.health_category_id1.css_class}">${item.health_category_id1.name}</span>` : ``}
-                ${item.health_category_id2 ? `<span class="tag ${item.health_category_id2.css_class}">${item.health_category_id2.name}</span>` : ``}
-                </div>
-                </div>
-            </div>
-          </article>
-            `
-    )}).join('')
-
-
-    // Insert HTML into page
-    document.getElementById("team-cards").innerHTML += cardsHtml
-
-}
-
 
 // change buttons
 function renderAvailable(data) {

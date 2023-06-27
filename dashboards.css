@@ -246,8 +246,7 @@ wordpress styles. Please clean-up if moving into a new environment */
   text-decoration: underline;
 }
 
-#my-dashboards .dimmable:hover .dimmer,
-#my-dashboards  .team-cards .card:hover .dimmer {
+#my-dashboards .dimmable:hover .dimmer {
   display:flex;
   align-items: center;
   cursor: pointer;
@@ -256,9 +255,7 @@ wordpress styles. Please clean-up if moving into a new environment */
   transition: 0.4s;
 }
 
-#my-dashboards  .team-cards .card:hover .meta {
-  visibility: hidden;
-}
+
 
 #my-dashboards .button,
 .button {
@@ -467,7 +464,7 @@ wordpress styles. Please clean-up if moving into a new environment */
   cursor: pointer;
   overflow: visible;
   height: 37px;
-  
+  margin-left: auto;
 }
 
 #my-dashboards .strip .actions .dashicons-arrow-down-alt2 {
@@ -512,24 +509,6 @@ wordpress styles. Please clean-up if moving into a new environment */
   display: block;
 }
 
-
-/* team cards */
-
-#my-dashboards  .team-cards .card  {
-  flex-direction: row;
-  width: 48%;
-  padding-bottom: 40px;
-}
-
-.dashicons-update {
-  color: #469525
-}
-.dashicons-dashboard {
-  color: #c96922
-}
-.dashicons-remove {
-  color: #db1313
-}
 
 /* messages */
 #my-dashboards .info-msg {
