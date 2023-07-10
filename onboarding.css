@@ -225,7 +225,9 @@ h1, h2, h3, h4 {
 }
 
 .complete-btn,
-.complete-btn:hover {
+.complete-btn:hover,
+.skip-btn,
+.skip-btn:hover {
     border-color: #727272;
     color: #727272;
   -webkit-box-shadow: 2px 2px 0 #727272;

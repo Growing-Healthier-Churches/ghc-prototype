@@ -1,0 +1,43 @@
+.sharelink-form select {
+    border: 10px solid #fff;
+    outline: 1px solid #000;
+    border-radius: 3px;
+}
+.sharelink-form select:focus,
+.sharelink-form selectmenu:focus {
+    outline-color: blue;
+}
+
+.sharelink-form input {
+    border: 1px solid #000;
+    border-radius: 3px;
+    padding: 11px;
+}
+.sharelink-form input.wide {
+    width: 290px;
+}
+.sharelink-form button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.callout {
+    padding: 10px;
+    border: 1px solid rgb(111, 111, 111);
+    background: #eee;
+    border-radius: 5px;
+    margin: 15px 0;
+
+}
+
+.callout-attention {
+   background: rgb(255, 246, 179);
+   border-color: rgb(255, 228, 21)
+}
+.callout-warning {
+    border-color:rgb(255, 26, 26);
+    background-color: rgb(255, 211, 211);
+}
+.callout .dashicons {
+    margin-right: 5px;
+}

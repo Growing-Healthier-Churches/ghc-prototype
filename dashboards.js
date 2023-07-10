@@ -7,9 +7,9 @@
 //
 
 //Example variables - in live loaded from php
-const userCHMS = "elvanto_user" //elvanto_user, pco_user
-const userSubscription = "large" // free, small, medium, large
-const userRoles = ["team_member"] //team_billing, team_member, team_admin
+let userCHMS = "elvanto_user" //elvanto_user, pco_user
+let userSubscription = "large" // free, small, medium, large
+const userRoles = ["coach"] //team_billing, team_member, team_admin, coach
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
 const sharedDashboardInfo = [
@@ -78,7 +78,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url&order=plan"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url,published&order=plan&eq(published,true)"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -143,7 +143,7 @@ function filterData(data) {
     
 
     // Shared dashboards info
-    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing")) { 
+    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing") || userRoles.includes("coach") ) { 
         console.log("shared dashboards")
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))          
         renderShared(sharedDashboardInfo, sharedDashboards)
@@ -203,7 +203,7 @@ function renderShared(userDataShared, linkedDashboards) {
 
     //default container to insert generated html into
     
-    if (userRoles.includes("team_billing" || "team_admin")) {
+    if (userRoles.includes("team_admin") || userRoles.includes("team_billing")) {
         containerEl = document.getElementById("admin-cards")
     } else {
         containerEl = document.getElementById("team-cards")
@@ -223,8 +223,8 @@ function renderShared(userDataShared, linkedDashboards) {
             return (`<article  class="strip">Previously shared dashboard not available on current plan</article>`)
         }
 
-        // simple display for team members
-        if(userRoles.includes("team_member")) {
+        // simple display for team members and coaches
+        if(userRoles.includes("team_member") || userRoles.includes("coach")) {
             return (
                 `<article  class="strip">
                     <span class="dashicons dashicons-analytics"></span>
@@ -233,7 +233,8 @@ function renderShared(userDataShared, linkedDashboards) {
                         <!-- <span>(Secondary name if exists)</span> -->
                     </h3>
                     </div>
-                    <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
+                    <a class="button" href="${item.looker_studio_url}">Open dashboard</a>
+                    <a href="${thisDash.info_link}" class="docs-link"><span class="dashicons dashicons-media-document"></span>Read the docs</a>   
                 </article>
                 `
             )
@@ -303,7 +304,7 @@ function renderAvailable(data) {
                     }
                     ${
                         /* logic to display turbo share or ordinary share */
-                        (userSubscription === "large" && item.turbo_setup_url && userRoles.includes("team_billing")) ?  
+                        (userSubscription === "large" && item.turbo_setup_url && (userRoles.includes("team_billing") || userRoles.includes("team_billing"))) ?  
                             `<a href="${item.turbo_setup_url}" class="button secondary">Share turbo version</a>` :
                         (userRoles.includes("team_billing") && item.plan !== "Separate subscription") && 
                             `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>`  

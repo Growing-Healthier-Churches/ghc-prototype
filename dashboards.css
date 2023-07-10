@@ -538,6 +538,14 @@ wordpress styles. Please clean-up if moving into a new environment */
   border-width: 0 1px 1px 1px;
 }
 
+/* team specific display */
+#my-dashboards .strip .docs-link {
+  text-decoration: none;
+}
+#my-dashboards .strip .docs-link .dashicons {
+  line-height: 1em;
+}
+
 .dashicons-update {
   color: #469525
 }

@@ -37,10 +37,18 @@ if ($user_meta){
 			 'looker_studio_url' => $share_meta_data['share_link'],	
 			 'save_date' =>  date("Y-m-d", strtotime($share_meta_data['share_date'])),	
 			 'created_by' => $created_by->user_email,	
-			 'is_turbo' => $share_meta_data['is_turbo']	
+			 'is_turbo' => $share_meta_data['is_turbo'],	
+			 'category' => get_the_category($post_id)[0]
 		 );	
-	 }	
- }	
+		 
+		 
+		 // Extract the 'cat' values into a separate array
+		$cat = array_column($share_dashboards, 'category');
+
+		// Sort the $share_dashboards array based on 'wp_post_id' values
+		array_multisort($cat, SORT_DESC, $share_dashboards);
+	}	
+  }	
 }
 
 
@@ -114,7 +122,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url&order=plan"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url,published&order=plan&eq(published,true)"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -179,7 +187,7 @@ function filterData(data) {
     
 
     // Shared dashboards info
-    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing")) { 
+    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing") || userRoles.includes("coach")) { 
         console.log("shared dashboards")
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))          
         renderShared(sharedDashboardInfo, sharedDashboards)
@@ -239,7 +247,7 @@ function renderShared(userDataShared, linkedDashboards) {
 
     //default container to insert generated html into
     
-    if (userRoles.includes("team_billing" || "team_admin")) {
+    if (userRoles.includes("team_billing") || userRoles.includes("team_admin")) {
         containerEl = document.getElementById("admin-cards")
     } else {
         containerEl = document.getElementById("team-cards")
@@ -260,7 +268,7 @@ function renderShared(userDataShared, linkedDashboards) {
         }
 
         // simple display for team members
-        if(userRoles.includes("team_member")) {
+        if(userRoles.includes("team_member") || userRoles.includes("coach")) {
             return (
                 `<article  class="strip">
                     <span class="dashicons dashicons-analytics"></span>
@@ -270,7 +278,8 @@ function renderShared(userDataShared, linkedDashboards) {
                     </h3>
                     </div>
                     <a class="button" target="_blank" href="${item.looker_studio_url}">Open dashboard</a>  
-                </article>
+                	<a href="${thisDash.info_link}" class="docs-link"><span class="dashicons dashicons-media-document"></span>Read the docs</a>   
+				</article>
                 `
             )
         } 
@@ -302,11 +311,11 @@ function renderShared(userDataShared, linkedDashboards) {
             <nav role="navigation" class="actions tag">
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
-              <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
-                <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
+                <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
+                <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li class="owner">Owner:  ${item.created_by}</li>
-                </ul>   
+              </ul>   
             </nav>   
         </article>
             `
