@@ -26,6 +26,9 @@
     overflow: scroll;
     height: calc(100vh - 80px)
 }
+.mymodal-overlay .mymodal-content h2 {
+    margin-right: 40px;
+}
 .mymodal-overlay .mymodal-content img {
     max-width: 70%;
     margin: 10px auto;
