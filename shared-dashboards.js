@@ -1,5 +1,8 @@
 /* Copy of onboarding/js with some different data */
 
+
+
+
 const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
 const modalClose = document.getElementById("mymodalClose")
 const modalLink = document.querySelectorAll(".modal-link")
@@ -9,7 +12,10 @@ const modalLink = document.querySelectorAll(".modal-link")
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
 const step = urlParams.get('step')
-console.log(queryString)
+const dashboardSelected = urlParams.get('share_post_id')
+
+
+
 if (step == "1") {
     // do nothing, default state of page
 } else if (step == "2") {
@@ -49,6 +55,22 @@ if (step == "1") {
 }
 
 
+async function getJSONData() {
+
+    // This is a little messy and could be done better with a join
+    // Limited supabase / postgress knowledge at this point
+
+    // dashboards & tools table
+    const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published&order=plan&eq(published,true)"
+    const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
+    const response = await fetch(baseurl + queryString + myApiKey)
+    const jsonData = await response.json();
+    
+    console.log(jsonData)
+  }
+
+  getJSONData()
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
 
