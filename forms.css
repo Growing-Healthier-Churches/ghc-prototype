@@ -1,6 +1,7 @@
 .sharelink-form {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 .sharelink-form select {
     border: 10px solid #fff;

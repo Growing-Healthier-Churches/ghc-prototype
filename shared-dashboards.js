@@ -14,6 +14,11 @@ const urlParams = new URLSearchParams(queryString);
 const step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
 
+//example variables - loaded from wordpress
+// used to populate <select> in form
+let userCHMS = "elvanto_user" //elvanto_user, pco_user
+let userSubscription = "large" // free, small, medium, large
+
 
 
 if (step == "1") {
@@ -67,10 +72,79 @@ async function getJSONData() {
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
     
-    console.log(jsonData)
+    filterData(jsonData)
   }
 
   getJSONData()
+
+function filterData(data) {
+    
+    //allow ourselves to mutate data
+    let newData = data;
+
+    //filter data for subscription-type
+    if (userSubscription === "free") {
+        newData = data.filter(dashboard => dashboard.plan === "Free")
+    } 
+
+    // remove non-dashboard tools
+    newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
+
+    // Filter data for CHMS
+    filterChms(userCHMS, newData)
+
+}
+
+// Filter data based on CHMS
+function filterChms(userType, newData) {
+    
+    let chmsData
+    let chms
+
+    // Different chMSes
+    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
+    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
+    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
+    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
+
+    switch(userType) {
+        case "pco_user":
+            chmsData = pcoDashboardsData;
+            chms = "pco";
+            break;
+        case "ccb_user":
+            chmsData = ccbDashboardsData;
+            chms = "ccb";
+            break;
+        case "fluro_user":
+            chmsData = fluroDashboardsData;
+            chms = "fluro";
+            break;
+        case "elvanto_user":
+            chmsData = elvantoDashboardsData;
+            chms = "elvanto";
+    }
+
+    renderSelect(chmsData)
+    
+}
+
+function renderSelect(data) {
+    
+    // Loop through JSON data to return html for dashboard cards
+    const selectHtml = data.map(item => {
+        return (
+            `
+            <option value="${item.wp_post_id}" ${dashboardSelected == item.wp_post_id ? "selected" : ""}>${item.name}</option>
+            `
+    )}).join('')
+
+    // Insert HTML into page
+    const dashboardSelects = document.querySelectorAll(".dashboard-select");
+        dashboardSelects.forEach((select) => {
+        select.innerHTML += selectHtml;
+    });
+}
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
 

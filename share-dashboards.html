@@ -841,18 +841,8 @@ font-family: 'Montserrat';
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
 
         <form class="sharelink-form">
-            <select>
-                <option value="health-checkup">Health Checkup</option>
-                <option value="health-toolkit">Health Toolkit</option> 
-                <option value="data-quality">Data Quality</option> 
-                <option value="frontdoor-backdoor">Front Door / Back Door</option>
-                <option value="ghc-stats">GHC Stats</option>
-                <option value="group-health">Group Health</option>
-                <option value="long-range">Long Range Service Attendance</option>
-                <option value="mission">Mission Dashboard</option>
-                <option value="people-flow">People Flow Health</option>
-                <option value="serving-activity">Serving Activity Loads</option>
-                <option value="song-health">Song Health</option>
+            <select class="dashboard-select">
+                <!-- generated from JS -->
             </select>
             <input type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
             <button type="submit" class="button">Save link</button>
@@ -1025,22 +1015,13 @@ font-family: 'Montserrat';
                             <li>Use a google group: Once you have created a google group email address you can paste this into the text field.</li>
                         </ul>
                         <p>Your copied dashboard is now shared and can be accessed by your team. Copy the url of this dashboard and paste into the form so that it can be viewed by all logged in team members of my GHC</p>
-                        <form>
-                            <select>
-                                <option value="health-checkup">Health Checkup</option>
-                                <option value="health-toolkit">Health Toolkit</option> 
-                                <option value="data-quality">Data Quality</option> 
-                                <option value="frontdoor-backdoor">Front Door / Back Door</option>
-                                <option value="ghc-stats">GHC Stats</option>
-                                <option value="group-health">Group Health</option>
-                                <option value="long-range">Long Range Service Attendance</option>
-                                <option value="mission">Mission Dashboard</option>
-                                <option value="people-flow">People Flow Health</option>
-                                <option value="serving-activity">Serving Activity Loads</option>
-                                <option value="song-health">Song Health</option>
+                        <h3>Save my link</h3>
+                        <form class="sharelink-form">
+                            <select class="dashboard-select">
+                                <!-- generated from JS -->
                             </select>
-                            <input type="text" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa-438b-a259-e6b1398e00c7/page/KfARB" />
-                            <button type="submit">Save link</button>
+                            <input type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+                            <button type="submit" class="button">Save link</button>
                         </form>
 					    
                 </div>
