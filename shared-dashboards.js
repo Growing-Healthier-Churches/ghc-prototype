@@ -67,7 +67,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published&order=plan&eq(published,true)"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published,dashboard_link&order=plan&eq(published,true)"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -125,11 +125,11 @@ function filterChms(userType, newData) {
             chms = "elvanto";
     }
 
-    renderSelect(chmsData)
+    renderData(chmsData)
     
 }
 
-function renderSelect(data) {
+function renderData(data) {
     
     // Loop through JSON data to return html for dashboard cards
     const selectHtml = data.map(item => {
@@ -139,11 +139,16 @@ function renderSelect(data) {
             `
     )}).join('')
 
+    const chosenDashboard = data.filter((item) => dashboardSelected == item.wp_post_id)
+
     // Insert HTML into page
     const dashboardSelects = document.querySelectorAll(".dashboard-select");
-        dashboardSelects.forEach((select) => {
+    dashboardSelects.forEach((select) => {
         select.innerHTML += selectHtml;
     });
+    document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
+    document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link} `
+  
 }
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
@@ -155,14 +160,16 @@ const helpModalContent = [
         html: `
         <h2>I can't see the menu!</h2>
         <p>The Looker Studio menu to create a shareable copy on appears when you hover over the top of the dashboard.</p> 
-       <p>Add animated gif</p>
+       <img src="dashboard_make_a_copy.gif" "Reveal menu on hover" />
         `
     },
     {
         order: 2,
         html: `
         <h2>Why do I need to create a shared copy?</h2>
-        <p>The original dashboard is owned by GHC, so when you share with others they will get an authentication failure. To share dashboards successfully you must first make a copy where you are the owner.</p>
+        <p>The original dashboard is owned by GHC, so when you share with others they will get an authentication failure. </p>
+
+        <p>To share dashboards successfully you must first make a copy where you are the owner.</p>
         <p>A copied dashboard will not receive automatic updates when improvements are released. However we will notify you in myGHC if there are any updates available and you can make a new copy which will include these updates.</p>
 
         `
@@ -170,44 +177,51 @@ const helpModalContent = [
     {
         order: 3,
         html : `
-        <h2>Where do I change the data credentials?</h2>
-       
+        <h2>Where do I manage data sources?</h2>
+       <img src="reauthenticate_sources.gif" alt="process of changing data sources" />
         `
     },
     {
         order: 4,
         html : `
-        <h2>Help! I’m getting a community connector error!</h2>
-        <p>Click Authorize and paste in your Elvanto API key</p>
-        <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/11/API-connect.png" />
+        <h2>Where do I change the data credentials?</h2>
+        <img src="data_credentials.gif" alt="process of changing data credentials" />
         `
     },
     {
         order: 5,
-        html: `
-        <h2>Help! I’m getting an “Empty Table” error!</h2>
-        <img src="./ghc-setup-menu.gif" width="300" />
+        html : `
+        <h2>Help! I’m getting a community connector error!</h2>
+       <p>This error exists because one/both of your attendance reports is returning "No Results". To get around this create dummy attendance results in a single service or group report. It doesn't matter if you you select no one attends, it's simply that this error occurs when the reports return empty results. No attendance is still a result.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/08/Screen-Shot-2021-08-18-at-1.25.19-pm.png" />
         `
     },
     {
         order: 6,
         html: `
-        <h2>Why do I need to reconnect each data source?</h2>
-        <p>You may notice this info bubble on the final screen of each data source:</p>
-        <p>Data source editors can now refresh fields, edit connections and edit custom SQL.</p>
-        <p>This has to do with who owns the data in google studio. To share a dashboard you first need to have permissions over the data sources it contains.</p>
-
+        <h2>Help! I’m getting an “Empty Table” error!</h2>
+        <p>Note that in some cases the reconnection will produce an error. In this case a dialogue box will appear, select "OK" and then select "FIELDS →" under the blue "RECONNECT" button.</p>
         `
     },
     {
         order: 7,
         html: `
-        <h2>Which filters can I customise?</h2>
-       
+        <h2>Why do I need to reconnect each data source?</h2>
+        <p>You may notice this message on the final screen of each data source:<br/>
+        "Data source editors can now refresh fields, edit connections and edit custom SQL."</p>
+        <p>This has to do with who owns the data in google studio. To share a dashboard you first need to have permissions over the data sources it contains.</p>
+
         `
     },
     {
         order: 8,
+        html: `
+        <h2>Which filters can I customise?</h2>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/12/Default-Locations-1024x829.png" />
+        `
+    },
+    {
+        order: 9,
         html: `
         <h2>Sharing data snapshots</h2>
         <p>I you just want a  static view of your dashboard you can: </p>
@@ -215,19 +229,19 @@ const helpModalContent = [
         <li>schedule pdf's of your dashboard to be sent via email at regular intervals. Simply open the share button and select "Schedule email delivery"</li>
         <li>download google sheet data from any table. Simply click the 3 dots in any table and select "Export to sheets"</li>
         </ul>
-        
+        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/05/ghc-pdf.gif" alt="how to reveal share menu" />
         `
     },
     {
-        order: 9,
+        order: 10,
         html: `
         <h2>Why should I save my shared dashboard to GHC?</h2>
-        <p>If you save your shared dashboard link to my GHC we can help you keep track of your dahboards</p>
+        <p>If you save your shared dashboard link to my GHC we can help you keep track of your dashboards</p>
         <ul>
             <li>We can let you know when updates are avilable to dashboards you've shared</li>
             <li>If you have a team account we will manage team members access to dashboards</li>
         </ul>
-        <p>We value data too, and sharing your dashboards to your GHC account helps us keep track of how the product is being used. This information helps us to make vauable improvements</p>
+        <p>We value data too, and sharing your dashboards to your GHC account helps us keep track of how the product is being used. This information helps us to make valuable improvements</p>
         `
     }
 
