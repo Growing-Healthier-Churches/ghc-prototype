@@ -6,7 +6,7 @@
 const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
 const modalClose = document.getElementById("mymodalClose")
 const modalLink = document.querySelectorAll(".modal-link")
-
+const dashboardSelects = document.querySelectorAll(".dashboard-select");
 
 // Set states from urls
 const queryString = window.location.search
@@ -14,10 +14,11 @@ const urlParams = new URLSearchParams(queryString);
 let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
 
-//example variables - loaded from wordpress
+// example variables - loaded from wordpress
 // used to populate <select> in form
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
+
 
 
 function renderStep() {
@@ -60,7 +61,7 @@ function renderStep() {
     }
 }
 
-renderStep()
+
 
 async function getJSONData() {
 
@@ -77,7 +78,7 @@ async function getJSONData() {
     filterData(jsonData)
   }
 
-  getJSONData()
+
 
 function filterData(data) {
     
@@ -144,7 +145,7 @@ function renderData(data) {
     const chosenDashboard = data.filter((item) => dashboardSelected == item.wp_post_id)
 
     // Insert HTML into page
-    const dashboardSelects = document.querySelectorAll(".dashboard-select");
+    
     dashboardSelects.forEach((select) => {
         select.innerHTML += selectHtml;
     });
@@ -159,6 +160,7 @@ function renderData(data) {
 }
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
+
 
 
 const helpModalContent = [
@@ -254,8 +256,14 @@ const helpModalContent = [
 
 ]
 
+// Invoke functions
+renderStep()
+getJSONData()
+accordion()
 
 
+
+// Event listeners
 doneBtn.forEach(element => {
     element.addEventListener("click", function(e){
         e.preventDefault()
@@ -319,7 +327,28 @@ function accordion() {
     })
 }
 
-accordion()
+dashboardSelects.forEach(element => {
+    element.addEventListener("change", function(e){
+            
+        // Get the current URL and its search parameters
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        const dashboardId = e.target.value
+
+        // Update or add parameters
+        searchParams.set('share_post_id', dashboardId); 
+       
+        // Create the new URL with updated parameters
+        const newURL = url.origin + url.pathname + '?' + searchParams.toString();
+
+        // Redirect to the new URL
+        window.location.href = newURL;
+   
+    })
+})
+
+
+
 
 
 
