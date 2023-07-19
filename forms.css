@@ -8,9 +8,13 @@
     outline: 1px solid #000;
     border-radius: 3px;
 }
+
 .sharelink-form select:focus,
 .sharelink-form selectmenu:focus {
     outline-color: blue;
+}
+.standalone-field {
+    margin-bottom: 20px;
 }
 
 .sharelink-form input {

@@ -839,6 +839,7 @@ font-family: 'Montserrat';
     <div class="intro-content">
         <h1 class="project-name">Share my dashboard</h1>
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
+        <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
         <form class="sharelink-form">
             <select class="dashboard-select">
@@ -848,23 +849,60 @@ font-family: 'Montserrat';
             <button type="submit" class="button">Save link</button>
         </form>
         
-       
-
-        <div class="callout callout-attention">
-            <p><span class="dashicons dashicons-warning"></span>Since dashboards permissions are connected to your google account you won’t be able to share dashboards without creating a copy first.</p>
-        </div>
         <div class="callout callout-info">
             <p><span class="dashicons dashicons-info"></span>We recommend splitting your screen in half so you can work through these instructions alongside your Looker Studio dashboard.</p>
         </div>
         </div>
 
 		<div id="timeline">
-			<div class="timeline-item" id="step1">
+            <div class="timeline-item" id="step1">
 				<div class="timeline-icon">1</div>
+				<div class="timeline-content">
+					<h2>Before you begin</h2>
+					    <div class="timeline-content-inner">
+                            <p>Before you begin you will need to ensure that you are logged into the correct google account.</p>
+                            
+                            <div class="callout callout-info">
+                                <p><span class="dashicons dashicons-info"></span>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
+                            </div>
+                            <p>Then you will needed to decide  which sharing option is right for you. There are 3 methods to set who can see your dashboards:</p>
+                        <ol>
+                            <li>
+                                <strong>Via a google group</strong><br/>
+                                This is the most powerful and flexible but requires some additional setup. We recommend this method of sharing. If a team member needs their access revoked you can do this simply without having to edit each dashboard's share settings separately.
+                            </li>
+                            <li><strong>Within the same domain</strong><br/>
+                                This option is only available for google enterprise email addresses. Choose this if all emails have the same company email address hosted by google e.g. jai@mycompany.com, emma@mycompany.com. 
+                            </li>
+                            <li><strong>Add individual emails</strong><br/>
+                                This option is available for everyone but it has the least control and visibility.
+                            </li>
+                        </ol>
+                        <form class="sharelink-form standalone-field">
+                            <!-- Jumps user to correct step -->
+                            <select id="share-select">
+                                <option value="2">Create a google group</option>
+                                <option value="3">I already have a google group</option>
+                                <option value="3">I'm using another sharing method</option>
+                            </select>
+                        </form>
+					        <a href="#" class="btn done-btn" data-step="1" id="step-decision">✓ Next</a>
+                            <a href="#" class="btn">Subscribe for assistance</a>
+                        </div>
+				</div>
+                <div class="timeline-help">
+                    <h3>Help</h3>
+                    
+                  
+                </div>
+			</div>
+			<div class="timeline-item closed" id="step2">
+				<div class="timeline-icon">2</div>
 				<div class="timeline-content">
 					<h2>Create a google group for sharing</h2>
 					    <div class="timeline-content-inner">
-                            <p>This is the most powerful and flexible way of managing permissions in your dashboards. Skip this step if you are not planning to use a google group to share your dashboards. </p>
+                            <p>This is the most powerful and flexible way of managing permissions in your dashboards. Skip this step if you are not planning to use a google group to share your dashboards or have already created one. </p>
+                            <a href="#" class="btn skip-btn" data-step="1">Skip step</a>
                             <ul>
                                 <li>First go to <a href="https://groups.google.com" target="_blank">https://groups.google.com</a></li>
                                 <li>Click <strong>Create Group</strong> (top left)</li>
@@ -887,8 +925,8 @@ font-family: 'Montserrat';
                             </ul>
                             <p>Your google group has now been created. Make a note of the email address for use later</p>
 
-					        <a href="#" class="btn done-btn" data-step="1">✓ Done</a>
-                            <a href="#" class="btn skip-btn" data-step="1">Skip step</a>
+					        <a href="#" class="btn done-btn" data-step="2">✓ Done</a>
+
                             <a href="#" class="btn">Subscribe for assistance</a>
                         </div>
 				</div>
@@ -900,8 +938,8 @@ font-family: 'Montserrat';
                 </div>
 			</div>
 
-			<div class="timeline-item closed" id="step2">
-				<div class="timeline-icon">2</div>
+			<div class="timeline-item closed" id="step3">
+				<div class="timeline-icon">3</div>
 				<div class="timeline-content">
 					<h2>Create a copy</h2>
                     <div class="timeline-content-inner">
@@ -914,7 +952,7 @@ font-family: 'Montserrat';
                     <p>A dialog box will now appear. Leave all the values unchanged. Click Copy Report.</p>
                     <p>You have now created a new copy! Rename it by clicking the "Copy of [dashboard title]" in the top left and name to something that makes sense to you.
                     </p>
-					<a href="#" class="btn done-btn" data-step="2">✓ Done</a>
+					<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
                 </div>
 				</div>
@@ -929,8 +967,8 @@ font-family: 'Montserrat';
                 </div>
 			</div>
 
-			<div class="timeline-item closed" id="step3">
-				<div class="timeline-icon">3</div>
+			<div class="timeline-item closed" id="step4">
+				<div class="timeline-icon">4</div>
 				<div class="timeline-content">
 					<h2>Reconnect your data</h2>
                     <div class="timeline-content-inner">
@@ -947,7 +985,7 @@ font-family: 'Montserrat';
                        <p> Repeat these steps for each of the data sources. Once completed Click “CLOSE” in the top right to return to the dashboard.</p>
                        
                         
-                    <a href="#" class="btn done-btn" data-step="3">✓ Done</a>
+                    <a href="#" class="btn done-btn" data-step="4">✓ Done</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
                 </div>
                 </div>
@@ -965,8 +1003,8 @@ font-family: 'Montserrat';
                 </div>
 			</div>
 
-            <div class="timeline-item closed" id="step4">
-				<div class="timeline-icon">4</div>
+            <div class="timeline-item closed" id="step5">
+				<div class="timeline-icon">5</div>
 				<div class="timeline-content">
 					<h2>Customise dashboard filters</h2>
                     <div class="timeline-content-inner">
@@ -974,8 +1012,8 @@ font-family: 'Montserrat';
                         <p>You may wish to set a default filter on your dashboards e.g. Adults of your main congregations.</p>
                         <p>To do this click on either the demographic or location control box. The data panel will open up and you can add "Default selection" values separated by a comma. You will need to enter the exact values.</p>
                         
-					<a href="#" class="btn done-btn" data-step="4">✓ Done</a>
-                    <a href="#" class="btn skip-btn" data-step="4">Skip step</a>
+					<a href="#" class="btn done-btn" data-step="5">✓ Done</a>
+                    <a href="#" class="btn skip-btn" data-step="5">Skip step</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
                 </div>
 				</div>
@@ -988,25 +1026,12 @@ font-family: 'Montserrat';
                 
 			</div>
 
-            <div class="timeline-item closed" id="step5">
-				<div class="timeline-icon">5</div>
+            <div class="timeline-item closed" id="step6">
+				<div class="timeline-icon">6</div>
 				<div class="timeline-content">
 					<h2>Sharing settings</h2>
                     <div class="timeline-content-inner">
-                        <p>There are 3 methods to set who can see your dashboards:</p>
-                        <ol>
-                            <li><strong>Within the same domain</strong><br/>
-                                This option is only available for google enterprise email addresses. Choose this if all emails have the same company email address hosted by google e.g. jai@mycompany.com, emma@mycompany.com. 
-                            </li>
-                            <li><strong>Add individual emails</strong><br/>
-                                This option is available for everyone but if you need to remove a team member in the future you will have to do it separately for each dashboard.
-                            </li>
-                            <li>
-                                <strong>Via a google group</strong><br/>
-                                This is the most powerful and flexible but requires some additional setup. Refer to step 1 for the full process
-
-                            </li>
-                        </ol>
+                        
                         <div class="callout callout-warning">
                             <p><span class="dashicons dashicons-remove"></span>Selecting "anyone with the link" or "anyone on the internet" in this step breaches our terms and conditions since you are not able to control the security of your data.</p>
                         </div>
@@ -1014,11 +1039,11 @@ font-family: 'Montserrat';
                             <p><span class="dashicons dashicons-info"></span>The following email accounts are associated to your my GHC team: emai1@test.com, email2@test.com</p>
                         </div>
                         
-                        <p>Decide which option is right for you, then click the "Share" button in the top right to open a dialog box with sharing options.</p>
+                        <p>Click the "Share" button in the top right to open a dialog box with sharing options.</p>
                         <ul>
                             <li>Share within the same domain:</li>
+                            <li>Use a google group: paste google group email address into the text field.</li>
                             <li>Add individual emails: Enter each email address into the text field. </li>
-                            <li>Use a google group: Once you have created a google group email address you can paste this into the text field.</li>
                         </ul>
                         <p>Your copied dashboard is now shared and can be accessed by your team. Copy the url of this dashboard and paste into the form so that it can be viewed by all logged in team members of my GHC</p>
                         <h3>Save my link</h3>
@@ -1036,6 +1061,7 @@ font-family: 'Montserrat';
                     <h3>Help</h3>
                     <p><a class="modal-link" data-help="9" href="">Sharing data snapshots</a></p>
                     <p><a class="modal-link" data-help="10" href="">Why should I save my shared dashboards to GHC?   </a></p>
+                    <p><a class="modal-link" data-help="11" href="">I forgot my google group email address </a></p>
                     <h4>Creating a shareable copy</h4>
                     <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>

@@ -11,7 +11,7 @@ const modalLink = document.querySelectorAll(".modal-link")
 // Set states from urls
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
-const step = urlParams.get('step')
+let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
 
 //example variables - loaded from wordpress
@@ -20,45 +20,47 @@ let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
 
 
-
-if (step == "1") {
-    // do nothing, default state of page
-} else if (step == "2") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.remove("closed")
-} else if (step == "3") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
-    document.getElementById("step2").classList.remove("closed")
-    document.getElementById("step3").classList.remove("closed")
-} else if (step == "4") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
-    document.getElementById("step2").classList.remove("closed")
-    document.getElementById("step3").classList.add("done")
-    document.getElementById("step3").classList.add("completed-closed")
-    document.getElementById("step3").classList.remove("closed")
-    document.getElementById("step4").classList.remove("closed")
-} else if (step == "5") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
-    document.getElementById("step2").classList.remove("closed")
-    document.getElementById("step3").classList.add("done")
-    document.getElementById("step3").classList.add("completed-closed")
-    document.getElementById("step3").classList.remove("closed")
-    document.getElementById("step4").classList.add("done")
-    document.getElementById("step4").classList.add("completed-closed")
-    document.getElementById("step4").classList.remove("closed")
-    document.getElementById("step5").classList.remove("closed")
+function renderStep() {
+    if (step == "1") {
+        // do nothing, default state of page
+    } else if (step == "2") {
+        document.getElementById("step1").classList.add("done")
+        document.getElementById("step1").classList.add("completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+    } else if (step == "3") {
+        document.getElementById("step1").classList.add("done")
+        document.getElementById("step1").classList.add("completed-closed")
+        document.getElementById("step2").classList.add("done")
+        document.getElementById("step2").classList.add("completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.remove("closed")
+    } else if (step == "4") {
+        document.getElementById("step1").classList.add("done")
+        document.getElementById("step1").classList.add("completed-closed")
+        document.getElementById("step2").classList.add("done")
+        document.getElementById("step2").classList.add("completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.add("done")
+        document.getElementById("step3").classList.add("completed-closed")
+        document.getElementById("step3").classList.remove("closed")
+        document.getElementById("step4").classList.remove("closed")
+    } else if (step == "5") {
+        document.getElementById("step1").classList.add("done")
+        document.getElementById("step1").classList.add("completed-closed")
+        document.getElementById("step2").classList.add("done")
+        document.getElementById("step2").classList.add("completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.add("done")
+        document.getElementById("step3").classList.add("completed-closed")
+        document.getElementById("step3").classList.remove("closed")
+        document.getElementById("step4").classList.add("done")
+        document.getElementById("step4").classList.add("completed-closed")
+        document.getElementById("step4").classList.remove("closed")
+        document.getElementById("step5").classList.remove("closed")
+    }
 }
 
+renderStep()
 
 async function getJSONData() {
 
@@ -131,7 +133,7 @@ function filterChms(userType, newData) {
 
 function renderData(data) {
     
-    // Loop through JSON data to return html for dashboard cards
+    // Loop through JSON data to return html for select options
     const selectHtml = data.map(item => {
         return (
             `
@@ -146,8 +148,13 @@ function renderData(data) {
     dashboardSelects.forEach((select) => {
         select.innerHTML += selectHtml;
     });
-    document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
-    document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link} `
+    if (chosenDashboard[0]) {
+        document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
+        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
+    } else {
+        document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")
+    }
+    
   
 }
 
@@ -260,8 +267,6 @@ doneBtn.forEach(element => {
         thisItem.closest(".timeline-item").classList.add("completed-closed")
         thisStep ++
         
-        console.log(thisItem.classList)
-        console.log(document.getElementById("step" + thisStep))
         // remove closed class from next step
         document.getElementById("step" + thisStep).classList.remove("closed")
         
@@ -273,8 +278,13 @@ doneBtn.forEach(element => {
             thisItem.classList.add("complete-btn")
         } 
         if (thisItem.classList.contains("skip-btn")) {
-            thisItem.innerHTML = "skipped"
-            
+            thisItem.innerHTML = "skipped"   
+        }
+        // different logic to jump to correct section
+        if (thisItem.id === "step-decision") {
+            console.log("decision to make")
+            step = document.getElementById("share-select").value
+            renderStep()
         }
         
 
@@ -303,7 +313,6 @@ function accordion() {
         let thisContent = el.children[1]
         thisContent.addEventListener("click", function(e) {
             e.preventDefault()
-            console.log(e.target.innerHTML)
             e.target.closest(".timeline-item").classList.remove("completed-closed")
         })
        
