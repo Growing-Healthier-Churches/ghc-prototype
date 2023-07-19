@@ -71,3 +71,8 @@
   input:focus::placeholder {
     color: transparent;
   }
+
+  button:disabled {
+      background: rgb(111, 111, 111);
+      cursor:not-allowed;
+  }

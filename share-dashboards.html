@@ -845,10 +845,12 @@ font-family: 'Montserrat';
             <select class="dashboard-select">
                 <!-- generated from JS -->
             </select>
-            <input type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+            <input type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
             <button type="submit" class="button">Save link</button>
         </form>
-        
+        <div class="callout callout-warning pasted-alert" style="display: none">
+            <p><span class="dashicons dashicons-remove"></span>This is the master dashboard link. You cannot use this link.</p>
+        </div>
         <div class="callout callout-info">
             <p><span class="dashicons dashicons-info"></span>We recommend splitting your screen in half so you can work through these instructions alongside your Looker Studio dashboard.</p>
         </div>

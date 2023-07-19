@@ -7,6 +7,7 @@ const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
 const modalClose = document.getElementById("mymodalClose")
 const modalLink = document.querySelectorAll(".modal-link")
 const dashboardSelects = document.querySelectorAll(".dashboard-select");
+const dashboardInput = document.querySelectorAll(".dashboard-paste");
 
 // Set states from urls
 const queryString = window.location.search
@@ -14,154 +15,13 @@ const urlParams = new URLSearchParams(queryString);
 let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
 
+// populated from data but needed for other functions
+let masterDashboardUrls
+
 // example variables - loaded from wordpress
 // used to populate <select> in form
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
-
-
-
-function renderStep() {
-    if (step == "1") {
-        // do nothing, default state of page
-    } else if (step == "2") {
-        document.getElementById("step1").classList.add("done")
-        document.getElementById("step1").classList.add("completed-closed")
-        document.getElementById("step2").classList.remove("closed")
-    } else if (step == "3") {
-        document.getElementById("step1").classList.add("done")
-        document.getElementById("step1").classList.add("completed-closed")
-        document.getElementById("step2").classList.add("done")
-        document.getElementById("step2").classList.add("completed-closed")
-        document.getElementById("step2").classList.remove("closed")
-        document.getElementById("step3").classList.remove("closed")
-    } else if (step == "4") {
-        document.getElementById("step1").classList.add("done")
-        document.getElementById("step1").classList.add("completed-closed")
-        document.getElementById("step2").classList.add("done")
-        document.getElementById("step2").classList.add("completed-closed")
-        document.getElementById("step2").classList.remove("closed")
-        document.getElementById("step3").classList.add("done")
-        document.getElementById("step3").classList.add("completed-closed")
-        document.getElementById("step3").classList.remove("closed")
-        document.getElementById("step4").classList.remove("closed")
-    } else if (step == "5") {
-        document.getElementById("step1").classList.add("done")
-        document.getElementById("step1").classList.add("completed-closed")
-        document.getElementById("step2").classList.add("done")
-        document.getElementById("step2").classList.add("completed-closed")
-        document.getElementById("step2").classList.remove("closed")
-        document.getElementById("step3").classList.add("done")
-        document.getElementById("step3").classList.add("completed-closed")
-        document.getElementById("step3").classList.remove("closed")
-        document.getElementById("step4").classList.add("done")
-        document.getElementById("step4").classList.add("completed-closed")
-        document.getElementById("step4").classList.remove("closed")
-        document.getElementById("step5").classList.remove("closed")
-    }
-}
-
-
-
-async function getJSONData() {
-
-    // This is a little messy and could be done better with a join
-    // Limited supabase / postgress knowledge at this point
-
-    // dashboards & tools table
-    const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published,dashboard_link&order=plan&eq(published,true)"
-    const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
-    const response = await fetch(baseurl + queryString + myApiKey)
-    const jsonData = await response.json();
-    
-    filterData(jsonData)
-  }
-
-
-
-function filterData(data) {
-    
-    //allow ourselves to mutate data
-    let newData = data;
-
-    //filter data for subscription-type
-    if (userSubscription === "free") {
-        newData = data.filter(dashboard => dashboard.plan === "Free")
-    } 
-
-    // remove non-dashboard tools
-    newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
-
-    // Filter data for CHMS
-    filterChms(userCHMS, newData)
-
-}
-
-// Filter data based on CHMS
-function filterChms(userType, newData) {
-    
-    let chmsData
-    let chms
-
-    // Different chMSes
-    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
-    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
-    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
-    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
-
-    switch(userType) {
-        case "pco_user":
-            chmsData = pcoDashboardsData;
-            chms = "pco";
-            break;
-        case "ccb_user":
-            chmsData = ccbDashboardsData;
-            chms = "ccb";
-            break;
-        case "fluro_user":
-            chmsData = fluroDashboardsData;
-            chms = "fluro";
-            break;
-        case "elvanto_user":
-            chmsData = elvantoDashboardsData;
-            chms = "elvanto";
-    }
-
-    renderData(chmsData)
-    
-}
-
-function renderData(data) {
-    
-    // Loop through JSON data to return html for select options
-    const selectHtml = data.map(item => {
-        return (
-            `
-            <option value="${item.wp_post_id}" ${dashboardSelected == item.wp_post_id ? "selected" : ""}>${item.name}</option>
-            `
-    )}).join('')
-
-    const chosenDashboard = data.filter((item) => dashboardSelected == item.wp_post_id)
-
-    // Insert HTML into page
-    
-    dashboardSelects.forEach((select) => {
-        select.innerHTML += selectHtml;
-    });
-    if (chosenDashboard[0]) {
-        document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
-        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
-    } else {
-        document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")
-    }
-    
-  
-}
-
-let doneItems = document.querySelectorAll(".timeline-item.done")
-
-
 
 const helpModalContent = [
     {
@@ -256,6 +116,144 @@ const helpModalContent = [
 
 ]
 
+function renderStep() {
+    if (step == "1") {
+        // do nothing, default state of page
+    } else if (step == "2") {
+        document.getElementById("step1").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+    } else if (step == "3") {
+        document.getElementById("step1").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.remove("closed")
+    } else if (step == "4") {
+        document.getElementById("step1").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.add("done", "completed-closed")
+        document.getElementById("step3").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.remove("closed")
+        document.getElementById("step4").classList.remove("closed")
+    } else if (step == "5") {
+        document.getElementById("step1").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.add("done", "completed-closed")
+        document.getElementById("step3").classList.add("done", "completed-closed")
+        document.getElementById("step4").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.remove("closed")
+        document.getElementById("step4").classList.remove("closed")
+        document.getElementById("step5").classList.remove("closed")
+    }
+}
+
+
+
+async function getJSONData() {
+
+    // This is a little messy and could be done better with a join
+    // Limited supabase / postgress knowledge at this point
+
+    // dashboards & tools table
+    const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published,dashboard_link&order=plan&eq(published,true)"
+    const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
+    const response = await fetch(baseurl + queryString + myApiKey)
+    const jsonData = await response.json();
+    
+    filterData(jsonData)
+  }
+
+
+
+function filterData(data) {
+    
+    //allow ourselves to mutate data
+    let newData = data;
+
+    // create array of all dashboard urls
+    // check for pasting into input field
+    masterDashboardUrls = newData.map(item => item.dashboard_link)
+
+    //filter data for subscription-type
+    if (userSubscription === "free") {
+        newData = data.filter(dashboard => dashboard.plan === "Free")
+    } 
+
+    // remove non-dashboard tools
+    newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
+
+    // Filter data for CHMS
+    filterChms(userCHMS, newData)
+
+}
+
+// Filter data based on CHMS
+function filterChms(userType, newData) {
+    
+    let chmsData
+    let chms
+
+    // Different chMSes
+    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
+    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
+    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
+    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
+
+    switch(userType) {
+        case "pco_user":
+            chmsData = pcoDashboardsData;
+            chms = "pco";
+            break;
+        case "ccb_user":
+            chmsData = ccbDashboardsData;
+            chms = "ccb";
+            break;
+        case "fluro_user":
+            chmsData = fluroDashboardsData;
+            chms = "fluro";
+            break;
+        case "elvanto_user":
+            chmsData = elvantoDashboardsData;
+            chms = "elvanto";
+    }
+
+    renderData(chmsData)
+    
+}
+
+function renderData(data) {
+    
+    // Loop through JSON data to return html for select options
+    const selectHtml = data.map(item => {
+        return (
+            `
+            <option value="${item.wp_post_id}" ${dashboardSelected == item.wp_post_id ? "selected" : ""}>${item.name}</option>
+            `
+    )}).join('')
+
+    const chosenDashboard = data.filter((item) => dashboardSelected == item.wp_post_id)
+
+    // Insert HTML into page
+    
+    dashboardSelects.forEach((select) => {
+        select.innerHTML += selectHtml;
+    });
+    if (chosenDashboard[0]) {
+        document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
+        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
+    } else {
+        document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")
+    }
+    
+  
+}
+
+let doneItems = document.querySelectorAll(".timeline-item.done")
+
+
+
+
+
 // Invoke functions
 renderStep()
 getJSONData()
@@ -323,7 +321,6 @@ function accordion() {
             e.preventDefault()
             e.target.closest(".timeline-item").classList.remove("completed-closed")
         })
-       
     })
 }
 
@@ -347,7 +344,27 @@ dashboardSelects.forEach(element => {
     })
 })
 
-
+dashboardInput.forEach(element => {
+    
+    element.addEventListener("input", function(e){
+        const thisInput = e.target.value 
+        const siblingButton = e.target.nextElementSibling
+        //reset
+        siblingButton.disabled = false
+        document.querySelectorAll(".pasted-alert").forEach(
+            el => el.style.display = "none"
+        )
+        //match - disable
+        if (masterDashboardUrls.includes(thisInput)) {
+            siblingButton.disabled = true
+            document.querySelectorAll(".pasted-alert").forEach(
+                el => el.style.display = "block"
+            )
+          
+        }
+   
+    })
+})
 
 
 
