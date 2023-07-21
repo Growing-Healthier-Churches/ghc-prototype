@@ -837,7 +837,7 @@ font-family: 'Montserrat';
 <div class="container">
     
     <div class="intro-content">
-        <h1 class="project-name">Share my dashboard</h1>
+        <h1 class="project-name">Share my dashboard (Turbo)</h1>
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
         <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
@@ -863,7 +863,7 @@ font-family: 'Montserrat';
 					<h2>Before you begin</h2>
 					    <div class="timeline-content-inner">
                             <p>Before you begin you will need to ensure that you are logged into the correct google account.</p>
-                            <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you can't see any data take a look at the help section to resolve the issue</p>
+                            <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you get Authorization errors or are prompted to "complete your account setup" when you click on Create a copy then you are not logged into the correct google account.</p>
                             
                             <div class="callout callout-info">
                                 <p><span class="dashicons dashicons-info"></span>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
@@ -895,7 +895,7 @@ font-family: 'Montserrat';
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="0">I get an authorization required error</a></p>
+                    <p><a class="modal-link" href="#" data-help="0">I get a "complete your account setup" prompt</a></p>
                   
                 </div>
 			</div>
@@ -948,12 +948,12 @@ font-family: 'Montserrat';
                     <div class="timeline-content-inner">
 					<p>You cannot share the original dashboard, you must first make a copy:</p>
                     <ul>
-                        <li><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
+                        <li><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a></li>
                             <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
                             <li>Click on the menu and select "Make a Copy"</li>
                     </ul>
-                    <p>A dialog box will now appear. Leave all the values unchanged. Click Copy Report.</p>
-                    <p>You have now created a new copy! Rename it by clicking the "Copy of [dashboard title]" in the top left and name to something that makes sense to you.
+                    <p>When making a copy you'll be asked confirm data sources. Simply hit <strong>Copy Report</strong>. These three sources are streams of data from your ChMS that will be cached</p>
+                    <p>You may now see a screen which conatins the messages <strong>Data set configuration error</strong>. We will fix this in the next step.
                     </p>
 					<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
@@ -964,9 +964,7 @@ font-family: 'Montserrat';
                     <p><a class="modal-link" href="#" data-help="1">I can't see the menu!</a></p>
                     <p><a class="modal-link" href="#" data-help="2">Why do I need to create a shared copy?</a></p>
                     
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=210" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                
+                    
                 </div>
 			</div>
 
@@ -975,17 +973,20 @@ font-family: 'Montserrat';
 				<div class="timeline-content">
 					<h2>Reconnect your data</h2>
                     <div class="timeline-content-inner">
-                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the "Edit" button to ensure you are first in edit mode.</p>
-                        <p>You will need to repeat the steps for each of the data sources listed so it may be helpful to make a note as you go.</p>
+                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"></path></svg>Edit</strong> button to ensure you are first in edit mode.</p>
+                        <p>You will need to repeat the steps for <strong>each of the data sources marked with <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg></strong> so it may be helpful to make a note as you go.</p>
                         <ul>
                             <li>Click <strong>edit in the actions</strong> column</li>
-                            <li>Click <strong>RECONNECT</strong> to the top right</li>
-                            <li>If a dialog box appears click <strong>Apply</strong> to apply connection changes</li>
-                            <li>Click <strong>Data Credentials</strong>  just below the top menu</li>
-                            <li>A dialog box will open. Change the radio button to <strong>Owner's Credentials</strong>. Click Update</li>
-                            <li>Click <strong>FINISHED</strong> to the top right</li>
+                            <li>Toggle <strong>Auto Update </strong>so it's active </li>
+                            <li> Select a time that's <strong>not 8am</strong> (we encourage our users to diversify their extraction times to love the Planning Center API servers!). </li>
+                            <li>Click <strong>SAVE AND EXTRACT</strong>, wait for the data to cache.</li>
                         </ul>
-                       <p> Repeat these steps for each of the data sources. Once completed Click “CLOSE” in the top right to return to the dashboard.</p>
+                        <div class="callout callout-info">
+                            <p><span class="dashicons dashicons-info"></span>This extraction time is when your data is cached and frozen. So any updates to your database won't be refreshed in our dashboards until the next extraction cycle.</p>
+                        </div>
+                       <p> Repeat these steps for each of the turboed data sources (indicated by <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>).</p>
+                       <p>Once completed Click <strong>FINISHED</strong> in the top right, then <strong>CLOSE</strong> </p>
+                        <p> Click <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M12 7c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7 0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7c0 1.49-1.21 2.7-2.7 2.7z"></path><path d="M12 4C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 13a9.77 9.77 0 0 1-8.82-5.5C4.83 8.13 8.21 6 12 6s7.17 2.13 8.82 5.5A9.77 9.77 0 0 1 12 17z"></path></svg>VIEW</strong> (to exit edit dashboard mode) and you should return to viewing the dashboard with your data. </p>
                        
                         
                     <a href="#" class="btn done-btn" data-step="4">✓ Done</a>
@@ -995,14 +996,7 @@ font-family: 'Montserrat';
                 <div class="timeline-help">
                     <h3>Help</h3>
                     <p><a class="modal-link" href="#" data-help="3">Where do I manage data sources?</a></p>
-                    <p><a class="modal-link" href="#" data-help="4">Where do I change the data credentials?</a></p>
-                    <p><a class="modal-link" href="#" data-help="5">Help! I’m getting a community connector error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="6">Help! I’m getting an “Empty Table” error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="7">Why do I need to reconnect each data source?</a></p>
-                    
-                    
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=250" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
                 </div>
 			</div>
 
@@ -1023,8 +1017,7 @@ font-family: 'Montserrat';
                 <div class="timeline-help">
                     <h3>Help</h3>
                     <p><a class="modal-link" href="#" data-help="8">Which filters can I customise?</a></p>
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=499" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    
                 </div>
                 
 			</div>
@@ -1068,8 +1061,7 @@ font-family: 'Montserrat';
                     <p><a class="modal-link" data-help="9" href="">Sharing data snapshots</a></p>
                     <p><a class="modal-link" data-help="10" href="">Why should I save my shared dashboards to GHC?   </a></p>
                     <p><a class="modal-link" data-help="11" href="">I forgot my google group email address </a></p>
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    
                 </div>
 			</div>
 
@@ -1131,7 +1123,7 @@ font-family: 'Montserrat';
         </div>
 
         <!-- timeline JS -->
-        <script type="text/javascript" src="shared-dashboards.js"></script>
+        <script type="text/javascript" src="share-dashboards-turbo.js"></script>
 
 		<script type="text/javascript">
 			jQuery('#-pro-menu-79-13 .oxy-pro-menu-show-dropdown .menu-item-has-children > a', 'body').each(function(){

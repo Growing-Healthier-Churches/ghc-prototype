@@ -27,11 +27,10 @@ const helpModalContent = [
     {
         order: 0,
         html: `
-        <h2>I get an authorization required error</h2>
-        <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
-        <p>Then you will need to select the dashboard you want to view from the list of Lookwr Studio reports</p>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
-       <p>Alternatively, you can add the correct account from the menu, or select use another account when you click the "Authorize" button. You will need to know your username and password first.</p>
+        <h2>I get a "complete your account setup" prompt</h2>
+        <p>If you see  a "complete your account setup" prompt when trying to copy your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
+        <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/complete-account-prompt.gif" "Reveal menu on hover" />
         `
     },
     {
@@ -58,38 +57,6 @@ const helpModalContent = [
         html : `
         <h2>Where do I manage data sources?</h2>
        <img src="reauthenticate_sources.gif" alt="process of changing data sources" />
-        `
-    },
-    {
-        order: 4,
-        html : `
-        <h2>Where do I change the data credentials?</h2>
-        <img src="data_credentials.gif" alt="process of changing data credentials" />
-        `
-    },
-    {
-        order: 5,
-        html : `
-        <h2>Help! I’m getting a community connector error!</h2>
-       <p>This error exists because one/both of your attendance reports is returning "No Results". To get around this create dummy attendance results in a single service or group report. It doesn't matter if you you select no one attends, it's simply that this error occurs when the reports return empty results. No attendance is still a result.</p>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/08/Screen-Shot-2021-08-18-at-1.25.19-pm.png" />
-        `
-    },
-    {
-        order: 6,
-        html: `
-        <h2>Help! I’m getting an “Empty Table” error!</h2>
-        <p>Note that in some cases the reconnection will produce an error. In this case a dialogue box will appear, select "OK" and then select "FIELDS →" under the blue "RECONNECT" button.</p>
-        `
-    },
-    {
-        order: 7,
-        html: `
-        <h2>Why do I need to reconnect each data source?</h2>
-        <p>You may notice this message on the final screen of each data source:<br/>
-        "Data source editors can now refresh fields, edit connections and edit custom SQL."</p>
-        <p>This has to do with who owns the data in google studio. To share a dashboard you first need to have permissions over the data sources it contains.</p>
-
         `
     },
     {
@@ -165,7 +132,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published,dashboard_link&order=plan&eq(published,true)"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,wp_post_id,plan,turbo_type,published,turbo_link,dashboard_link&order=plan&eq(published,true)"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -182,7 +149,10 @@ function filterData(data) {
 
     // create array of all dashboard urls
     // check for pasting into input field
-    masterDashboardUrls = newData.map(item => item.dashboard_link)
+    masterDashboardUrls = newData.map(item => {
+        return ([item.dashboard_link, item.turbo_link])
+    }).flat()
+    console.log(masterDashboardUrls)
 
     //filter data for subscription-type
     if (userSubscription === "free") {
@@ -190,8 +160,12 @@ function filterData(data) {
     } 
 
     // remove non-dashboard tools
-    newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
+    newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription" ) 
 
+    // remove non-dashboard tools
+    newData = newData.filter(dashboard => dashboard.turbo_type !== null ) 
+    
+    console.log(newData)
     // Filter data for CHMS
     filterChms(userCHMS, newData)
 
@@ -251,8 +225,8 @@ function renderData(data) {
     if (chosenDashboard[0]) {
         let dashboardLinks = Array.from(document.getElementsByClassName("dashboard-to-share"))
         dashboardLinks.forEach((el) => {
-            el.textContent = `Open ${chosenDashboard[0].name} dashboard`
-            el.href = `${chosenDashboard[0].dashboard_link}`
+            el.textContent = `Open Turbo ${chosenDashboard[0].name} dashboard`
+            el.href = `${chosenDashboard[0].turbo_link}`
         })
 
     } else {
