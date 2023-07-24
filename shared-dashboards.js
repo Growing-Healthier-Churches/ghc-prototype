@@ -29,7 +29,7 @@ const helpModalContent = [
         html: `
         <h2>I get an authorization required error</h2>
         <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
-        <p>Then you will need to select the dashboard you want to view from the list of Lookwr Studio reports</p>
+        <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
        <p>Alternatively, you can add the correct account from the menu, or select use another account when you click the "Authorize" button. You will need to know your username and password first.</p>
         `
@@ -154,6 +154,9 @@ function renderStep() {
         document.getElementById("step4").classList.remove("closed")
         document.getElementById("step5").classList.remove("closed")
     }
+
+    //update done items
+    doneItems = document.querySelectorAll(".timeline-item.done")
 }
 
 
@@ -263,9 +266,6 @@ function renderData(data) {
 }
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
-
-
-
 
 
 // Invoke functions

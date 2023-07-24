@@ -857,7 +857,9 @@ font-family: 'Montserrat';
         <div class="callout callout-attention" id="shortcut-step" style="display: none">
             <p><span class="dashicons dashicons-warning"></span>Hey! It looks like you've already created a shared dashboard so we've skipped over the setup for you. If you need to review these again please expand steps 1 and 2.</p>
         </div>
-       
+        <div class="callout callout-attention" id="shortcut-step2" style="display: none">
+            <p><span class="dashicons dashicons-warning"></span>Hey! It looks like you've already created reusable data sources for another turbo dashboard so we've skipped over these steps for you. If you need to review these again please expand steps 3 and 4.</p>
+        </div>
         </div>
 
 		<div id="timeline">
@@ -867,7 +869,7 @@ font-family: 'Montserrat';
 					<h2>Before you begin</h2>
 					    <div class="timeline-content-inner">
                             <p>Before you begin you will need to ensure that you are logged into the correct google account.</p>
-                            <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you get Authorization errors or are prompted to "complete your account setup" when you click on Create a copy then you are not logged into the correct google account.</p>
+                            <p><a hr    ef="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you get Authorization errors or are prompted to "complete your account setup" when you click on Create a copy then you are not logged into the correct google account.</p>
                             
                             <div class="callout callout-info">
                                 <p><span class="dashicons dashicons-info"></span>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
@@ -949,16 +951,19 @@ font-family: 'Montserrat';
 			<div class="timeline-item closed" id="step3">
 				<div class="timeline-icon">3</div>
 				<div class="timeline-content">
-					<h2>Create a copy</h2>
+					<h2>Copy turboed sources</h2>
                     <div class="timeline-content-inner">
-					<p>You cannot share the original dashboard, you must first make a copy:</p>
+                    <div class="callout callout-info" id="shortcut-step">
+                        <p><span class="dashicons dashicons-info"></span>You only need to complete the next two steps the first time you create a turboed dashboard.</p>
+                    </div>
+					<p>To begin a turbo setup we've created a special setup dashboard that builds the extract sources.</p>
                     <ul>
-                        <li><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a></li>
+                        <li><a href="https://lookerstudio.google.com/u/0/reporting/cbc15c21-6b06-4037-b8c8-71310ccd2e15/page/QjZZC" target="_blank">Open turbo data sources</a></li>
                             <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
                             <li>Click on the menu and select "Make a Copy"</li>
                     </ul>
-                    <p>When making a copy you'll be asked confirm data sources. Simply hit <strong>Copy Report</strong>. These three sources are streams of data from your ChMS that will be cached</p>
-                    <p>You may now see a screen which conatins the messages <strong>Data set configuration error</strong>. We will fix this in the next step.
+                    <p>When making a copy you'll be asked confirm data sources. Simply hit <strong>Copy Report</strong>.</p>
+                    <p>After you make the copy the numbers will change to errors. This is normal, we will fix this in the next step.
                     </p>
 					<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
@@ -976,11 +981,33 @@ font-family: 'Montserrat';
 			<div class="timeline-item closed" id="step4">
 				<div class="timeline-icon">4</div>
 				<div class="timeline-content">
-					<h2>Reconnect your data</h2>
+					<h2>Make reusable data sources</h2>
                     <div class="timeline-content-inner">
+                       
                         <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"></path></svg>Edit</strong> button to ensure you are first in edit mode.</p>
-                        <p>You will need to repeat the steps for <strong>each of the data sources marked with <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg></strong> so it may be helpful to make a note as you go.</p>
+                        <p>You must first edit the <strong>elvanto API</strong> data source.</p>
                         <ul>
+                            <li>Click <strong>edit in the actions</strong> column</li>
+                            <li>Click <strong>RECONNECT</strong> in the top right</li>
+                            <li>Click on the button in the dialog to <strong>Apply</strong></li>
+                            <li>Click <strong>FINISHED</strong>in the top right</li>
+                        </ul>
+                        <p>You will need to repeat the steps below for <strong>each of the other data sources</strong> so it may be helpful to make a note as you go.</p>
+                        <ul>
+                            <li>Click <strong><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="15px" height="15px" viewBox="0 0 869.958 869.958" style="enable-background:new 0 0 869.958 869.958;"
+                                xml:space="preserve">
+                           <g>
+                               <path d="M115.132,737.958c13.436,0,26.872-5.126,37.124-15.377c20.502-20.502,20.502-53.744-0.001-74.246
+                                   c-30.474-30.474-47.256-70.988-47.256-114.084v-4.32c0-88.963,72.377-161.34,161.34-161.34h423.78l-41.688,42.192
+                                   c-20.381,20.625-20.18,53.865,0.445,74.244c10.23,10.11,23.564,15.155,36.896,15.155c13.541,0,27.078-5.207,37.346-15.6
+                                   l131.684-133.271c9.787-9.905,15.236-23.291,15.154-37.215c-0.084-13.923-5.693-27.244-15.6-37.03l-131.48-129.912
+                                   c-20.623-20.379-53.865-20.18-74.244,0.445s-20.18,53.866,0.445,74.245l42.25,41.747H266.339
+                                   c-71.143,0-138.026,27.704-188.332,78.009C27.704,391.903,0,458.788,0,529.93v4.32c0,71.143,27.704,138.026,78.01,188.331
+                                   C88.261,732.833,101.697,737.958,115.132,737.958z"/>
+                           </g>
+                           </svg> MAKE REUSABLE in the actions</strong> column</li>
+                            <li>Click the <strong>Make reusable</strong> button in the dialog</li>
                             <li>Click <strong>edit in the actions</strong> column</li>
                             <li>Toggle <strong>Auto Update </strong>so it's active </li>
                             <li> Select a time that's <strong>not 8am</strong> (we encourage our users to diversify their extraction times to reduce load on API servers). </li>
@@ -991,7 +1018,7 @@ font-family: 'Montserrat';
                         </div>
                        <p> Repeat these steps for each of the turboed data sources (indicated by <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>).</p>
                        <p>Once completed Click <strong>FINISHED</strong> in the top right, then <strong>CLOSE</strong> </p>
-                        <p> Click <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M12 7c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7 0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7c0 1.49-1.21 2.7-2.7 2.7z"></path><path d="M12 4C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 13a9.77 9.77 0 0 1-8.82-5.5C4.83 8.13 8.21 6 12 6s7.17 2.13 8.82 5.5A9.77 9.77 0 0 1 12 17z"></path></svg>VIEW</strong> (to exit edit dashboard mode) and you should return to viewing the dashboard with your data. </p>
+                        <p> Click <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M12 7c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7 0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7c0 1.49-1.21 2.7-2.7 2.7z"></path><path d="M12 4C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 13a9.77 9.77 0 0 1-8.82-5.5C4.83 8.13 8.21 6 12 6s7.17 2.13 8.82 5.5A9.77 9.77 0 0 1 12 17z"></path></svg>VIEW</strong> (to exit edit dashboard mode) and you should return to viewing the Turbo Setup with all the Validation Checks green. </p>
                        
                         
                     <a href="#" class="btn done-btn" data-step="4">✓ Done</a>
@@ -1008,12 +1035,32 @@ font-family: 'Montserrat';
             <div class="timeline-item closed" id="step5">
 				<div class="timeline-icon">5</div>
 				<div class="timeline-content">
-					<h2>Customise dashboard filters</h2>
+					<h2>Create a turbo copy</h2>
                     <div class="timeline-content-inner">
-                        <p>This is an optional step for those who want to share a filtered view of the dashboards. You can skip this step if not required.</p>
-                        <p>You may wish to set a default filter on your dashboards e.g. Adults of your main congregations.</p>
-                        <p>To do this click on either the demographic or location control box. The data panel will open up and you can add "Default selection" values separated by a comma. You will need to enter the exact values.</p>
-                        
+                        <ul>
+                            <li><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a></li>
+                                <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
+                                <li>Click on the menu and select "Make a Copy"</li>
+                        </ul>
+                        <p>When making a copy you'll be asked confirm data sources. This is where you'll need to select the reusable extraction sources you created earlier.</p>
+                        <p>Select the following 5 data sources (noting you'll need to scroll):</p>
+<ul>
+    <li>elvanto API People — <br/>
+        <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+            Extract Data People</strong></li>
+    <li>elvanto API Report of Service Individual Attendance — <br/>
+        <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+            Extract Data Group Attendance</strong></li>
+    <li>elvanto API Report of Group Individual Attendance — <br/>
+        <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+        Extract Data Group Attendance</strong></li>
+    <li>elvanto API Service Volunteers — <br/>
+        <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+        Extract Data Services Volunteers</strong></li>
+    <li>elvanto API Groups — <br/>
+        <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>Extract Data Groups</strong></li>
+</ul>
+<p>Click <strong>Copy Report</strong> </p>
 					<a href="#" class="btn done-btn" data-step="5">✓ Done</a>
                     <a href="#" class="btn skip-btn" data-step="5">Skip step</a>
                     <a href="#" class="btn">Subscribe for assistance</a>
@@ -1021,7 +1068,7 @@ font-family: 'Montserrat';
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="6">Which filters can I customise?</a></p>
+                
                     
                 </div>
                 
@@ -1188,266 +1235,7 @@ for (i = 0; i < accordions.length; i++) {
 		</script>
 
 	
-        <script type="text/javascript">
-
-            function oxygen_init_pro_menu() {
-                jQuery('.oxy-pro-menu-container').each(function(){
-                    
-                    // dropdowns
-                    var menu = jQuery(this),
-                        animation = menu.data('oxy-pro-menu-dropdown-animation'),
-                        animationDuration = menu.data('oxy-pro-menu-dropdown-animation-duration');
-                    
-                    jQuery('.sub-menu', menu).attr('data-aos',animation);
-                    jQuery('.sub-menu', menu).attr('data-aos-duration',animationDuration*1000);
-
-                    oxygen_offcanvas_menu_init(menu);
-                    jQuery(window).resize(function(){
-                        oxygen_offcanvas_menu_init(menu);
-                    });
-
-                    // let certain CSS rules know menu being initialized
-                    // "10" timeout is extra just in case, "0" would be enough
-                    setTimeout(function() {menu.addClass('oxy-pro-menu-init');}, 10);
-                });
-            }
-
-            jQuery(document).ready(oxygen_init_pro_menu);
-            document.addEventListener('oxygen-ajax-element-loaded', oxygen_init_pro_menu, false);
-            
-            let proMenuMouseDown = false;
-
-            jQuery(".oxygen-body")
-            .on("mousedown", '.oxy-pro-menu-show-dropdown:not(.oxy-pro-menu-open-container) .menu-item-has-children', function(e) {
-                proMenuMouseDown = true;
-            })
-
-            .on("mouseup", '.oxy-pro-menu-show-dropdown:not(.oxy-pro-menu-open-container) .menu-item-has-children', function(e) {
-                proMenuMouseDown = false;
-            })
-
-            .on('mouseenter focusin', '.oxy-pro-menu-show-dropdown:not(.oxy-pro-menu-open-container) .menu-item-has-children', function(e) {
-                if( proMenuMouseDown ) return;
-                
-                var subMenu = jQuery(this).children('.sub-menu');
-                subMenu.addClass('aos-animate oxy-pro-menu-dropdown-animating').removeClass('sub-menu-left');
-
-                var duration = jQuery(this).parents('.oxy-pro-menu-container').data('oxy-pro-menu-dropdown-animation-duration');
-
-                setTimeout(function() {subMenu.removeClass('oxy-pro-menu-dropdown-animating')}, duration*1000);
-
-                var offset = subMenu.offset(),
-                    width = subMenu.width(),
-                    docWidth = jQuery(window).width();
-
-                    if (offset.left+width > docWidth) {
-                        subMenu.addClass('sub-menu-left');
-                    }
-            })
-            
-            .on('mouseleave focusout', '.oxy-pro-menu-show-dropdown .menu-item-has-children', function() {
-                jQuery(this).children('.sub-menu').removeClass('aos-animate');
-
-                var subMenu = jQuery(this).children('.sub-menu');
-                //subMenu.addClass('oxy-pro-menu-dropdown-animating-out');
-
-                var duration = jQuery(this).parents('.oxy-pro-menu-container').data('oxy-pro-menu-dropdown-animation-duration');
-                setTimeout(function() {subMenu.removeClass('oxy-pro-menu-dropdown-animating-out')}, duration*1000);
-            })
-
-            // open icon click
-            .on('click', '.oxy-pro-menu-mobile-open-icon', function() {    
-                var menu = jQuery(this).parents('.oxy-pro-menu');
-                // off canvas
-                if (jQuery(this).hasClass('oxy-pro-menu-off-canvas-trigger')) {
-                    oxygen_offcanvas_menu_run(menu);
-                }
-                // regular
-                else {
-                    menu.addClass('oxy-pro-menu-open');
-                    jQuery(this).siblings('.oxy-pro-menu-container').addClass('oxy-pro-menu-open-container');
-                    jQuery('body').addClass('oxy-nav-menu-prevent-overflow');
-                    jQuery('html').addClass('oxy-nav-menu-prevent-overflow');
-                    
-                    oxygen_pro_menu_set_static_width(menu);
-                }
-                // remove animation and collapse
-                jQuery('.sub-menu', menu).attr('data-aos','');
-                jQuery('.oxy-pro-menu-dropdown-toggle .sub-menu', menu).slideUp(0);
-            });
-
-            function oxygen_pro_menu_set_static_width(menu) {
-                var menuItemWidth = jQuery(".oxy-pro-menu-list > .menu-item", menu).width();
-                jQuery(".oxy-pro-menu-open-container > div:first-child, .oxy-pro-menu-off-canvas-container > div:first-child", menu).width(menuItemWidth);
-            }
-
-            function oxygen_pro_menu_unset_static_width(menu) {
-                jQuery(".oxy-pro-menu-container > div:first-child", menu).width("");
-            }
-
-            // close icon click
-            jQuery('body').on('click', '.oxy-pro-menu-mobile-close-icon', function(e) {
-                
-                var menu = jQuery(this).parents('.oxy-pro-menu');
-
-                menu.removeClass('oxy-pro-menu-open');
-                jQuery(this).parents('.oxy-pro-menu-container').removeClass('oxy-pro-menu-open-container');
-                jQuery('.oxy-nav-menu-prevent-overflow').removeClass('oxy-nav-menu-prevent-overflow');
-
-                if (jQuery(this).parent('.oxy-pro-menu-container').hasClass('oxy-pro-menu-off-canvas-container')) {
-                    oxygen_offcanvas_menu_run(menu);
-                }
-
-                oxygen_pro_menu_unset_static_width(menu);
-            });
-
-            // dropdown toggle icon click
-            jQuery('body').on(
-                'touchstart click', 
-                '.oxy-pro-menu-dropdown-links-toggle.oxy-pro-menu-off-canvas-container .menu-item-has-children > a > .oxy-pro-menu-dropdown-icon-click-area,'+
-                '.oxy-pro-menu-dropdown-links-toggle.oxy-pro-menu-open-container .menu-item-has-children > a > .oxy-pro-menu-dropdown-icon-click-area', 
-                function(e) {
-                    e.preventDefault();
-
-                    // fix for iOS false triggering submenu clicks
-                    jQuery('.sub-menu').css('pointer-events', 'none');
-                    setTimeout( function() {
-                        jQuery('.sub-menu').css('pointer-events', 'initial');
-                    }, 500);
-
-                    // workaround to stop click event from triggering after touchstart
-                    if (window.oxygenProMenuIconTouched === true) {
-                        window.oxygenProMenuIconTouched = false;
-                        return;
-                    }
-                    if (e.type==='touchstart') {
-                        window.oxygenProMenuIconTouched = true;
-                    }
-                    oxygen_pro_menu_toggle_dropdown(this);
-                }
-            );
-
-            function oxygen_pro_menu_toggle_dropdown(trigger) {
-
-                var duration = jQuery(trigger).parents('.oxy-pro-menu-container').data('oxy-pro-menu-dropdown-animation-duration');
-
-                jQuery(trigger).closest('.menu-item-has-children').children('.sub-menu').slideToggle({
-                    start: function () {
-                        jQuery(this).css({
-                            display: "flex"
-                        })
-                    },
-                    duration: duration*1000
-                });
-            }
-                    
-            // fullscreen menu link click
-            var selector = '.oxy-pro-menu-open .menu-item a';
-            jQuery('body').on('click', selector, function(event){
-                
-                if (jQuery(event.target).closest('.oxy-pro-menu-dropdown-icon-click-area').length > 0) {
-                    // toggle icon clicked, no need to hide the menu
-                    return;
-                }
-                else if ((jQuery(this).attr("href") === "#" || jQuery(this).closest(".oxy-pro-menu-container").data("entire-parent-toggles-dropdown")) && 
-                         jQuery(this).parent().hasClass('menu-item-has-children')) {
-                    // empty href don't lead anywhere, treat it as toggle trigger
-                    oxygen_pro_menu_toggle_dropdown(event.target);
-                    // keep anchor links behavior as is, and prevent regular links from page reload
-                    if (jQuery(this).attr("href").indexOf("#")!==0) {
-                        return false;
-                    }
-                }
-
-                // hide the menu and follow the anchor
-                if (jQuery(this).attr("href").indexOf("#")===0) {
-                    jQuery('.oxy-pro-menu-open').removeClass('oxy-pro-menu-open');
-                    jQuery('.oxy-pro-menu-open-container').removeClass('oxy-pro-menu-open-container');
-                    jQuery('.oxy-nav-menu-prevent-overflow').removeClass('oxy-nav-menu-prevent-overflow');
-                }
-
-            });
-
-            // off-canvas menu link click
-            var selector = '.oxy-pro-menu-off-canvas .menu-item a';
-            jQuery('body').on('click', selector, function(event){
-                if (jQuery(event.target).closest('.oxy-pro-menu-dropdown-icon-click-area').length > 0) {
-                    // toggle icon clicked, no need to trigger it 
-                    return;
-                }
-                else if ((jQuery(this).attr("href") === "#" || jQuery(this).closest(".oxy-pro-menu-container").data("entire-parent-toggles-dropdown")) && 
-                    jQuery(this).parent().hasClass('menu-item-has-children')) {
-                    // empty href don't lead anywhere, treat it as toggle trigger
-                    oxygen_pro_menu_toggle_dropdown(event.target);
-                    // keep anchor links behavior as is, and prevent regular links from page reload
-                    if (jQuery(this).attr("href").indexOf("#")!==0) {
-                        return false;
-                    }
-                }
-            });
-
-            // off canvas
-            function oxygen_offcanvas_menu_init(menu) {
-
-                // only init off-canvas animation if trigger icon is visible i.e. mobile menu in action
-                var offCanvasActive = jQuery(menu).siblings('.oxy-pro-menu-off-canvas-trigger').css('display');
-                if (offCanvasActive!=='none') {
-                    var animation = menu.data('oxy-pro-menu-off-canvas-animation');
-                    setTimeout(function() {menu.attr('data-aos', animation);}, 10);
-                }
-                else {
-                    // remove AOS
-                    menu.attr('data-aos', '');
-                };
-            }
-            
-            function oxygen_offcanvas_menu_run(menu) {
-
-                var container = menu.find(".oxy-pro-menu-container");
-                
-                if (!container.attr('data-aos')) {
-                    // initialize animation
-                    setTimeout(function() {oxygen_offcanvas_menu_toggle(menu, container)}, 0);
-                }
-                else {
-                    oxygen_offcanvas_menu_toggle(menu, container);
-                }
-            }
-
-            var oxygen_offcanvas_menu_toggle_in_progress = false;
-
-            function oxygen_offcanvas_menu_toggle(menu, container) {
-
-                if (oxygen_offcanvas_menu_toggle_in_progress) {
-                    return;
-                }
-
-                container.toggleClass('aos-animate');
-
-                if (container.hasClass('oxy-pro-menu-off-canvas-container')) {
-                    
-                    oxygen_offcanvas_menu_toggle_in_progress = true;
-                    
-                    var animation = container.data('oxy-pro-menu-off-canvas-animation'),
-                        timeout = container.data('aos-duration');
-
-                    if (!animation){
-                        timeout = 0;
-                    }
-
-                    setTimeout(function() {
-                        container.removeClass('oxy-pro-menu-off-canvas-container')
-                        menu.removeClass('oxy-pro-menu-off-canvas');
-                        oxygen_offcanvas_menu_toggle_in_progress = false;
-                    }, timeout);
-                }
-                else {
-                    container.addClass('oxy-pro-menu-off-canvas-container');
-                    menu.addClass('oxy-pro-menu-off-canvas');
-                    oxygen_pro_menu_set_static_width(menu);
-                }
-            }
-        </script>
+        
 
     <link rel="stylesheet" id="oxygen-aos-css" href="./wordpress_files/aos.css" type="text/css" media="all">
 <style id="core-block-supports-inline-css" type="text/css">

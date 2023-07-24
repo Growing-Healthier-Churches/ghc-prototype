@@ -27,6 +27,16 @@ const helpModalContent = [
     {
         order: 0,
         html: `
+        <h2>I get an authorization required error</h2>
+        <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
+        <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
+       <p>Alternatively, you can add the correct account from the menu, or select use another account when you click the "Authorize" button. You will need to know your username and password first.</p>
+        `
+    },
+    {
+        order: 1,
+        html: `
         <h2>I get a "complete your account setup" prompt</h2>
         <p>If you see  a "complete your account setup" prompt when trying to copy your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
         <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
@@ -34,7 +44,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 1,
+        order: 2,
         html: `
         <h2>I can't see the menu!</h2>
         <p>The Looker Studio menu to create a shareable copy on appears when you hover over the top of the dashboard.</p> 
@@ -42,7 +52,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 2,
+        order: 3,
         html: `
         <h2>Why do I need to create a shared copy?</h2>
         <p>The original dashboard is owned by GHC, so when you share with others they will get an authentication failure. </p>
@@ -53,21 +63,29 @@ const helpModalContent = [
         `
     },
     {
-        order: 3,
+        order: 4,
         html : `
         <h2>Where do I manage data sources?</h2>
        <img src="reauthenticate_sources.gif" alt="process of changing data sources" />
         `
     },
     {
-        order: 8,
+        order: 5,
+        html : `
+        <h2>How do I edit data extraction sources?</h2>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/edit-extraction-sources.gif" alt="process of editing data sources extraction" />
+        `
+    },
+    
+    {
+        order: 6,
         html: `
         <h2>Which filters can I customise?</h2>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/12/Default-Locations-1024x829.png" />
         `
     },
     {
-        order: 9,
+        order: 7,
         html: `
         <h2>Sharing data snapshots</h2>
         <p>I you just want a  static view of your dashboard you can: </p>
@@ -79,7 +97,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 10,
+        order: 8,
         html: `
         <h2>Why should I save my shared dashboard to GHC?</h2>
         <p>If you save your shared dashboard link to my GHC we can help you keep track of your dashboards</p>
@@ -104,6 +122,8 @@ function renderStep() {
         document.getElementById("step2").classList.add("done", "completed-closed")
         document.getElementById("step2").classList.remove("closed")
         document.getElementById("step3").classList.remove("closed")
+        //show prompt
+        document.getElementById("shortcut-step").style.display = "block"
     } else if (step == "4") {
         document.getElementById("step1").classList.add("done", "completed-closed")
         document.getElementById("step2").classList.add("done", "completed-closed")
@@ -120,7 +140,11 @@ function renderStep() {
         document.getElementById("step3").classList.remove("closed")
         document.getElementById("step4").classList.remove("closed")
         document.getElementById("step5").classList.remove("closed")
+        //show prompt - only for reusable
+        if (document.getElementById("shortcut-step2")) {document.getElementById("shortcut-step2").style.display = "block"}
     }
+    //update done items
+    doneItems = document.querySelectorAll(".timeline-item.done")
 }
 
 
@@ -232,6 +256,8 @@ function renderData(data) {
     } else {
         document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")
     }
+
+    
     
   
 }
