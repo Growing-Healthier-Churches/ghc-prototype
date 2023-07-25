@@ -122,6 +122,14 @@ const helpModalContent = [
         </ul>
         <p>We value data too, and sharing your dashboards to your GHC account helps us keep track of how the product is being used. This information helps us to make valuable improvements</p>
         `
+    },
+    {
+        order: 11,
+        html: `
+        <h2>I forgot my google group email address</h2>
+        <p>Go to <a href="https://groups.google.com/my-groups">groups.google.com/my-groups</a> from there you can see all the groups you administer and those of which you are a member.</p>
+        <p>If you are group admin you can click on the group and edit its members, or add new ones.</p>
+        `
     }
 
 ]
@@ -153,6 +161,17 @@ function renderStep() {
         document.getElementById("step3").classList.remove("closed")
         document.getElementById("step4").classList.remove("closed")
         document.getElementById("step5").classList.remove("closed")
+    } else if (step == "6") {
+        document.getElementById("step1").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.add("done", "completed-closed")
+        document.getElementById("step3").classList.add("done", "completed-closed")
+        document.getElementById("step4").classList.add("done", "completed-closed")
+        document.getElementById("step5").classList.add("done", "completed-closed")
+        document.getElementById("step2").classList.remove("closed")
+        document.getElementById("step3").classList.remove("closed")
+        document.getElementById("step4").classList.remove("closed")
+        document.getElementById("step5").classList.remove("closed")
+        document.getElementById("step6").classList.remove("closed")
     }
 
     //update done items
