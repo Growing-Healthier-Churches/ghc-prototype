@@ -20,7 +20,7 @@ let masterDashboardUrls
 
 // example variables - loaded from wordpress
 // used to populate <select> in form
-let userCHMS = "pco_user" //elvanto_user, pco_user
+let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
 
 const helpModalContent = [
@@ -76,16 +76,35 @@ const helpModalContent = [
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/edit-extraction-sources.gif" alt="process of editing data sources extraction" />
         `
     },
-    
     {
         order: 6,
-        html: `
-        <h2>Which filters can I customise?</h2>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/12/Default-Locations-1024x829.png" />
+        html : `
+        <h2>How do I make sources reusable?</h2>
+        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/make-reusable-sources.gif" alt="process of editing data sources extraction" />
+        
         `
     },
     {
         order: 7,
+        html : `
+        <h2>How can I check I've completed this step successfully?</h2>
+       <p>When you're done your added data sources screen will look like this.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/Screen-Shot-2023-07-25-at-4.12.29-pm.png" />
+       <p>Also, your dashboard numbers will now all be green.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/Screen-Shot-2023-07-25-at-4.12.57-pm.png" />
+        `
+    },
+    
+    {
+        order: 8,
+        html: `
+        <h2How do I select extraction sources?</h2>
+       <p>When you make a copy select the corresponding extraction source from the list.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/linking-extraction-sources.gif" alt="selecting extraction sources" />
+        `
+    },
+    {
+        order: 9,
         html: `
         <h2>Sharing data snapshots</h2>
         <p>I you just want a  static view of your dashboard you can: </p>
@@ -97,7 +116,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 8,
+        order: 10,
         html: `
         <h2>Why should I save my shared dashboard to GHC?</h2>
         <p>If you save your shared dashboard link to my GHC we can help you keep track of your dashboards</p>
@@ -109,7 +128,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 9,
+        order: 11,
         html: `
         <h2>I forgot my google group email address</h2>
         <p>Go to <a href="https://groups.google.com/my-groups">groups.google.com/my-groups</a> from there you can see all the groups you administer and those of which you are a member.</p>
@@ -270,7 +289,7 @@ function renderData(data) {
         let dashboardLinks = Array.from(document.getElementsByClassName("dashboard-to-share"))
         dashboardLinks.forEach((el) => {
             el.textContent = `Open Turbo ${chosenDashboard[0].name} dashboard`
-            el.href = `${chosenDashboard[0].turbo_link}`
+            el.href = `${chosenDashboard[0].dashboard_link}`
         })
 
     } else {
