@@ -324,12 +324,12 @@ doneBtn.forEach(element => {
         // add done class to timeline container
         thisItem.closest(".timeline-item").classList.add("done")
         thisItem.closest(".timeline-item").classList.add("completed-closed")
+        //increment step
         thisStep ++
         
         // remove closed class from next step
         document.getElementById("step" + thisStep).classList.remove("closed")
-        
-        
+
         if (thisItem.classList.contains("done-btn")) {
             // update done button text and styles
             thisItem.innerHTML = "completed"
