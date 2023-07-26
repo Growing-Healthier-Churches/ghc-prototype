@@ -9,7 +9,7 @@
 //Example variables - in live loaded from php
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
-const userRoles = ["coach"] //team_billing, team_member, team_admin, coach
+const userRoles = ["team_billing"] //team_billing, team_member, team_admin, coach
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
 const sharedDashboardInfo = [
@@ -52,19 +52,6 @@ const sharedDashboardInfo = [
     }
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
-
-// Used just for delete functionality
-const helpModalContent = [
-    {
-        order: 1,
-        html: `
-        <h2>Are you sure you want to delete this dashboard?</h2>
-        <p>Deelting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
-        <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
-        <a class="button" href="">Yes, delete</a>
-        `
-    }
-]
 
 // dynamically populated from supabase
 // Lists version notes
@@ -131,16 +118,7 @@ function filterData(data) {
             extraDashboards.push(includedNotify[0])  
         }    
     }
-    
 
-    // Different chMSes
-    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
-    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
-    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
-    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
-
-    // Shared dashboards used 
-    
 
     // Shared dashboards info
     if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing") || userRoles.includes("coach") ) { 
@@ -214,8 +192,16 @@ function renderShared(userDataShared, linkedDashboards) {
 
         // set variable to show new release tag
         let updateNeeded = false;  
+        //set turbo type for delete instructions
+        let turbotype = ""
+        let turboCount = 0
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
+        
+        linkedDashboards
+        .filter(dash => (dash.turbo_type === "associated" || dash.turbo_type === "reusable"))
+        .forEach(item => turboCount++ )
+        
 
         // if previously shared dashboard is no longer available on plan
         if (!thisDash) {
@@ -249,6 +235,12 @@ function renderShared(userDataShared, linkedDashboards) {
             updateNeeded = true;
         }
 
+        if (item.is_turbo === false) {
+            turbotype = "not-turbo"
+        } else {
+            turbotype = thisDash.turbo_type  
+        }
+
 
         return (
             `<article  class="strip">
@@ -268,7 +260,7 @@ function renderShared(userDataShared, linkedDashboards) {
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
               <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
-                <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}" data-turbocount="${turboCount}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
                 <li class="owner">Owner:  ${item.created_by}</li>
                 </ul>   
@@ -382,7 +374,6 @@ function setModals() {
             document.querySelector(".mymodal-overlay").classList.add("show")
             //dynamic content modals
             if(e.target.classList.contains("release")) {
-                console.log(dashboardModalContent)
                 let thisContent = dashboardModalContent.filter(note => note.dashboard_id == e.target.dataset['modal'])       
                 document.querySelector(".mymodal-content").innerHTML = `
                 <h2>Updates available to dashboard:</h2>
@@ -391,11 +382,25 @@ function setModals() {
                 <a class="button" href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${thisContent[0].wp_post_id}">Create a new share copy</a>
                 `
             } 
-            // static content modals
-            else {
-                let i = Number(e.target.dataset['modal']) - 1
-                document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
-            }
+            if(e.target.classList.contains("delete")) {
+                let lastReusable = false
+                let dashType = e.target.dataset['dashtype']
+                let dashToDelete = e.target.dataset['dashid']
+                let turboCount = e.target.dataset['turbocount']
+                console.log(dashType, dashToDelete, turboCount)
+                if (turboCount == 1 && (dashType == "associated" || dashType == "reusable")) {
+                    lastReusable = true
+                }
+                
+                document.querySelector(".mymodal-content").innerHTML = `
+                <h2>Are you sure you want to delete this dashboard?</h2>
+        
+                <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
+                <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
+                <a class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>
+                `
+            } 
+           
         })
 
     })
