@@ -22,34 +22,34 @@ const sharedDashboardInfo = [
         "created_by": "GHC31861737",
         "is_turbo": true
     },
-    {
-        "wp_post_id": 467,
-        "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
-        "save_date": "2022-03-21",
-        "created_by": "GHC31861737",
-        "is_turbo": false
-    },
-    {
-        "wp_post_id": 2002,
-        "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
-        "save_date": "2022-03-21",
-        "created_by": "GHC31861737",
-        "is_turbo": false
-    },
-    {
-        "wp_post_id": 1171,
-        "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
-        "save_date": "2023-02-11",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    },
-    {
-        "wp_post_id": 2858,
-        "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
-        "save_date": "2019-11-17",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    }
+    // {
+    //     "wp_post_id": 467,
+    //     "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
+    //     "save_date": "2022-03-21",
+    //     "created_by": "GHC31861737",
+    //     "is_turbo": false
+    // },
+    // {
+    //     "wp_post_id": 2002,
+    //     "looker_studio_url": "https://datastudio.google.com/reporting/170b6e6c-b997-45d7-aff1-7d3dbff4746d/page/oN2VC",
+    //     "save_date": "2022-03-21",
+    //     "created_by": "GHC31861737",
+    //     "is_turbo": false
+    // },
+    // {
+    //     "wp_post_id": 1171,
+    //     "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
+    //     "save_date": "2023-02-11",
+    //     "created_by": "GHC31861737",
+    //     "is_turbo": true
+    // },
+    // {
+    //     "wp_post_id": 2858,
+    //     "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
+    //     "save_date": "2019-11-17",
+    //     "created_by": "GHC31861737",
+    //     "is_turbo": true
+    // }
 ]
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
@@ -91,6 +91,8 @@ function filterVersionData(data, sharedDashboardIds) {
     dashboardModalContent = [].concat(dashboardVersionNotes)
     return dashboardModalContent
 }
+
+
 
 //Filter database to return different arrays
 function filterData(data) {
@@ -384,30 +386,67 @@ function setModals() {
             } 
             if(e.target.classList.contains("delete")) {
                 let lastReusable = false
+                let extractedSources = false
                 let dashType = e.target.dataset['dashtype']
                 let dashToDelete = e.target.dataset['dashid']
                 let turboCount = e.target.dataset['turbocount']
                 console.log(dashType, dashToDelete, turboCount)
                 if (turboCount == 1 && (dashType == "associated" || dashType == "reusable")) {
                     lastReusable = true
+                    extractedSources = true
+                }
+                if (dashType == "embedded") {
+                    extractedSources = true
                 }
                 
                 document.querySelector(".mymodal-content").innerHTML = `
                 <h2>Are you sure you want to delete this dashboard?</h2>
         
                 <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
+                ${extractedSources ? `<p>Before you delete the reference to this dashboard in myGHC we advice you also delete the attached turbo sources to stop extracting unneeded data from the church management servers. To do this go to your <a href="https://lookerstudio.google.com/u/0/navigation/datasources" target="_blank">Looker Studio data sources</a> and select the following sources to delete:` : ``}
                 <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
-                <a class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>
+                
+                <a id="deleteDashboard" class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>
                 `
+
+                deleteDashboard()
             } 
+
+           
            
         })
 
     })
+
+    
     
     modalClose.addEventListener("click", function(e){   
         e.target.closest(".mymodal-overlay").classList.remove("show")
     })
+
+    
 }
+
+function deleteDashboard() {
+    document.getElementById("deleteDashboard").addEventListener("click", function(e){
+        e.preventDefault();
+        console.log("test")
+    
+        // Get the current URL and its search parameters
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        const dashboardId = e.target.dataset['dashid']
+    
+        // Update or add parameters
+        searchParams.set('dash_to_delete', dashboardId); 
+       
+        // Create the new URL with updated parameters
+        const newURL = url.origin + url.pathname + '?' + searchParams.toString();
+    
+        // Redirect to the new URL
+        window.location.href = newURL;
+    })
+}
+
 
      

@@ -825,11 +825,11 @@ font-family: 'Montserrat';
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
         <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
-        <form class="sharelink-form">
-            <select class="dashboard-select">
+        <form class="sharelink-form" action="test-dashboard" method="get">
+            <select name="share_id" class="dashboard-select">
                 <!-- generated from JS -->
             </select>
-            <input type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
         <div class="callout callout-warning pasted-alert" style="display: none">
@@ -1050,9 +1050,6 @@ font-family: 'Montserrat';
     <li>elvanto API Groups — <br/>
         <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>Extract Data Groups</strong></li>
 </ul>
-<div class="callout callout-info">
-    <p><span class="dashicons dashicons-info"></span>If you're doing this for a dashboard other than the Toolkit there may only be a couple of these data sources listed. Please pick the corresponding extraction source.</p>
-</div>
 <p>Click <strong>Copy Report</strong> </p>
 					<a href="#" class="btn done-btn" data-step="5">✓ Done</a>
                 

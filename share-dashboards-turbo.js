@@ -14,6 +14,8 @@ const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
 let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
+console.log(document.querySelector('input[type="hidden"][name="share_post_id"]'))
+document.querySelector('input[type="hidden"][name="share_post_id"]').value = dashboardSelected
 
 // populated from data but needed for other functions
 let masterDashboardUrls
@@ -27,7 +29,8 @@ const helpModalContent = [
     {
         order: 0,
         html: `
-        <h2>I get an authorization required error</h2>
+        <h2>How can I check I'm logged into the correct account?</h2>
+        <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you can't see any data take a look at the help section to resolve the issue</p>
         <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
         <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
@@ -267,11 +270,9 @@ function renderData(data) {
         select.innerHTML += selectHtml;
     });
     if (chosenDashboard[0]) {
-        let dashboardLinks = Array.from(document.getElementsByClassName("dashboard-to-share"))
-        dashboardLinks.forEach((el) => {
-            el.textContent = `Open Turbo ${chosenDashboard[0].name} dashboard`
-            el.href = `${chosenDashboard[0].turbo_link}`
-        })
+        document.getElementById("dashboard-to-share").textContent = `Open Turbo ${chosenDashboard[0].name} dashboard`
+        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].turbo_link}`
+        
 
     } else {
         document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")

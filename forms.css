@@ -17,6 +17,7 @@
     margin-bottom: 20px;
 }
 
+form input[type="text"],
 .sharelink-form input {
     border: 1px solid #000;
     border-radius: 3px;

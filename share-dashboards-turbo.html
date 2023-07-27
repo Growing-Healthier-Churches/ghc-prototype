@@ -841,11 +841,11 @@ font-family: 'Montserrat';
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
         <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
-        <form class="sharelink-form">
-            <select class="dashboard-select">
+        <form class="sharelink-form" action="test-dashboard" method="get">
+            <select name="share_id" class="dashboard-select">
                 <!-- generated from JS -->
             </select>
-            <input type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
         <div class="callout callout-warning pasted-alert" style="display: none">

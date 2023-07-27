@@ -841,11 +841,11 @@ font-family: 'Montserrat';
         <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
         <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
-        <form class="sharelink-form">
-            <select class="dashboard-select">
+        <form class="sharelink-form" action="test-dashboard" method="get">
+            <select name="share_id" class="dashboard-select">
                 <!-- generated from JS -->
             </select>
-            <input type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
         <div class="callout callout-warning pasted-alert" style="display: none">
@@ -862,11 +862,9 @@ font-family: 'Montserrat';
 				<div class="timeline-content">
 					<h2>Before you begin</h2>
 					    <div class="timeline-content-inner">
-                            <p>Before you begin you will need to ensure that you are logged into the correct google account.</p>
-                            <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you can't see any data take a look at the help section to resolve the issue</p>
-                            
                             <div class="callout callout-info">
-                                <p><span class="dashicons dashicons-info"></span>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
+                                <p><span class="dashicons dashicons-info"></span>You will need to ensure that you are logged into the correct google account.</p>
+                                <p>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
                             </div>
                             <p>Then you will needed to decide  which sharing option is right for you. There are 3 methods to set who can see your dashboards:</p>
                         <ol>
@@ -895,7 +893,7 @@ font-family: 'Montserrat';
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="0">I get an authorization required error</a></p>
+                    <p><a class="modal-link" href="#" data-help="0">How can I check I'm logged into the correct google account?</a></p>
                   
                 </div>
 			</div>
@@ -926,11 +924,16 @@ font-family: 'Montserrat';
                                 <li> <strong>Toggle “Directly add members”</strong> to on but leave the invitation field blank</li>
                                 <li><strong>Paste each email address</strong> into the group members text field. Click Add members. </li>
                             </ul>
-                            <p>Your google group has now been created. Make a note of the email address for use later</p>
+                            <p>Your google group has now been created.</p>
+                            <form action="#step3">
+                                <input type="hidden" name="step" value="3" />
+                                <input type="hidden" name="share_post_id" value="" />
+                                <input name="google_group" type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB">
+                                <button type="submit" class="button">Save google group</button>
+                                <a href="#" class="btn skip-btn" data-step="2">Skip step</a>
+                            </form>
 
-					        <a href="#" class="btn done-btn" data-step="2">✓ Done</a>
 
-                            <a href="#" class="btn">Subscribe for assistance</a>
                         </div>
 				</div>
                 <div class="timeline-help">
@@ -948,7 +951,7 @@ font-family: 'Montserrat';
                     <div class="timeline-content-inner">
 					<p>You cannot share the original dashboard, you must first make a copy:</p>
                     <ul>
-                        <li><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
+                        <li><a href="#" id="dashboard-to-share" target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
                             <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
                             <li>Click on the menu and select "Make a Copy"</li>
                     </ul>
@@ -966,7 +969,6 @@ font-family: 'Montserrat';
                     
                     <h4>Creating a shareable copy</h4>
                     <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=210" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                
                 </div>
 			</div>
 
@@ -1039,7 +1041,8 @@ font-family: 'Montserrat';
                         <div class="callout callout-warning">
                             <p><span class="dashicons dashicons-remove"></span>Selecting "anyone with the link" or "anyone on the internet" in this step breaches our terms and conditions since you are not able to control the security of your data.</p>
                         </div>
-                        <div class="callout callout-info">
+
+                        <div id="accountEmails" class="callout callout-info">
                             <p><span class="dashicons dashicons-info"></span>The following email accounts are associated to your my GHC team: emai1@test.com, email2@test.com</p>
                         </div>
                         
@@ -1051,11 +1054,11 @@ font-family: 'Montserrat';
                         </ul>
                         <p>Your copied dashboard is now shared and can be accessed by your team. Copy the url of this dashboard and paste into the form so that it can be viewed by all logged in team members of my GHC</p>
                         <h3>Save my link</h3>
-                        <form class="sharelink-form">
-                            <select class="dashboard-select">
+                        <form class="sharelink-form" action="test-dashboard" method="get">
+                            <select name="share_id" class="dashboard-select">
                                 <!-- generated from JS -->
                             </select>
-                            <input type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
+                            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
                             <button type="submit" class="button">Save link</button>
                         </form>
                         <div class="callout callout-warning pasted-alert" style="display: none">
