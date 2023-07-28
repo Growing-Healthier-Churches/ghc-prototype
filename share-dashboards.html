@@ -854,7 +854,10 @@ font-family: 'Montserrat';
         <div class="callout callout-info">
             <p><span class="dashicons dashicons-info"></span>We recommend splitting your screen in half so you can work through these instructions alongside your Looker Studio dashboard.</p>
         </div>
+        <div class="callout callout-attention" id="shortcut-step" style="display: none">
+            <p><span class="dashicons dashicons-warning"></span>Hey! It looks like you've already created a shared dashboard so we've skipped over the setup for you. If you need to review these again please expand steps 1 and 2.</p>
         </div>
+    </div>
 
 		<div id="timeline">
             <div class="timeline-item" id="step1">
@@ -928,7 +931,7 @@ font-family: 'Montserrat';
                             <form action="#step3">
                                 <input type="hidden" name="step" value="3" />
                                 <input type="hidden" name="share_post_id" value="" />
-                                <input name="google_group" type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB">
+                                <input name="google_group" type="email" required class="wide" placeholder="myuniquename@googlegroups.com" />
                                 <button type="submit" class="button">Save google group</button>
                                 <a href="#" class="btn skip-btn" data-step="2">Skip step</a>
                             </form>

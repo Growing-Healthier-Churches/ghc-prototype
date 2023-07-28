@@ -866,11 +866,9 @@ font-family: 'Montserrat';
 				<div class="timeline-content">
 					<h2>Before you begin</h2>
 					    <div class="timeline-content-inner">
-                            <p>Before you begin you will need to ensure that you are logged into the correct google account.</p>
-                            <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you get Authorization errors or are prompted to "complete your account setup" when you click on Create a copy then you are not logged into the correct google account.</p>
-                            
                             <div class="callout callout-info">
-                                <p><span class="dashicons dashicons-info"></span>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
+                                <p><span class="dashicons dashicons-info"></span>You will need to ensure that you are logged into the correct google account.</p>
+                                <p>The google account we have on file associated with your GHC dashboards is: <strong>test@company.com</strong></p>
                             </div>
                             <p>Then you will needed to decide  which sharing option is right for you. There are 3 methods to set who can see your dashboards:</p>
                         <ol>
@@ -899,7 +897,7 @@ font-family: 'Montserrat';
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="0">I get an authorization required error</a></p>
+                    <p><a class="modal-link" href="#" data-help="0">How can I check I'm logged into the correct google account?</a></p>
                     <p><a class="modal-link" href="#" data-help="1">I get a "complete your account setup" prompt</a></p>
                     
                 </div>
@@ -932,10 +930,13 @@ font-family: 'Montserrat';
                                 <li><strong>Paste each email address</strong> into the group members text field. Click Add members. </li>
                             </ul>
                             <p>Your google group has now been created. Make a note of the email address for use later</p>
-
-					        <a href="#" class="btn done-btn" data-step="2">✓ Done</a>
-
-                            <a href="#" class="btn">Subscribe for assistance</a>
+                            <form action="#step3">
+                                <input type="hidden" name="step" value="3" />
+                                <input type="hidden" name="share_post_id" value="" />
+                                <input name="google_group" type="text" class="wide" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB">
+                                <button type="submit" class="button">Save google group</button>
+                                <a href="#" class="btn skip-btn" data-step="2">Skip step</a>
+                            </form>
                         </div>
 				</div>
                 <div class="timeline-help">

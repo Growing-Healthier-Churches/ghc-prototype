@@ -10,13 +10,16 @@ const dashboardInput = document.querySelectorAll(".dashboard-paste");
 // used to populate <select> in form
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
 let userSubscription = "large" // free, small, medium, large
-let googleGroup = '' // used to determin if google group preference for sharing
+let googleGroup = '' // used to determine if google group preference for sharing
 
 // Set states from urls
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
 let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
+document.querySelectorAll('input[name="share_post_id"]')[0].value = dashboardSelected
+
+
 if (urlParams.get('google_group')) {
     googleGroup = urlParams.get('google_group')
 }
@@ -149,6 +152,8 @@ function renderStep() {
         document.getElementById("step2").classList.add("done", "completed-closed")
         document.getElementById("step2").classList.remove("closed")
         document.getElementById("step3").classList.remove("closed")
+        //show prompt
+        document.getElementById("shortcut-step").style.display = "block"
     } else if (step == "4") {
         document.getElementById("step1").classList.add("done", "completed-closed")
         document.getElementById("step2").classList.add("done", "completed-closed")
@@ -281,6 +286,7 @@ function renderData(data) {
         document.getElementById("dashboard-to-share").replace("Open the dashboard from your my GHC")
     }
     
+    
     //if user has a google group preference
     if (googleGroup !== '') {
         document.getElementById("accountEmails").style.display = "none"
@@ -367,10 +373,13 @@ modalClose.addEventListener("click", function(e){
 function accordion() {
     doneItems.forEach(el => {
         let thisContent = el.children[1]
-        thisContent.addEventListener("click", function(e) {
+        thisContent.addEventListener("click", openItem)
+        function openItem(e) {
             e.preventDefault()
+            console.log("clicked")
             e.target.closest(".timeline-item").classList.remove("completed-closed")
-        })
+            thisContent.removeEventListener("click", openItem)
+        }
     })
 }
 

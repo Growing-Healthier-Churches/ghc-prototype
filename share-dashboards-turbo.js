@@ -1,7 +1,3 @@
-/* Copy of onboarding/js with some different data */
-
-
-
 
 const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
 const modalClose = document.getElementById("mymodalClose")
@@ -9,28 +5,32 @@ const modalLink = document.querySelectorAll(".modal-link")
 const dashboardSelects = document.querySelectorAll(".dashboard-select");
 const dashboardInput = document.querySelectorAll(".dashboard-paste");
 
+// example variables - loaded from wordpress
+// used to populate <select> in form
+let userCHMS = "pco_user" //elvanto_user, pco_user
+let userSubscription = "large" // free, small, medium, large
+let googleGroup = '' // used to determin if google group preference for sharing
+
+
 // Set states from urls
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
 let step = urlParams.get('step')
 const dashboardSelected = urlParams.get('share_post_id')
-console.log(document.querySelector('input[type="hidden"][name="share_post_id"]'))
-document.querySelector('input[type="hidden"][name="share_post_id"]').value = dashboardSelected
+if (urlParams.get('google_group')) {
+    googleGroup = urlParams.get('google_group')
+}
 
 // populated from data but needed for other functions
 let masterDashboardUrls
 
-// example variables - loaded from wordpress
-// used to populate <select> in form
-let userCHMS = "pco_user" //elvanto_user, pco_user
-let userSubscription = "large" // free, small, medium, large
 
 const helpModalContent = [
     {
         order: 0,
         html: `
         <h2>How can I check I'm logged into the correct account?</h2>
-        <p><a href="#" class="dashboard-to-share" target="_blank">Open [Dashboard name]</a>. If you can't see any data take a look at the help section to resolve the issue</p>
+        <p><a href="#" target="_blank">Open your dashboard</a>. If you can't see any data take a look at the help section to resolve the issue</p>
         <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
         <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
@@ -270,16 +270,17 @@ function renderData(data) {
         select.innerHTML += selectHtml;
     });
     if (chosenDashboard[0]) {
-        document.getElementById("dashboard-to-share").textContent = `Open Turbo ${chosenDashboard[0].name} dashboard`
-        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].turbo_link}`
-        
-
+        document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
+        document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
     } else {
-        document.getElementById("dashboard-to-share").replaceWith("Open the dashboard from your my GHC")
+        document.getElementById("dashboard-to-share").replace("Open the dashboard from your my GHC")
+    }
+    
+    //if user has a google group preference
+    if (googleGroup !== '') {
+        document.getElementById("accountEmails").style.display = "none"
     }
 
-    
-    
   
 }
 
@@ -341,7 +342,19 @@ modalLink.forEach(element => {
         e.preventDefault()
         let i = Number(e.target.dataset['help'])
         document.querySelector(".mymodal-overlay").classList.add("show")
-        document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
+
+        let textString = helpModalContent[i].html
+        
+        if (i === 0) {
+            let replaceLink = document.getElementById("dashboard-to-share").href
+
+            let textArray = textString.split('"')
+            textArray[1] = replaceLink
+            
+            textString = textArray.join('')
+        }
+
+        document.querySelector(".mymodal-content").innerHTML = textString
     })
 })
 
