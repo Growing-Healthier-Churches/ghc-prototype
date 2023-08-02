@@ -36,13 +36,13 @@ const sharedDashboardInfo = [
     //     "created_by": "GHC31861737",
     //     "is_turbo": false
     // },
-    // {
-    //     "wp_post_id": 1171,
-    //     "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
-    //     "save_date": "2023-02-11",
-    //     "created_by": "GHC31861737",
-    //     "is_turbo": true
-    // },
+    {
+        "wp_post_id": 1171,
+        "looker_studio_url": "https://lookerstudio.google.com/u/0/reporting/749acb54-23b6-461c-8b4d-b5434b74f6f1/page/KfARB",
+        "save_date": "2023-02-11",
+        "created_by": "GHC31861737",
+        "is_turbo": true
+    },
     // {
     //     "wp_post_id": 2858,
     //     "looker_studio_url": "https://datastudio.google.com/reporting/3a645319-54bc-4f7e-88f2-08ae07b78d9c/page/xBHMC",
@@ -200,15 +200,11 @@ function renderShared(userDataShared, linkedDashboards) {
 
         // set variable to show new release tag
         let updateNeeded = false;  
-        //set turbo type for delete instructions
-        let turbotype = ""
-        let turboCount = 0
+        
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
         
-        linkedDashboards
-        .filter(dash => (dash.turbo_type === "associated" || dash.turbo_type === "reusable"))
-        .forEach(item => turboCount++ )
+
         
 
         // if previously shared dashboard is no longer available on plan
@@ -269,7 +265,7 @@ function renderShared(userDataShared, linkedDashboards) {
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
               <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
-                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}" data-turbocount="${turboCount}" data-sources="${turboSources}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
                 <li class="owner">Owner:  ${item.created_by}</li>
                 </ul>   
@@ -394,31 +390,17 @@ function setModals() {
                 `
             } 
             if(e.target.classList.contains("delete")) {
-                let lastReusable = false
-                let extractedSources = false
-                let dashType = e.target.dataset['dashtype']
+                
                 let dashToDelete = e.target.dataset['dashid']
-                let turboCount = e.target.dataset['turbocount']
-                let extractedList = e.target.dataset['sources'].split(',').map(source => `<li>${source}</li>`).join('')
                 
                
-
-                if (turboCount == 1 && (dashType == "associated" || dashType == "reusable")) {
-                    lastReusable = true
-                    extractedSources = true
-                }
-                if (dashType == "embedded") {
-                    extractedSources = true
-                }
-                
                 document.querySelector(".mymodal-content").innerHTML = `
                 <h2>Are you sure you want to delete this dashboard?</h2>
         
                 <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
-                ${extractedSources ? `<p>Before you delete the reference to this dashboard in myGHC we advice you also delete the attached turbo sources to stop extracting unneeded data from the church management servers. To do this go to your <a href="https://lookerstudio.google.com/u/0/navigation/datasources" target="_blank">Looker Studio data sources</a> and select the following sources to delete: <br/><ul> ${extractedList} </ul>` : ``}
                 <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
                 
-                <a id="deleteDashboard" class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>
+                <a id="deleteDashboard" class="button" href="" data-dashid="${dashToDelete}">Yes, delete</a>
                 `
 
                 deleteDashboard()
