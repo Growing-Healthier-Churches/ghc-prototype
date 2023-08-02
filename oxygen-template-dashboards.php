@@ -1,8 +1,72 @@
 
+<!-- Notifications -->
+<?php
+
+//this whole block is conditional on user role (team billing and not PCQ )
+$user = wp_get_current_user();
+$central_user = get_billing_user();
+$user_id = $user->ID;
+$GHC_setup = get_user_meta($user_id, 'GHC_setup' ,true); 
+$GHC_onboard_step = substr(get_user_meta($user_id, 'GHC_onboard' ,true),0,1); 
+
+$GHC_ID = get_user_meta($user_id,'GHC_ID',true);
+$GHC_team = get_user_meta($user_id,'GHC_team',true);
+
+
+if (isset($_GET['welcome'])) { 
+	echo "<div class='tooltip'><h2>Welcome to the myGHC page</h2><p>Thank you for signing up. This is the main page to access all your dashboards. For the Core Platforms to work full you will need to connect GHC with your church management system first. </p><p>Use the <a href='/setup'>setup page</a> to complete this.</p></div>";
+}elseif( isset($_GET["coach"])) {
+	echo "<div class='tooltip'><h2>Welcome to myGHC</h2><p>You will be able to view churches that have given you coach access. <b>Note: </b>You may need to wait a short while for the church administrator to add your permission access to each dashboard</div>";
+
+}elseif(( empty($GHC_onboard_step) || $GHC_onboard_step==1 || $GHC_onboard_step==2) && ( $GHC_setup != 'Transfer') ) {
+	//this to be displayed when setup is not equal to compelte or trasnfer
+	echo "<p class='notification'>It appears your setup (or subscription) is incomplete. Please return to <a href='/onboard'>setup page</a> to review";
+}
+
+
+
+// when page is navigated to from saving dashboard
+if(isset($_GET['share_name']) && isset($_GET['share_url']) && isset($_GET['share_post_id'])) {
+	
+
+	if (isset($_GET['is_turbo'])) {
+		$turbo_val = true;
+	} else {
+		$turbo_val = false;
+	}
+	
+	echo("<div class='tooltip'>".$_GET['share_name']." dashboard saved</div>");
+
+	$share_post_id = $_GET['share_post_id'];
+	$share_dashboards_data = array(
+ 		'share_link' =>$_GET['share_url'],
+ 		'share_date' => date("m/d/Y"),
+ 		'is_turbo' => $turbo_val,
+		'created_by' => $GHC_ID);
+	
+
+	update_user_meta($central_user,'share_dashboards_'.$share_post_id,$share_dashboards_data);
+
+}
+
+
+?>
+
+<!-- JS & Logic -->
 <?php
 //USER
 	$user_id = get_current_user_id();
 	$central_user = get_billing_user();
+
+	//delete dashboard
+	if (isset($_GET['dash_to_delete'])) {
+		$dash_value = 'share_dashboards_' . $_GET['dash_to_delete'];
+		//delete_user_meta($user_id, $dash_value);
+		delete_user_meta($central_user,$dash_value);
+	}
+
+	
+
 	$user_meta = get_user_meta($central_user);
 	$roles = wp_get_current_user()->roles;
 	$isPCQ = in_array('pcq',$roles);
@@ -10,18 +74,20 @@
 	$isTeamBilling = in_array('team_billing',$roles);
 	$SSOlogin = get_user_meta( $user_id, 'logged_in_with_SSO',true);
 
-	$GHC_ID = get_user_meta($user_id,'GHC_ID',true);
-	$GHC_team = get_user_meta($user_id,'GHC_team',true);
-	
-	//$share_dashboards = get_user_meta($user_id, 'share_dashboards_'.$post_id,true);
+	//GHC_ID and GHC_team moved to Notifications block
+
+
 	$user_shared = get_user_meta($user_id,'share_post_id');
 	$user_sub = get_user_meta($user_id,'ghc_subscription');
 	$user_notify = get_user_meta($user_id,'ghc_notify_subscription');
 	
-	// Do we need to be able to create $share_dashboards as an empty array if
-	// no dashboards shared?
+
 
  // Loop through each metadata	
+$share_dashboards = [];	
+
+
+
 if ($user_meta){	
  foreach ($user_meta as $meta_key => $meta_values) {	
 	 // Check if the meta key matches the pattern	
@@ -30,18 +96,27 @@ if ($user_meta){
 		$post_id = (int) substr($meta_key, strlen('share_dashboards_'));	
 		 	
 		$args = array('meta_query' => array(array('key' => 'GHC_ID','value' => $share_meta_data['created_by'],'compare' => '=')));	
-		$created_by = get_users($args)[0];	
-		 	
+		$created_by = get_users($args)[0];
+		 
+		$category = get_the_category($post_id);
+		if (is_array($category) && !empty($category)){ $category = $category[0];}
+		if (isset($share_meta_data['is_turbo'])){
+			$is_turbo = $share_meta_data['is_turbo'];
+		}else{
+			$is_turbo = false;
+		}
+		 
+		
 		 $share_dashboards[] = array(	
 			 'wp_post_id' => $post_id,	
 			 'looker_studio_url' => $share_meta_data['share_link'],	
 			 'save_date' =>  date("Y-m-d", strtotime($share_meta_data['share_date'])),	
 			 'created_by' => $created_by->user_email,	
-			 'is_turbo' => $share_meta_data['is_turbo'],	
-			 'category' => get_the_category($post_id)[0]
+			 'is_turbo' => $is_turbo,	
+			 'category' => $category
 		 );	
 		 
-		 
+		
 		 // Extract the 'cat' values into a separate array
 		$cat = array_column($share_dashboards, 'category');
 
@@ -59,13 +134,13 @@ if ($user_meta){
 <script>
 
 // To DO:
-// if user shares dashboard which is no longer available on plan logic fails
-// -- consider addition logic inside .map function
 // update code to display only relevant version histories in modal
 // -- currently just ne matching entry
 //
 
 //Example variables - in live loaded from php
+const userMeta = <?php echo json_encode($user_meta); ?>;
+console.log(userMeta)
 const userRoles = <?php echo json_encode($roles); ?>; //team_billing, team_member, team_admin
 let userCHMS = "elvanto_user";
 
@@ -97,18 +172,7 @@ const sharedDashboardInfo = <?php echo json_encode($share_dashboards); ?>;
 
 const sharedDashboardIds = sharedDashboardInfo.map(dash => dash.wp_post_id) // [1171]
 
-// Used just for delete functionality
-const helpModalContent = [
-    {
-        order: 1,
-        html: `
-        <h2>Are you sure you want to delete this dashboard?</h2>
-        <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
-        <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
-        <a class="button" href="">Yes, delete</a>
-        `
-    }
-]
+
 
 // dynamically populated from supabase
 // Lists version notes
@@ -149,6 +213,8 @@ function filterVersionData(data, sharedDashboardIds) {
     return dashboardModalContent
 }
 
+
+
 //Filter database to return different arrays
 function filterData(data) {
 
@@ -175,19 +241,10 @@ function filterData(data) {
             extraDashboards.push(includedNotify[0])  
         }    
     }
-    
 
-    // Different chMSes
-    const elvantoDashboardsData = newData.filter(dashboard => dashboard.elvanto)
-    const pcoDashboardsData = newData.filter(dashboard => dashboard.pco)
-    const ccbDashboardsData = newData.filter(dashboard => dashboard.ccb)
-    const fluroDashboardsData = newData.filter(dashboard => dashboard.fluro)
-
-    // Shared dashboards used 
-    
 
     // Shared dashboards info
-    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing") || userRoles.includes("coach")) { 
+    if (userRoles.includes("team_member") || userRoles.includes("team_admin") || userRoles.includes("team_billing") || userRoles.includes("coach") ) { 
         console.log("shared dashboards")
         const sharedDashboards = newData.filter(dashboard => sharedDashboardIds.includes(dashboard.wp_post_id))          
         renderShared(sharedDashboardInfo, sharedDashboards)
@@ -247,7 +304,7 @@ function renderShared(userDataShared, linkedDashboards) {
 
     //default container to insert generated html into
     
-    if (userRoles.includes("team_billing") || userRoles.includes("team_admin")) {
+    if (userRoles.includes("team_admin") || userRoles.includes("team_billing")) {
         containerEl = document.getElementById("admin-cards")
     } else {
         containerEl = document.getElementById("team-cards")
@@ -258,8 +315,16 @@ function renderShared(userDataShared, linkedDashboards) {
 
         // set variable to show new release tag
         let updateNeeded = false;  
+        //set turbo type for delete instructions
+        let turbotype = ""
+        let turboCount = 0
 
         const thisDash = linkedDashboards.filter(dash => dash.wp_post_id === item.wp_post_id)[0]
+        
+        linkedDashboards
+        .filter(dash => (dash.turbo_type === "associated" || dash.turbo_type === "reusable"))
+        .forEach(item => turboCount++ )
+        
 
         // if previously shared dashboard is no longer available on plan
         if (!thisDash) {
@@ -267,7 +332,7 @@ function renderShared(userDataShared, linkedDashboards) {
             return (`<article  class="strip">Previously shared dashboard not available on current plan</article>`)
         }
 
-        // simple display for team members
+        // simple display for team members and coaches
         if(userRoles.includes("team_member") || userRoles.includes("coach")) {
             return (
                 `<article  class="strip">
@@ -277,9 +342,9 @@ function renderShared(userDataShared, linkedDashboards) {
                         <!-- <span>(Secondary name if exists)</span> -->
                     </h3>
                     </div>
-                    <a class="button" target="_blank" href="${item.looker_studio_url}">Open dashboard</a>  
-                	<a href="${thisDash.info_link}" class="docs-link"><span class="dashicons dashicons-media-document"></span>Read the docs</a>   
-				</article>
+                    <a class="button" href="${item.looker_studio_url}">Open dashboard</a>
+                    <a href="${thisDash.info_link}" class="docs-link"><span class="dashicons dashicons-media-document"></span>Read the docs</a>   
+                </article>
                 `
             )
         } 
@@ -293,6 +358,12 @@ function renderShared(userDataShared, linkedDashboards) {
             updateNeeded = true;
         }
 
+        if (item.is_turbo === false) {
+            turbotype = "not-turbo"
+        } else {
+            turbotype = thisDash.turbo_type  
+        }
+
 
         return (
             `<article  class="strip">
@@ -304,18 +375,18 @@ function renderShared(userDataShared, linkedDashboards) {
                 <!-- <span>(Secondary name if exists)</span> -->
               </h3>
             </div>
-            <a class="button" target="_blank" href="${item.looker_studio_url}">Open dashboard</a>  
+            <a class="button" href="${item.looker_studio_url}">Open dashboard</a>  
             ${updateNeeded ?
                 `<a class="tag release modal-link" href="" data-modal="${thisDash.id}">New release available</a>`
             : ``}
             <nav role="navigation" class="actions tag">
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
+              <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
+                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}" data-turbocount="${turboCount}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
-                <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
-                <li><a href="#" class="modal-link" data-modal="1"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li class="owner">Owner:  ${item.created_by}</li>
-              </ul>   
+                </ul>   
             </nav>   
         </article>
             `
@@ -348,17 +419,17 @@ function renderAvailable(data) {
                     }
                     ${
                         /* logic to display turbo share or ordinary share */
-                        (userSubscription === "large" && item.turbo_setup_url && userRoles.includes("team_billing")) ?  
+                        (userSubscription === "large" && item.turbo_setup_url && (userRoles.includes("team_billing") || userRoles.includes("team_billing"))) ?  
                             `<a href="${item.turbo_setup_url}" class="button secondary">Share turbo version</a>` :
                         (userRoles.includes("team_billing") && item.plan !== "Separate subscription") && 
-                            `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>`  
+                            `<a href="/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>`  
                     }  
                   </div>
                   <img src="${item.thumb}">
                 </div>
                 <div class="content"> 
                   <p>${item.description}</p>
-				  ${(userRoles.includes("team_billing") || userRoles.includes("team_admin")) && item.additional_setup ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` }
+                  ${(item.additional_setup && userRoles.includes("team_billing")) ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` }
                 </div>
                 <div class="extra content">
                     <strong>measures:</strong> ${item.example_metrics}
@@ -395,7 +466,6 @@ function renderSubscribe(data) {
                 </div>
                 <div class="content"> 
                   <p>${item.description}</p>
-				  <!--not needed if not available ${(userRoles.includes("team_billing") || userRoles.includes("team_admin")) && item.additional_setup ? `<p class="highlight"><a href="${item.additional_setup}">Additional setup required</a></p>` : `` } -->
                 </div>
                 <div class="extra content">
                     <strong>measures:</strong> ${item.example_metrics}
@@ -427,7 +497,6 @@ function setModals() {
             document.querySelector(".mymodal-overlay").classList.add("show")
             //dynamic content modals
             if(e.target.classList.contains("release")) {
-                console.log(dashboardModalContent)
                 let thisContent = dashboardModalContent.filter(note => note.dashboard_id == e.target.dataset['modal'])       
                 document.querySelector(".mymodal-content").innerHTML = `
                 <h2>Updates available to dashboard:</h2>
@@ -436,20 +505,131 @@ function setModals() {
                 <a class="button" href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${thisContent[0].wp_post_id}">Create a new share copy</a>
                 `
             } 
-            // static content modals
-            else {
-                let i = Number(e.target.dataset['modal']) - 1
-                document.querySelector(".mymodal-content").innerHTML = helpModalContent[i].html
-            }
+            if(e.target.classList.contains("delete")) {
+                let lastReusable = false
+                let extractedSources = false
+                let dashType = e.target.dataset['dashtype']
+                let dashToDelete = e.target.dataset['dashid']
+                let turboCount = e.target.dataset['turbocount']
+                console.log(dashType, dashToDelete, turboCount)
+                if (turboCount == 1 && (dashType == "associated" || dashType == "reusable")) {
+                    lastReusable = true
+                    extractedSources = true
+                }
+                if (dashType == "embedded") {
+                    extractedSources = true
+                }
+                
+                document.querySelector(".mymodal-content").innerHTML = `
+                <h2>Are you sure you want to delete this dashboard?</h2>
+        
+                <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
+                ${extractedSources ? `<p>Before you delete the reference to this dashboard in myGHC we advice you also delete the attached turbo sources to stop extracting unneeded data from the church management servers. To do this go to your <a href="https://lookerstudio.google.com/u/0/navigation/datasources" target="_blank">Looker Studio data sources</a> and select the following sources to delete:` : ``}
+                <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
+                
+                <a id="deleteDashboard" class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>
+                `
+
+                deleteDashboard()
+            } 
+
+           
+           
         })
 
     })
+
+    
     
     modalClose.addEventListener("click", function(e){   
         e.target.closest(".mymodal-overlay").classList.remove("show")
     })
+
+    
 }
 
+function deleteDashboard() {
+    document.getElementById("deleteDashboard").addEventListener("click", function(e){
+        e.preventDefault();
+        
+    
+        // Get the current URL and its search parameters
+        const url = new URL(window.location.href);
+		
+        const searchParams = url.searchParams;
+        const dashboardId = e.target.dataset['dashid']
+    
+        // Update or add parameters
+		searchParams.set('dash_to_delete', dashboardId);
+		// if come from sharing screen
+		searchParams.delete('share_post_id');
+		searchParams.delete('share_url');
+         
+       
+        // Create the new URL with updated parameters
+        const newURL = url.origin + url.pathname + '?' + searchParams.toString();
+    
+        // Redirect to the new URL
+        window.location.href = newURL;
+    })
+}
      
 
 </script>
+
+<!-- HTML structure -->
+<?php
+$roles = wp_get_current_user()->roles;
+$isTeamBilling = in_array('team_billing',$roles);
+$isTeamAdmin = in_array('team_admin',$roles);
+$isTeamMember = in_array('team_member',$roles);
+?>
+
+<div id="my-dashboards">
+	
+    <!-- isTeamBilling -->
+	<?php if ($isTeamBilling || $isTeamAdmin) { ?>	  
+    <section class="ui cards admin-cards" id="admin-cards">
+        <h2 class="subtitle">My Shared Dashboards</h2>
+        <p class="dashboards-description">These dashboards have been copied and are sharable with anyone in your team.</p>
+          <!-- shared dashboards here -->
+    </section>
+	<?php } ?>
+
+    <!-- if ($isTeamMember)  -->
+	<?php if ($isTeamMember) { ?>	  
+    <section class="ui cards admin-cards" id="team-cards">
+        <h2 class="subtitle">My Team Dashboards</h2>
+        <p class="dashboards-description">These are dashboards that have been shared with me by my team administrator.</p>
+        <!-- team dashbaords here -->   
+    </section>
+	<?php } ?>
+
+    <section class="ui cards" id="available-dashboards">
+        <!-- Master dashboards available on current plan/chMS -->
+        <h2 class="subtitle">Dashboards &amp; Tools</h2>
+        <p class="dashboards-description">These are dashboards that are available on my plan</p>
+        <!-- Content here -->
+
+    </section>
+
+    <section class="ui cards" id="extra-dashboards">
+        <!-- Additional dashboards available on upgrade plan/chMS -->
+        <!-- Content here -->
+    </section>
+   
+</div>
+
+
+<!-- modal -->
+<div class="mymodal-overlay">
+    <div class="mymodal-inner">
+        <button id="mymodalClose" aria-label="close" class="mymodal-close"><svg width="10" height="10" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+            <path d="M0.549989 4.44999L4.44999 0.549988L43.45 39.55L39.55 43.45L0.549989 4.44999Z" />
+            <path d="M39.55 0.549988L43.45 4.44999L4.44999 43.45L0.549988 39.55L39.55 0.549988Z" />
+            </svg></button>
+            <div class="mymodal-content">   
+                <!-- content to go here -->
+            </div>
+    </div>
+  </div>

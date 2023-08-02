@@ -15,13 +15,13 @@ let  extraDashboards =[]
 const sharedDashboardInfo = [
     // paid: 2858, 756, 1676, 2350, 467, 1823
     // free: 1171, 1169
-    {
-        "wp_post_id": 756,
-        "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
-        "save_date": "2022-01-23",
-        "created_by": "GHC31861737",
-        "is_turbo": true
-    },
+    // {
+    //     "wp_post_id": 756,
+    //     "looker_studio_url": "https://datastudio.google.com/reporting/fc2a47fb-5e96-422e-a970-a6bee320cbb7",
+    //     "save_date": "2022-01-23",
+    //     "created_by": "GHC31861737",
+    //     "is_turbo": true
+    // },
     // {
     //     "wp_post_id": 467,
     //     "looker_studio_url": "https://datastudio.google.com/reporting/730b7b5f-21a9-4027-9030-d186088d6565",
@@ -65,7 +65,7 @@ async function getJSONData() {
 
     // dashboards & tools table
     const baseurl = "https://rwmbrtwcuogykekepsfg.supabase.co/rest/v1/dashboards_and_tools?"
-    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url,published&order=plan&eq(published,true)"
+    const queryString = "select=id,name,elvanto,pco,ccb,fluro,health_category_id1(id,name,css_class),health_category_id2(id,name,css_class),description,info_link,dashboard_link,example_metrics,thumb,additional_setup,wp_post_id,plan,turbo_type,turbo_setup_url,turbo_sources,published&order=plan&eq(published,true)"
     const myApiKey = "&apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWJydHdjdW9neWtla2Vwc2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY3OTcyMjQsImV4cCI6MjAwMjM3MzIyNH0.SlxIj9CN17Y36gYD9husbYUZMX1mjTArKwu9mBGxxRQ"
     const response = await fetch(baseurl + queryString + myApiKey)
     const jsonData = await response.json();
@@ -177,7 +177,13 @@ function renderShared(userDataShared, linkedDashboards) {
    
     // When no dashboards have been shared
     if (userDataShared.length == 0) {
-        document.getElementById("admin-cards").innerHTML += `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p>`
+
+        let msg = `<p class="info-msg">You have not shared any dashboards yet. <a href="https://growinghealthierchurches.com/save-share-link/">Follow the instructions</a> to share dashboards with your team.</p> `
+        if (userSubscription == "free") {
+            msg = `<p class="info-msg"><strong>Upgrade your plan to share dashboards with your team.</strong></p>`
+        }
+        
+        document.getElementById("admin-cards").innerHTML += msg
         return
     }
 
@@ -231,7 +237,7 @@ function renderShared(userDataShared, linkedDashboards) {
         const thisReleaseInfo = dashboardModalContent.filter(dash => dash.dashboard_id === thisDash.id)
         const latestReleaseDate = Date.parse(thisReleaseInfo[0].updated);
         const savedDashboardDate = Date.parse(item.save_date);
-
+        let turboSources = thisDash.turbo_sources 
 
         if (latestReleaseDate > savedDashboardDate) {
             updateNeeded = true;
@@ -241,6 +247,7 @@ function renderShared(userDataShared, linkedDashboards) {
             turbotype = "not-turbo"
         } else {
             turbotype = thisDash.turbo_type  
+            
         }
 
 
@@ -262,7 +269,7 @@ function renderShared(userDataShared, linkedDashboards) {
               More &hellip; <span class="dashicons dashicons-arrow-down-alt2"></span>
               <ul>
               <li>${item.is_turbo ? `<a href="#"><span class="dashicons dashicons-update"></span>Refresh data</a>` : userSubscription !== "large" ? `<a href="/account/#payments"><span class="dashicons dashicons-unlock"></span>Unlock turbo</a>` : ``}</li>
-                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}" data-turbocount="${turboCount}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
+                <li><a href="#" class="modal-link delete" data-modal="1" data-dashid="${thisDash.wp_post_id}" data-dashtype="${turbotype}" data-turbocount="${turboCount}" data-sources="${turboSources}"><span class="dashicons dashicons-remove"></span>Delete dashboard</a></li>
                 <li><a href="${thisDash.info_link}"><span class="dashicons dashicons-media-document"></span>Read the docs</a></li>
                 <li class="owner">Owner:  ${item.created_by}</li>
                 </ul>   
@@ -300,8 +307,10 @@ function renderAvailable(data) {
                         /* logic to display turbo share or ordinary share */
                         (userSubscription === "large" && item.turbo_setup_url && (userRoles.includes("team_billing") || userRoles.includes("team_billing"))) ?  
                             `<a href="${item.turbo_setup_url}" class="button secondary">Share turbo version</a>` :
-                        (userRoles.includes("team_billing") && item.plan !== "Separate subscription") && 
-                            `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>`  
+                        ((userRoles.includes("team_billing") && item.plan !== "Separate subscription" && userSubscription !== "free") ? 
+                            `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>` 
+                        : (userRoles.includes("team_billing") && item.plan !== "Separate subscription" && userSubscription == "free") && 
+                            `<a href="/account#payments" class="button secondary">Uppgrade to share</a>`)  
                     }  
                   </div>
                   <img src="${item.thumb}">
@@ -390,7 +399,10 @@ function setModals() {
                 let dashType = e.target.dataset['dashtype']
                 let dashToDelete = e.target.dataset['dashid']
                 let turboCount = e.target.dataset['turbocount']
-                console.log(dashType, dashToDelete, turboCount)
+                let extractedList = e.target.dataset['sources'].split(',').map(source => `<li>${source}</li>`).join('')
+                
+               
+
                 if (turboCount == 1 && (dashType == "associated" || dashType == "reusable")) {
                     lastReusable = true
                     extractedSources = true
@@ -403,7 +415,7 @@ function setModals() {
                 <h2>Are you sure you want to delete this dashboard?</h2>
         
                 <p>Deleting this dashboard will remove it from this page but it will still exist inside looker studio.</p>
-                ${extractedSources ? `<p>Before you delete the reference to this dashboard in myGHC we advice you also delete the attached turbo sources to stop extracting unneeded data from the church management servers. To do this go to your <a href="https://lookerstudio.google.com/u/0/navigation/datasources" target="_blank">Looker Studio data sources</a> and select the following sources to delete:` : ``}
+                ${extractedSources ? `<p>Before you delete the reference to this dashboard in myGHC we advice you also delete the attached turbo sources to stop extracting unneeded data from the church management servers. To do this go to your <a href="https://lookerstudio.google.com/u/0/navigation/datasources" target="_blank">Looker Studio data sources</a> and select the following sources to delete: <br/><ul> ${extractedList} </ul>` : ``}
                 <p>View the dashboard inside your <a href="https://lookerstudio.google.com/u/0/navigation/reporting" target="_blank">Looker Studio Reports</a> to delete access to it permanently.</p>
                 
                 <a id="deleteDashboard" class="button" href="" data-dashid="${dashToDelete}" data-lastReusable="${lastReusable}">Yes, delete</a>

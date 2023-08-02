@@ -185,6 +185,11 @@ function renderStep() {
 
     //update done items
     doneItems = document.querySelectorAll(".timeline-item.done")
+
+     //if user has a google group preference
+     if (googleGroup !== '') {
+        document.getElementById("accountEmails").style.display = "none"
+    }
 }
 
 
@@ -282,15 +287,13 @@ function renderData(data) {
     if (chosenDashboard[0]) {
         document.getElementById("dashboard-to-share").textContent = `Open ${chosenDashboard[0].name} dashboard`
         document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
+        document.querySelectorAll("input[name='share_name']").forEach(el => el.value = chosenDashboard[0].name)
     } else {
         document.getElementById("dashboard-to-share").replace("Open the dashboard from your my GHC")
     }
     
     
-    //if user has a google group preference
-    if (googleGroup !== '') {
-        document.getElementById("accountEmails").style.display = "none"
-    }
+   
   
 }
 
@@ -331,8 +334,16 @@ doneBtn.forEach(element => {
         }
         // different logic to jump to correct section
         if (thisItem.id === "step-decision") {
-            console.log("decision to make")
-            step = document.getElementById("share-select").value
+            
+            let shareChoice = document.getElementById("share-select").value
+            // decision to use google Group
+            if (shareChoice == "other-method" || shareChoice == "already-google"  ) {
+                step = 3
+            }
+            if (shareChoice == "google" || shareChoice == "already-google") {
+                googleGroup = 'true'
+  
+            }
             renderStep()
         }
         

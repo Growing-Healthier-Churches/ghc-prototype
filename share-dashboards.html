@@ -845,7 +845,9 @@ font-family: 'Montserrat';
             <select name="share_id" class="dashboard-select">
                 <!-- generated from JS -->
             </select>
-            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
+            <input type="hidden" name="is_tubo" value="false" />
+            <input type="hidden" name="share_name" value="" />
+            <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
         <div class="callout callout-warning pasted-alert" style="display: none">
@@ -885,9 +887,9 @@ font-family: 'Montserrat';
                         <form class="sharelink-form standalone-field">
                             <!-- Jumps user to correct step -->
                             <select id="share-select">
-                                <option value="2">Create a google group</option>
-                                <option value="3">I already have a google group</option>
-                                <option value="3">I'm using another sharing method</option>
+                                <option value="google">Create a google group</option>
+                                <option value="already-google">I already have a google group</option>
+                                <option value="separate-emails">I'm using another sharing method</option>
                             </select>
                         </form>
 					        <a href="#" class="btn done-btn" data-step="1" id="step-decision">✓ Next</a>
@@ -1061,7 +1063,9 @@ font-family: 'Montserrat';
                             <select name="share_id" class="dashboard-select">
                                 <!-- generated from JS -->
                             </select>
-                            <input name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
+                            <input type="hidden" name="is_tubo" value="false" />
+                            <input type="hidden" name="share_name" value="" />
+                            <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
                             <button type="submit" class="button">Save link</button>
                         </form>
                         <div class="callout callout-warning pasted-alert" style="display: none">
