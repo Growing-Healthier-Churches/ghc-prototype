@@ -209,7 +209,7 @@ function filterData(data) {
     // remove non-dashboard tools
     newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription" ) 
 
-    // remove non-dashboard tools
+    // remove non-turbo dashboards
     newData = newData.filter(dashboard => dashboard.turbo_type !== null ) 
     
     console.log(newData)

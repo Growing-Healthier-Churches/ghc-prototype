@@ -8,7 +8,7 @@
 
 //Example variables - in live loaded from php
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
-let userSubscription = "large" // free, small, medium, large
+let userSubscription = "free" // free, small, medium, large
 const userRoles = ["team_billing"] //team_billing, team_member, team_admin, coach
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]

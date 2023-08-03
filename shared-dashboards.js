@@ -289,7 +289,7 @@ function renderData(data) {
         document.getElementById("dashboard-to-share").href = `${chosenDashboard[0].dashboard_link}`
         document.querySelectorAll("input[name='share_name']").forEach(el => el.value = chosenDashboard[0].name)
     } else {
-        document.getElementById("dashboard-to-share").replace("Open the dashboard from your my GHC")
+        document.getElementById("dashboard-to-share").textContent =  "Open the dashboard from your my GHC"
     }
     
     
