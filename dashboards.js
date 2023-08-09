@@ -8,7 +8,7 @@
 
 //Example variables - in live loaded from php
 let userCHMS = "elvanto_user" //elvanto_user, pco_user
-let userSubscription = "free" // free, small, medium, large
+let userSubscription = "small" // free, small, medium, large
 const userRoles = ["team_billing"] //team_billing, team_member, team_admin, coach
 const ghcNotify = ["active"] //relevant value: "active"
 let  extraDashboards =[]
@@ -214,7 +214,7 @@ function renderShared(userDataShared, linkedDashboards) {
         }
 
         // simple display for team members and coaches
-        if(userRoles.includes("team_member") || userRoles.includes("coach")) {
+        if(userRoles.includes("team_member")) {
             return (
                 `<article  class="strip">
                     <span class="dashicons dashicons-analytics"></span>
@@ -285,6 +285,11 @@ function renderAvailable(data) {
     
     // Loop through JSON data to return html for dashboard cards
     const cardsHtml = data.map(item => {
+        // Not dashboards
+        let isDashboard = true
+        if (item.health_category_id1.name == "Elvanto ext." || item.plan == "Separate subscription") {
+            isDashboard = false
+        }
         return (
             `
             <article class="card">
@@ -293,19 +298,19 @@ function renderAvailable(data) {
                 </div>
                 <div class="dimmable image">
                   <div class="dimmer">
-                  ${(item.plan == "Separate subscription" || userRoles.includes("team_member"))
-                    /* these dashboards cannot be shared */ 
-                    ? ` <a href="${item.info_link}"" class="button">Read docs</a>`
-                    : ` <a href="${item.dashboard_link}" class="button">Open dashboard</a>
-                        ` 
+                  
+                  ${(!isDashboard  || userRoles.includes("team_member")) ?
+                   ` <a href="${item.info_link}"" class="button">Read docs</a>`: 
+                   ` <a href="${item.dashboard_link}" class="button">Open dashboard</a>
+                    ` 
                     }
                     ${
                         /* logic to display turbo share or ordinary share */
                         (userSubscription === "large" && item.turbo_setup_url && (userRoles.includes("team_billing") || userRoles.includes("team_billing"))) ?  
                             `<a href="${item.turbo_setup_url}" class="button secondary">Share turbo version</a>` :
-                        ((userRoles.includes("team_billing") && item.plan !== "Separate subscription" && userSubscription !== "free") ? 
+                        ((userRoles.includes("team_billing") && isDashboard && userSubscription !== "free") ? 
                             `<a href="https://growinghealthierchurches.com/save-share-link/?share_post_id=${item.wp_post_id}" class="button secondary">Share dashboard</a>` 
-                        : (userRoles.includes("team_billing") && item.plan !== "Separate subscription" && userSubscription == "free") && 
+                        : (userRoles.includes("team_billing") && isDashboard && userSubscription == "free") && 
                             `<a href="/account#payments" class="button secondary">Uppgrade to share</a>`)  
                     }  
                   </div>

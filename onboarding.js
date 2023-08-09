@@ -11,42 +11,42 @@ console.log(queryString)
 if (step == "1") {
     // do nothing, default state of page
 } else if (step == "2") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
+    document.getElementById("step1").classList.add("done", "completed-closed")
     document.getElementById("step2").classList.remove("closed")
 } else if (step == "3") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step1").classList.add("done", "completed-closed")
+    document.getElementById("step2").classList.add("done", "completed-closed")
     document.getElementById("step2").classList.remove("closed")
     document.getElementById("step3").classList.remove("closed")
+ 
 } else if (step == "4") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step1").classList.add("done", "completed-closed")
+    document.getElementById("step2").classList.add("done", "completed-closed")
+    document.getElementById("step3").classList.add("done", "completed-closed")
     document.getElementById("step2").classList.remove("closed")
-    document.getElementById("step3").classList.add("done")
-    document.getElementById("step3").classList.add("completed-closed")
     document.getElementById("step3").classList.remove("closed")
     document.getElementById("step4").classList.remove("closed")
 } else if (step == "5") {
-    document.getElementById("step1").classList.add("done")
-    document.getElementById("step1").classList.add("completed-closed")
-    document.getElementById("step2").classList.add("done")
-    document.getElementById("step2").classList.add("completed-closed")
+    document.getElementById("step1").classList.add("done", "completed-closed")
+    document.getElementById("step2").classList.add("done", "completed-closed")
+    document.getElementById("step3").classList.add("done", "completed-closed")
+    document.getElementById("step4").classList.add("done", "completed-closed")
     document.getElementById("step2").classList.remove("closed")
-    document.getElementById("step3").classList.add("done")
-    document.getElementById("step3").classList.add("completed-closed")
     document.getElementById("step3").classList.remove("closed")
-    document.getElementById("step4").classList.add("done")
-    document.getElementById("step4").classList.add("completed-closed")
     document.getElementById("step4").classList.remove("closed")
     document.getElementById("step5").classList.remove("closed")
+} else if (step == "6") {
+    document.getElementById("step1").classList.add("done", "completed-closed")
+    document.getElementById("step2").classList.add("done", "completed-closed")
+    document.getElementById("step3").classList.add("done", "completed-closed")
+    document.getElementById("step4").classList.add("done", "completed-closed")
+    document.getElementById("step5").classList.add("done", "completed-closed")
+    document.getElementById("step2").classList.remove("closed")
+    document.getElementById("step3").classList.remove("closed")
+    document.getElementById("step4").classList.remove("closed")
+    document.getElementById("step5").classList.remove("closed")
+    document.getElementById("step6").classList.remove("closed")
 }
-
-
 
 let doneItems = document.querySelectorAll(".timeline-item.done")
 
@@ -176,14 +176,23 @@ modalClose.addEventListener("click", function(e){
     e.target.closest(".mymodal-overlay").classList.remove("show")
 })
 
+//Open and close completed items
 function accordion() {
     doneItems.forEach(el => {
         let thisContent = el.children[1]
         thisContent.addEventListener("click", function(e) {
+			//prevent default link behaviour
             e.preventDefault()
-            console.log(e.target.innerHTML)
-            e.target.closest(".timeline-item").classList.remove("completed-closed")
-        })
+			e.stopPropagation()
+			e.target.closest(".timeline-item").classList.remove("completed-closed")
+        	// if external link open in a new window
+			// required due to preventdefault being called
+			if(!(e.target.href.indexOf(window.location.href) > -1)) {
+				console.log("external link")
+				window.open(e.target.href, "_blank")
+			}
+			
+         })
        
     })
 }

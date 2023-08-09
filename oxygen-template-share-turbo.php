@@ -1,4 +1,5 @@
-<!-- share dashboard STANDARD -->
+<!-- share dashboard TURBO -->
+
 <script>
 
 <?php 
@@ -33,8 +34,8 @@
 
     // Initialize a counter
     $dashboardCount = 0;
-	
-	if (isset($google_group)) {
+
+    if (isset($google_group)) {
     	echo 'googleGroupEmail = "' . $google_group . '"';
 	}
 	
@@ -42,7 +43,7 @@
 	if (isset($_GET['google_group'])) {
 		update_user_meta($central_user,'google_group_email',$_GET['google_group']);
 		update_user_meta($central_user,'google_sharing_preference','google_group');
-	
+
 		$google_group = get_user_meta($central_user,'google_group_email',true);
 		
 		
@@ -59,9 +60,9 @@
 		// Remove the specific parameter from the parsed query parameters
 		if (isset($query_params[$parameter_to_remove])) {
 			unset($query_params[$parameter_to_remove]);
-		}
+	    }
 
-		// Reconstruct the query string without the removed parameter
+        // Reconstruct the query string without the removed parameter
 		$new_query_string = http_build_query($query_params);
 
 		// Create the new URL
@@ -72,7 +73,7 @@
 		exit();
 		
 	}
-	
+
 
 ?>
 
@@ -123,7 +124,7 @@ console.log(googleGroupEmail)
 		echo $title;
 	}
 	
-	
+
 ?>
 	</h1>
 		
@@ -135,7 +136,7 @@ console.log(googleGroupEmail)
                 <!-- generated from JS -->
             </select>
 			<input type="hidden" name="share_name" value="" />
-			<input type="hidden" name="is_tubo" value="false" />
+			<input type="hidden" name="is_turbo" value="true" />
             <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
@@ -173,7 +174,7 @@ console.log(googleGroupEmail)
                                 This option is available for everyone but it has the least control and visibility.
                             </li>
                         </ol>
-						<div class="callout callout-info" id="googlegroupInfo0" style="display: none">
+                        <div class="callout callout-info" id="googlegroupInfo0" style="display: none">
                             <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                         </div>
                         <form class="sharelink-form standalone-field">
@@ -190,7 +191,7 @@ console.log(googleGroupEmail)
                 <div class="timeline-help">
                     <h3>Help</h3>
                     <p><a class="modal-link" href="#" data-help="0">How can I check I'm logged into the correct google account?</a></p>
-                  
+                    <p><a class="modal-link" href="#" data-help="1">I get a "complete your account setup" prompt</a></p>
                 </div>
 			</div>
 			<div class="timeline-item closed" id="step2">
@@ -221,11 +222,11 @@ console.log(googleGroupEmail)
                                 <li><strong>Paste each email address</strong> into the group members text field. Click Add members. </li>
                             </ul>
                             <p>Your google group has now been created.</p>
-                            <form action="#step3"> 
+                            <form action="#step3">
                                 <input type="hidden" name="share_post_id" value="" />
                                 <input name="google_group" type="email" required class="wide" placeholder="myuniquename@googlegroups.com" />
                                 <input type="hidden" name="step" value="3" />
-								<button type="submit" class="button">Save google group</button>
+                                <button type="submit" class="button">Save google group</button>
                                 <a href="#" class="btn skip-btn" data-step="2">Skip step</a>
                             </form>
 
@@ -245,48 +246,51 @@ console.log(googleGroupEmail)
 				<div class="timeline-content">
 					<h2>Create a copy</h2>
                     <div class="timeline-content-inner">
-					<!-- revealed when google group saved in process -->
+                    <!-- revealed when google group saved in process -->
 					<div class="callout callout-info" id="googlegroupInfo" style="display:none">
                           <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                     </div>
 					<p>You cannot share the original dashboard, you must first make a copy:</p>
                     <ul>
-                        <li><a href="#" id="dashboard-to-share" target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
+                        <li><a href="#" id="dashboard-to-share"  target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
                             <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
                             <li>Click on the menu and select "Make a Copy"</li>
                     </ul>
-                    <p>A dialog box will now appear. Leave all the values unchanged. Click Copy Report.</p>
-                    <p>You have now created a new copy! Rename it by clicking the "Copy of [dashboard title]" in the top left and name to something that makes sense to you.
+                    <p>When making a copy you'll be asked confirm data sources. Simply hit <strong>Copy Report</strong>. These three sources are streams of data from your ChMS that will be cached</p>
+                    <p>You may now see a screen which contains the messages <strong>Data set configuration error</strong>. We will fix this in the next step.
                     </p>
-						<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
+					<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
+
                 </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="1">I can't see the menu!</a></p>
-                    <p><a class="modal-link" href="#" data-help="2">Why do I need to create a shared copy?</a></p>
+                    <p><a class="modal-link" href="#" data-help="2">I can't see the menu!</a></p>
+                    <p><a class="modal-link" href="#" data-help="3">Why do I need to create a shared copy?</a></p>
                     
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=210" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    
                 </div>
 			</div>
-
+			
 			<div class="timeline-item closed" id="step4">
 				<div class="timeline-icon">4</div>
 				<div class="timeline-content">
 					<h2>Reconnect your data</h2>
                     <div class="timeline-content-inner">
-                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the "Edit" button to ensure you are first in edit mode.</p>
-                        <p>You will need to repeat the steps for each of the data sources listed so it may be helpful to make a note as you go.</p>
+                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"></path></svg>Edit</strong> button to ensure you are first in edit mode.</p>
+                        <p>You will need to repeat the steps for <strong>each of the data sources marked with <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg></strong> so it may be helpful to make a note as you go.</p>
                         <ul>
                             <li>Click <strong>edit in the actions</strong> column</li>
-                            <li>Click <strong>RECONNECT</strong> to the top right</li>
-                            <li>If a dialog box appears click <strong>Apply</strong> to apply connection changes</li>
-                            <li>Click <strong>Data Credentials</strong>  just below the top menu</li>
-                            <li>A dialog box will open. Change the radio button to <strong>Owner's Credentials</strong>. Click Update</li>
-                            <li>Click <strong>FINISHED</strong> to the top right</li>
+                            <li>Toggle <strong>Auto Update </strong>so it's active </li>
+                            <li> Select a time that's <strong>not 8am</strong> (we encourage our users to diversify their extraction times to reduce load on API servers). </li>
+                            <li>Click <strong>SAVE AND EXTRACT</strong>, wait for the data to cache.</li>
                         </ul>
-                       <p> Repeat these steps for each of the data sources. Once completed Click “CLOSE” in the top right to return to the dashboard.</p>
+                        <div class="callout callout-info">
+                            <p><span class="dashicons dashicons-info"></span>This extraction time is when your data is cached and frozen. So any updates to your database won't be refreshed in our dashboards until the next extraction cycle.</p>
+                        </div>
+                       <p> Repeat these steps for each of the turboed data sources (indicated by <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>).</p>
+                       <p>Once completed Click <strong>FINISHED</strong> in the top right, then <strong>CLOSE</strong> </p>
+                        <p> Click <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M12 7c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7 0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7c0 1.49-1.21 2.7-2.7 2.7z"></path><path d="M12 4C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 13a9.77 9.77 0 0 1-8.82-5.5C4.83 8.13 8.21 6 12 6s7.17 2.13 8.82 5.5A9.77 9.77 0 0 1 12 17z"></path></svg>VIEW</strong> (to exit edit dashboard mode) and you should return to viewing the dashboard with your data. </p>
                        
                         
                     <a href="#" class="btn done-btn" data-step="4">✓ Done</a>
@@ -294,15 +298,8 @@ console.log(googleGroupEmail)
                 </div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="3">Where do I manage data sources?</a></p>
-                    <p><a class="modal-link" href="#" data-help="4">Where do I change the data credentials?</a></p>
-                    <p><a class="modal-link" href="#" data-help="5">Help! I’m getting a community connector error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="6">Help! I’m getting an “Empty Table” error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="7">Why do I need to reconnect each data source?</a></p>
-                    
-                    
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=250" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <p><a class="modal-link" href="#" data-help="4">Where do I manage data sources?</a></p>
+                    <p><a class="modal-link" href="#" data-help="5">How do I edit data extraction sources?</a></p>
                 </div>
 			</div>
 
@@ -321,11 +318,8 @@ console.log(googleGroupEmail)
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="8">Which filters can I customise?</a></p>
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=499" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <p><a class="modal-link" href="#" data-help="6">Which filters can I customise?</a></p>  
                 </div>
-                
 			</div>
 
             <div class="timeline-item closed" id="step6">
@@ -340,6 +334,8 @@ console.log(googleGroupEmail)
 						<div class="callout callout-info" id="googlegroupInfo2" style="display: none">
                             <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                         </div>
+						
+
                         <div id="accountEmails" class="callout callout-info">
                             <p><span class="dashicons dashicons-info"></span>The following email accounts are associated to your my GHC team: <?php echo(implode(', ', $user_emails)); ?></p>
                         </div>
@@ -353,32 +349,29 @@ console.log(googleGroupEmail)
                         <p>Your copied dashboard is now shared and can be accessed by your team. Copy the url of this dashboard and paste into the form so that it can be viewed by all logged in team members of my GHC</p>
                         <h3>Save my link</h3>
                         <form class="sharelink-form" action="myGHC" method="get">
-                            <select name="share_post_id" class="dashboard-select">
+                            <select class="dashboard-select">
                                 <!-- generated from JS -->
                             </select>
 							<input type="hidden" name="share_name" value="" />
-							<input type="hidden" name="is_tubo" value="false" />
-                            <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
+							<input type="hidden" name="is_turbo" value="true" />
+                            <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB" />
                             <button type="submit" class="button">Save link</button>
                         </form>
                         <div class="callout callout-warning pasted-alert" style="display: none">
                             <p><span class="dashicons dashicons-remove"></span>This is the master dashboard link. You cannot use this link.</p>
-                        </div>
-					    
-                </div>
+                        </div>   
+                    </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" data-help="9" href="">Sharing data snapshots</a></p>
-                    <p><a class="modal-link" data-help="10" href="">Why should I save my shared dashboards to GHC?   </a></p>
-                    <p><a class="modal-link" data-help="11" href="">I forgot my google group email address </a></p>
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <p><a class="modal-link" data-help="7" href="">Sharing data snapshots</a></p>
+                    <p><a class="modal-link" data-help="8" href="">Why should I save my shared dashboards to GHC?   </a></p>
+                    <p><a class="modal-link" data-help="9" href="">I forgot my google group email address </a></p>
                     <h4>Creating a google group</h4>
                     <iframe width="260" height="150" src="https://www.youtube.com/embed/33BI5j4i9Eg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 			</div>
-
+			
 		</div>
 	</div>
 
@@ -386,8 +379,8 @@ console.log(googleGroupEmail)
 
 
 <!-- OXYGEN TAB - JavaScript (remove wrapping <script> tags) --> 
-
-
+    
+    
 <script>
 	
 const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
@@ -425,13 +418,22 @@ const helpModalContent = [
     {
         order: 1,
         html: `
+        <h2>I get a "complete your account setup" prompt</h2>
+        <p>If you see  a "complete your account setup" prompt when trying to copy your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
+        <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/complete-account-prompt.gif" "Reveal menu on hover" />
+        `
+    },
+    {
+        order: 2,
+        html: `
         <h2>I can't see the menu!</h2>
         <p>The Looker Studio menu to create a shareable copy on appears when you hover over the top of the dashboard.</p> 
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/dashboard_make_a_copy.gif" "Reveal menu on hover" />
         `
     },
     {
-        order: 2,
+        order: 3,
         html: `
         <h2>Why do I need to create a shared copy?</h2>
         <p>The original dashboard is owned by GHC, so when you share with others they will get an authentication failure. </p>
@@ -442,53 +444,29 @@ const helpModalContent = [
         `
     },
     {
-        order: 3,
+        order: 4,
         html : `
         <h2>Where do I manage data sources?</h2>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/reauthenticate_sources.gif" alt="process of changing data sources" />
         `
     },
     {
-        order: 4,
-        html : `
-        <h2>Where do I change the data credentials?</h2>
-        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/data_credentials.gif" alt="process of changing data credentials" />
-        `
-    },
-    {
         order: 5,
         html : `
-        <h2>Help! I’m getting a community connector error!</h2>
-       <p>This error exists because one/both of your attendance reports is returning "No Results". To get around this create dummy attendance results in a single service or group report. It doesn't matter if you you select no one attends, it's simply that this error occurs when the reports return empty results. No attendance is still a result.</p>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/08/Screen-Shot-2021-08-18-at-1.25.19-pm.png" />
+        <h2>How do I edit data extraction sources?</h2>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/edit-extraction-sources.gif" alt="process of editing data sources extraction" />
         `
     },
+    
     {
         order: 6,
-        html: `
-        <h2>Help! I’m getting an “Empty Table” error!</h2>
-        <p>Note that in some cases the reconnection will produce an error. In this case a dialogue box will appear, select "OK" and then select "FIELDS →" under the blue "RECONNECT" button.</p>
-        `
-    },
-    {
-        order: 7,
-        html: `
-        <h2>Why do I need to reconnect each data source?</h2>
-        <p>You may notice this message on the final screen of each data source:<br/>
-        "Data source editors can now refresh fields, edit connections and edit custom SQL."</p>
-        <p>This has to do with who owns the data in google studio. To share a dashboard you first need to have permissions over the data sources it contains.</p>
-
-        `
-    },
-    {
-        order: 8,
         html: `
         <h2>Which filters can I customise?</h2>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/12/Default-Locations-1024x829.png" />
         `
     },
     {
-        order: 9,
+        order: 7,
         html: `
         <h2>Sharing data snapshots</h2>
         <p>I you just want a  static view of your dashboard you can: </p>
@@ -500,7 +478,7 @@ const helpModalContent = [
         `
     },
     {
-        order: 10,
+        order: 8,
         html: `
         <h2>Why should I save my shared dashboard to GHC?</h2>
         <p>If you save your shared dashboard link to my GHC we can help you keep track of your dashboards</p>
@@ -512,11 +490,12 @@ const helpModalContent = [
         `
     },
     {
-        order: 11,
+        order: 9,
         html: `
         <h2>I forgot my google group email address</h2>
         <p>Go to <a href="https://groups.google.com/my-groups">groups.google.com/my-groups</a> from there you can see all the groups you administer and those of which you are a member.</p>
         <p>If you are group admin you can click on the group and edit its members, or add new ones.</p>
+       
         `
     }
 
@@ -568,10 +547,10 @@ function renderStep() {
     doneItems = document.querySelectorAll(".timeline-item.done")
 	
 	//if user has a google group preference
-    if (googleGroup == 'google_group') {
+    if (googleGroup !== '') {
         document.getElementById("accountEmails").style.display = "none"
     }
-	
+
 	// hide google email info box if no google group email stored for user
 	if (googleGroupEmail !== '') {
 		document.querySelector('#share-select option[value="already-google"]').selected = true
@@ -619,7 +598,12 @@ function filterData(data) {
     // remove non-dashboard tools
     newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
 
-    // Filter data for CHMS
+    
+	
+	// remove non-turbo dashboards
+    newData = newData.filter(dashboard => dashboard.turbo_type !== null )
+	
+	// Filter data for CHMS
     filterChms(userCHMS, newData)
 
 }
@@ -661,7 +645,7 @@ function filterChms(userType, newData) {
 function renderData(data) {
     
     // Loop through JSON data to return html for select options
-    const selectHtml = data.filter(item => item.name !== "GHC Stats").map(item => {
+    const selectHtml = data.map(item => {
         return (
             `
             <option value="${item.wp_post_id}" ${dashboardSelected == item.wp_post_id ? "selected" : ""}>${item.name}</option>
@@ -829,6 +813,7 @@ dashboardInput.forEach(element => {
     })
 })
 
+
 </script>
 
 <!-- OXYGEN BLOCK --> 
@@ -845,4 +830,3 @@ dashboardInput.forEach(element => {
             </div>
     </div>
   </div>
-

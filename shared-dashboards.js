@@ -387,7 +387,6 @@ function accordion() {
         thisContent.addEventListener("click", openItem)
         function openItem(e) {
             e.preventDefault()
-            console.log("clicked")
             e.target.closest(".timeline-item").classList.remove("completed-closed")
             thisContent.removeEventListener("click", openItem)
         }
@@ -424,7 +423,11 @@ dashboardInput.forEach(element => {
         document.querySelectorAll(".pasted-alert").forEach(
             el => el.style.display = "none"
         )
-        //match - disable
+        //disable button for non google urls
+        if (!(thisInput.includes(".google.com"))) {
+            siblingButton.disabled = true
+        }
+        // match - disable
         if (masterDashboardUrls.includes(thisInput)) {
             siblingButton.disabled = true
             document.querySelectorAll(".pasted-alert").forEach(

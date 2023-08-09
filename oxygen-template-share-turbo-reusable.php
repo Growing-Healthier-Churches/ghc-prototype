@@ -1,11 +1,11 @@
-<!-- share dashboard STANDARD -->
-<script>
+<!-- share dashboard REUSABLE TURBO -->$_COOKIE
 
+<script>
 <?php 
 	$roles = wp_get_current_user()->roles; 
 	$user_id = get_current_user_id();
 	$central_user = get_billing_user();
-	$share_method = get_user_meta($central_user,'google_sharing_preference',true); //google_group
+	$share_method = get_user_meta($central_user,'google_sharing_preference',true);
 	$google_group = get_user_meta($central_user,'google_group_email',true);
 	$google_account = wp_get_current_user()->user_email;
 	
@@ -34,7 +34,7 @@
     // Initialize a counter
     $dashboardCount = 0;
 	
-	if (isset($google_group)) {
+    if (isset($google_group)) {
     	echo 'googleGroupEmail = "' . $google_group . '"';
 	}
 	
@@ -42,7 +42,7 @@
 	if (isset($_GET['google_group'])) {
 		update_user_meta($central_user,'google_group_email',$_GET['google_group']);
 		update_user_meta($central_user,'google_sharing_preference','google_group');
-	
+
 		$google_group = get_user_meta($central_user,'google_group_email',true);
 		
 		
@@ -58,21 +58,22 @@
 
 		// Remove the specific parameter from the parsed query parameters
 		if (isset($query_params[$parameter_to_remove])) {
-			unset($query_params[$parameter_to_remove]);
-		}
+			
+	    }
+        // Reconstruct the query string without the removed parameter
+        $new_query_string = http_build_query($query_params);
 
-		// Reconstruct the query string without the removed parameter
-		$new_query_string = http_build_query($query_params);
+        // Create the new URL
+        $new_url = strtok($current_url, '?') . '?' . $new_query_string;
 
-		// Create the new URL
-		$new_url = strtok($current_url, '?') . '?' . $new_query_string;
+        // Redirect to the new URL
+        header('Location: ' . $new_url);
+        exit();
 
-		// Redirect to the new URL
-		header('Location: ' . $new_url);
-		exit();
-		
-	}
-	
+        }
+
+
+
 
 ?>
 
@@ -103,7 +104,6 @@ let userSubscription = "free" // free, small, medium, large
 	echo 'userSubscription = "large"';
 } ?>
 
-
 let googleGroup = <?php echo '"' . $share_method . '"'; ?>
 
 console.log(googleGroupEmail)
@@ -123,11 +123,11 @@ console.log(googleGroupEmail)
 		echo $title;
 	}
 	
-	
+
 ?>
 	</h1>
 		
-        <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
+               <p>If you have already copied and shared your dashboard paste its url into the form below. Otherwise follow the instructions to generate your link.</p>
         <p>Since dashboards permissions are connected to your google account <strong>you won’t be able to share dashboards without creating a copy first.</strong></p>
 
         <form class="sharelink-form" action="myGHC" method="get">
@@ -135,7 +135,7 @@ console.log(googleGroupEmail)
                 <!-- generated from JS -->
             </select>
 			<input type="hidden" name="share_name" value="" />
-			<input type="hidden" name="is_tubo" value="false" />
+			<input type="hidden" name="is_turbo" value="true" />
             <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
             <button type="submit" class="button">Save link</button>
         </form>
@@ -145,8 +145,11 @@ console.log(googleGroupEmail)
         <div class="callout callout-info">
             <p><span class="dashicons dashicons-info"></span>We recommend splitting your screen in half so you can work through these instructions alongside your Looker Studio dashboard.</p>
         </div>
-        <div class="callout callout-attention" id="shortcut-step" style="display: none">
+         <div class="callout callout-attention" id="shortcut-step" style="display: none">
             <p><span class="dashicons dashicons-warning"></span>Hey! It looks like you've already created a shared dashboard so we've skipped over the setup for you. If you need to review these again please expand steps 1 and 2.</p>
+        </div>
+        <div class="callout callout-attention" id="shortcut-step2" style="display: none">
+            <p><span class="dashicons dashicons-warning"></span>Hey! It looks like you've already created reusable data sources for another turbo dashboard so we've skipped over these steps for you. If you need to review these again please expand steps 3 and 4.</p>
         </div>
     </div>
 
@@ -173,7 +176,7 @@ console.log(googleGroupEmail)
                                 This option is available for everyone but it has the least control and visibility.
                             </li>
                         </ol>
-						<div class="callout callout-info" id="googlegroupInfo0" style="display: none">
+                        <div class="callout callout-info" id="googlegroupInfo0" style="display: none">
                             <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                         </div>
                         <form class="sharelink-form standalone-field">
@@ -189,8 +192,9 @@ console.log(googleGroupEmail)
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="0">How can I check I'm logged into the correct google account?</a></p>
-                  
+                    <p><a class="modal-link" href="#" data-help="0">I get an authorization required error</a></p>
+                    <p><a class="modal-link" href="#" data-help="1">I get a "complete your account setup" prompt</a></p>
+                    
                 </div>
 			</div>
 			<div class="timeline-item closed" id="step2">
@@ -221,11 +225,11 @@ console.log(googleGroupEmail)
                                 <li><strong>Paste each email address</strong> into the group members text field. Click Add members. </li>
                             </ul>
                             <p>Your google group has now been created.</p>
-                            <form action="#step3"> 
+                            <form action="#step3">
                                 <input type="hidden" name="share_post_id" value="" />
                                 <input name="google_group" type="email" required class="wide" placeholder="myuniquename@googlegroups.com" />
                                 <input type="hidden" name="step" value="3" />
-								<button type="submit" class="button">Save google group</button>
+                                <button type="submit" class="button">Save google group</button>
                                 <a href="#" class="btn skip-btn" data-step="2">Skip step</a>
                             </form>
 
@@ -243,87 +247,136 @@ console.log(googleGroupEmail)
 			<div class="timeline-item closed" id="step3">
 				<div class="timeline-icon">3</div>
 				<div class="timeline-content">
-					<h2>Create a copy</h2>
+					<h2>Copy turboed sources</h2>
                     <div class="timeline-content-inner">
-					<!-- revealed when google group saved in process -->
+                    <!-- revealed when google group saved in process -->
 					<div class="callout callout-info" id="googlegroupInfo" style="display:none">
                           <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                     </div>
-					<p>You cannot share the original dashboard, you must first make a copy:</p>
+                    <div class="callout callout-info" id="shortcut-step">
+                        <p><span class="dashicons dashicons-info"></span>You only need to complete the next two steps the first time you create a turboed dashboard.</p>
+                    </div>
+					<p>To begin a turbo setup we've created a special setup dashboard that builds the extract sources.</p>
                     <ul>
-                        <li><a href="#" id="dashboard-to-share" target="_blank">Open [Dashboard name]</a> or another dashboard that you wish to share</li>
+                        <li><a href="https://lookerstudio.google.com/u/0/reporting/cbc15c21-6b06-4037-b8c8-71310ccd2e15/page/QjZZC" target="_blank">Open turbo data sources</a></li>
                             <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
                             <li>Click on the menu and select "Make a Copy"</li>
                     </ul>
-                    <p>A dialog box will now appear. Leave all the values unchanged. Click Copy Report.</p>
-                    <p>You have now created a new copy! Rename it by clicking the "Copy of [dashboard title]" in the top left and name to something that makes sense to you.
+                    <p>When making a copy you'll be asked confirm data sources. Simply hit <strong>Copy Report</strong>.</p>
+                    <p>After you make the copy the numbers will change to errors. This is normal, we will fix this in the next step.
                     </p>
-						<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
+					<a href="#" class="btn done-btn" data-step="3">✓ Done</a>
                 </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="1">I can't see the menu!</a></p>
-                    <p><a class="modal-link" href="#" data-help="2">Why do I need to create a shared copy?</a></p>
+                    <p><a class="modal-link" href="#" data-help="2">I can't see the menu!</a></p>
+                    <p><a class="modal-link" href="#" data-help="3">Why do I need to create a shared copy?</a></p>
+                    <h4>Setting up turbo sources</h4>
+                    <iframe width="260" height="150" src="https://www.youtube.com/embed/ogOAL8lPcV8?start=214" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=210" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 			</div>
 
 			<div class="timeline-item closed" id="step4">
 				<div class="timeline-icon">4</div>
 				<div class="timeline-content">
-					<h2>Reconnect your data</h2>
+					<h2>Make reusable data sources</h2>
                     <div class="timeline-content-inner">
-                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the "Edit" button to ensure you are first in edit mode.</p>
-                        <p>You will need to repeat the steps for each of the data sources listed so it may be helpful to make a note as you go.</p>
+                       
+                        <p>From the top menu bar select <strong>Resource > Manage added data sources</strong>. If you cannot see this click the <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"></path></svg>Edit</strong> button to ensure you are first in edit mode.</p>
+                        <p>You must first edit the <strong>elvanto API</strong> data source.</p>
                         <ul>
                             <li>Click <strong>edit in the actions</strong> column</li>
-                            <li>Click <strong>RECONNECT</strong> to the top right</li>
-                            <li>If a dialog box appears click <strong>Apply</strong> to apply connection changes</li>
-                            <li>Click <strong>Data Credentials</strong>  just below the top menu</li>
-                            <li>A dialog box will open. Change the radio button to <strong>Owner's Credentials</strong>. Click Update</li>
-                            <li>Click <strong>FINISHED</strong> to the top right</li>
+                            <li>Click <strong>RECONNECT</strong> in the top right</li>
+                            <li>Click on the button in the dialog to <strong>Apply</strong></li>
+                            <li>Click <strong>FINISHED</strong>in the top right</li>
                         </ul>
-                       <p> Repeat these steps for each of the data sources. Once completed Click “CLOSE” in the top right to return to the dashboard.</p>
+                        <p>You will need to repeat the steps below for <strong>each of the other data sources</strong> so it may be helpful to make a note as you go.</p>
+                        <ul>
+                            <li>Click <strong><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="15px" height="15px" viewBox="0 0 869.958 869.958" style="enable-background:new 0 0 869.958 869.958;"
+                                xml:space="preserve">
+                           <g>
+                               <path d="M115.132,737.958c13.436,0,26.872-5.126,37.124-15.377c20.502-20.502,20.502-53.744-0.001-74.246
+                                   c-30.474-30.474-47.256-70.988-47.256-114.084v-4.32c0-88.963,72.377-161.34,161.34-161.34h423.78l-41.688,42.192
+                                   c-20.381,20.625-20.18,53.865,0.445,74.244c10.23,10.11,23.564,15.155,36.896,15.155c13.541,0,27.078-5.207,37.346-15.6
+                                   l131.684-133.271c9.787-9.905,15.236-23.291,15.154-37.215c-0.084-13.923-5.693-27.244-15.6-37.03l-131.48-129.912
+                                   c-20.623-20.379-53.865-20.18-74.244,0.445s-20.18,53.866,0.445,74.245l42.25,41.747H266.339
+                                   c-71.143,0-138.026,27.704-188.332,78.009C27.704,391.903,0,458.788,0,529.93v4.32c0,71.143,27.704,138.026,78.01,188.331
+                                   C88.261,732.833,101.697,737.958,115.132,737.958z"/>
+                           </g>
+                           </svg> MAKE REUSABLE in the actions</strong> column</li>
+                            <li>Click the <strong>Make reusable</strong> button in the dialog</li>
+                            <li>Click <strong>edit in the actions</strong> column</li>
+                            <li>Toggle <strong>Auto Update </strong>so it's active </li>
+                            <li> Select a time that's <strong>not 8am</strong> (we encourage our users to diversify their extraction times to reduce load on API servers). </li>
+                            <li>Click <strong>SAVE AND EXTRACT</strong>, wait for the data to cache.</li>
+                        </ul>
+                        <div class="callout callout-info">
+                            <p><span class="dashicons dashicons-info"></span>This extraction time is when your data is cached and frozen. So any updates to your database won't be refreshed in our dashboards until the next extraction cycle.</p>
+                        </div>
+                       <p> Repeat these steps for each of the turboed data sources (indicated by <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>).</p>
+                       <p>Once completed Click <strong>FINISHED</strong> in the top right, then <strong>CLOSE</strong> </p>
+                        <p> Click <strong><svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" focusable="false"><path d="M12 7c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7zm0 7.2c-1.49 0-2.7-1.21-2.7-2.7 0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7c0 1.49-1.21 2.7-2.7 2.7z"></path><path d="M12 4C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 13a9.77 9.77 0 0 1-8.82-5.5C4.83 8.13 8.21 6 12 6s7.17 2.13 8.82 5.5A9.77 9.77 0 0 1 12 17z"></path></svg>VIEW</strong> (to exit edit dashboard mode) and you should return to viewing the Turbo Setup with all the Validation Checks green. </p>
                        
                         
                     <a href="#" class="btn done-btn" data-step="4">✓ Done</a>
+                   
                 </div>
                 </div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="3">Where do I manage data sources?</a></p>
-                    <p><a class="modal-link" href="#" data-help="4">Where do I change the data credentials?</a></p>
-                    <p><a class="modal-link" href="#" data-help="5">Help! I’m getting a community connector error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="6">Help! I’m getting an “Empty Table” error!</a></p>
-                    <p><a class="modal-link" href="#" data-help="7">Why do I need to reconnect each data source?</a></p>
+                    <p><a class="modal-link" href="#" data-help="4">Where do I manage data sources?</a></p>
+                    <p><a class="modal-link" href="#" data-help="5">How do I edit data extraction sources?</a></p>
+                    <p><a class="modal-link" href="#" data-help="6">How do I make sources reusable?</a></p>
+                    <p><a class="modal-link" href="#" data-help="7">How can I check I've completed this step successfully?</a></p>
+                    <h4>The extract tool</h4>
+                    <iframe width="260" height="150" src="https://www.youtube.com/embed/ogOAL8lPcV8?start=260" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     
-                    
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=250" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 			</div>
 
             <div class="timeline-item closed" id="step5">
 				<div class="timeline-icon">5</div>
 				<div class="timeline-content">
-					<h2>Customise dashboard filters</h2>
+					<h2>Create a turbo copy</h2>
                     <div class="timeline-content-inner">
-                        <p>This is an optional step for those who want to share a filtered view of the dashboards. You can skip this step if not required.</p>
-                        <a href="#" class="btn skip-btn" data-step="5">Skip step</a>
-                        <p>You may wish to set a default filter on your dashboards e.g. Adults of your main congregations.</p>
-                        <p>To do this click on either the demographic or location control box. The data panel will open up and you can add "Default selection" values separated by a comma. You will need to enter the exact values.</p>
-                        
+                        <ul>
+                            <li><a href="#" id="dashboard-to-share" target="_blank">Open [Dashboard name]</a></li>
+                                <li>Hover your mouse at the top of the dashboard. A three dot (⠇) menu will appear.</li>
+                                <li>Click on the menu and select "Make a Copy"</li>
+                        </ul>
+                        <p>When making a copy you'll be asked confirm data sources. This is where you'll need to select the reusable extraction sources you created earlier.</p>
+                        <p>Select the relevant data sources from the list below, noting you'll need to scroll:</p>
+                        <ul>
+                            <li>elvanto API People — <br/>
+                                <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+                                    Extract Data People</strong></li>
+                            <li>elvanto API Report of Service Individual Attendance — <br/>
+                                <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+                                    Extract Data Service Attendance</strong></li>
+                            <li>elvanto API Report of Group Individual Attendance — <br/>
+                                <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+                                Extract Data Group Attendance</strong></li>
+                            <li>elvanto API Service Volunteers — <br/>
+                                <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>
+                                Extract Data Services Volunteers</strong></li>
+                            <li>elvanto API Groups — <br/>
+                                <strong><svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.793 27.793" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g id="c1_ray"> <polygon points="20.972,0 5.076,15.803 10.972,15.803 6.44,27.793 22.716,11.989 16.819,11.989 "></polygon> </g> <g id="Capa_1_29_"> </g> </g> </g></svg>Extract Data Groups</strong></li>
+                        </ul>
+                        <p>Click <strong>Copy Report</strong> </p>
 					<a href="#" class="btn done-btn" data-step="5">✓ Done</a>
+                
                 </div>
 				</div>
                 <div class="timeline-help">
                     <h3>Help</h3>
-                    <p><a class="modal-link" href="#" data-help="8">Which filters can I customise?</a></p>
-                    <h4>Creating a shareable copy</h4>
-                    <iframe width="260" height="150" src="https://www.youtube.com/embed/dHTKs7HIbzk?start=499" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <p><a class="modal-link" href="#" data-help="8">How do I select extraction sources?</a></p>
+                    <h4>Copy dashboard and connect extraction sources</h4>
+                    <iframe width="260" height="150" src="https://www.youtube.com/embed/ogOAL8lPcV8?start=473" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    
+                    
                 </div>
                 
 			</div>
@@ -337,9 +390,11 @@ console.log(googleGroupEmail)
                         <div class="callout callout-warning">
                             <p><span class="dashicons dashicons-remove"></span>Selecting "anyone with the link" or "anyone on the internet" in this step breaches our terms and conditions since you are not able to control the security of your data.</p>
                         </div>
-						<div class="callout callout-info" id="googlegroupInfo2" style="display: none">
+						<div class="callout callout-info" id="googlegroupInfo">
                             <p><span class="dashicons dashicons-info"></span>The google group we have saved for you is: <strong><?php echo $google_group; ?></strong></p>
                         </div>
+						
+
                         <div id="accountEmails" class="callout callout-info">
                             <p><span class="dashicons dashicons-info"></span>The following email accounts are associated to your my GHC team: <?php echo(implode(', ', $user_emails)); ?></p>
                         </div>
@@ -357,7 +412,7 @@ console.log(googleGroupEmail)
                                 <!-- generated from JS -->
                             </select>
 							<input type="hidden" name="share_name" value="" />
-							<input type="hidden" name="is_tubo" value="false" />
+							<input type="hidden" name="is_turbo" value="true" />
                             <input required name="share_url" type="text" class="wide dashboard-paste" placeholder="https://lookerstudio.google.com/u/0/reporting/8a910ffd-96fa/page/KfARB"  />
                             <button type="submit" class="button">Save link</button>
                         </form>
@@ -384,11 +439,11 @@ console.log(googleGroupEmail)
 
 <!-- end timeline -->
 
-
 <!-- OXYGEN TAB - JavaScript (remove wrapping <script> tags) --> 
-
-
+    
+    
 <script>
+
 	
 const doneBtn = document.querySelectorAll(".done-btn, .skip-btn")
 const modalClose = document.getElementById("mymodalClose")
@@ -414,8 +469,7 @@ const helpModalContent = [
     {
         order: 0,
         html: `
-        <h2>How can I check I'm logged into the correct account?</h2>
-        <p><a href="#" target="_blank">Open your dashboard</a>. If you can't see any data take a look at the help section to resolve the issue</p>
+        <h2>I get an authorization required error</h2>
         <p>If you see authorization required messages when trying to access your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
         <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/google-login-looker.gif" "Reveal menu on hover" />
@@ -425,13 +479,22 @@ const helpModalContent = [
     {
         order: 1,
         html: `
-        <h2>I can't see the menu!</h2>
-        <p>The Looker Studio menu to create a shareable copy on appears when you hover over the top of the dashboard.</p> 
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/dashboard_make_a_copy.gif" "Reveal menu on hover" />
+        <h2>I get a "complete your account setup" prompt</h2>
+        <p>If you see  a "complete your account setup" prompt when trying to copy your dashboard you are not logged into the correct google account. Open the menu and select the correct google account which is linked to my GHC.</p> 
+        <p>Then you will need to select the dashboard you want to view from the list of Looker Studio reports</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/complete-account-prompt.gif" "Reveal menu on hover" />
         `
     },
     {
         order: 2,
+        html: `
+        <h2>I can't see the menu!</h2>
+        <p>The Looker Studio menu to create a shareable copy on appears when you hover over the top of the dashboard.</p> 
+       <img src="dashboard_make_a_copy.gif" "Reveal menu on hover" />
+        `
+    },
+    {
+        order: 3,
         html: `
         <h2>Why do I need to create a shared copy?</h2>
         <p>The original dashboard is owned by GHC, so when you share with others they will get an authentication failure. </p>
@@ -442,49 +505,44 @@ const helpModalContent = [
         `
     },
     {
-        order: 3,
-        html : `
-        <h2>Where do I manage data sources?</h2>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/reauthenticate_sources.gif" alt="process of changing data sources" />
-        `
-    },
-    {
         order: 4,
         html : `
-        <h2>Where do I change the data credentials?</h2>
-        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/data_credentials.gif" alt="process of changing data credentials" />
+        <h2>Where do I manage data sources?</h2>
+       <img src="reauthenticate_sources.gif" alt="process of changing data sources" />
         `
     },
     {
         order: 5,
         html : `
-        <h2>Help! I’m getting a community connector error!</h2>
-       <p>This error exists because one/both of your attendance reports is returning "No Results". To get around this create dummy attendance results in a single service or group report. It doesn't matter if you you select no one attends, it's simply that this error occurs when the reports return empty results. No attendance is still a result.</p>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2021/08/Screen-Shot-2021-08-18-at-1.25.19-pm.png" />
+        <h2>How do I edit data extraction sources?</h2>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/edit-extraction-sources.gif" alt="process of editing data sources extraction" />
         `
     },
     {
         order: 6,
-        html: `
-        <h2>Help! I’m getting an “Empty Table” error!</h2>
-        <p>Note that in some cases the reconnection will produce an error. In this case a dialogue box will appear, select "OK" and then select "FIELDS →" under the blue "RECONNECT" button.</p>
+        html : `
+        <h2>How do I make sources reusable?</h2>
+        <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/make-reusable-sources.gif" alt="process of editing data sources extraction" />
+        
         `
     },
     {
         order: 7,
-        html: `
-        <h2>Why do I need to reconnect each data source?</h2>
-        <p>You may notice this message on the final screen of each data source:<br/>
-        "Data source editors can now refresh fields, edit connections and edit custom SQL."</p>
-        <p>This has to do with who owns the data in google studio. To share a dashboard you first need to have permissions over the data sources it contains.</p>
-
+        html : `
+        <h2>How can I check I've completed this step successfully?</h2>
+       <p>When you're done your added data sources screen will look like this.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/Screen-Shot-2023-07-25-at-4.12.29-pm.png" />
+       <p>Also, your dashboard numbers will now all be green.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/Screen-Shot-2023-07-25-at-4.12.57-pm.png" />
         `
     },
+    
     {
         order: 8,
         html: `
-        <h2>Which filters can I customise?</h2>
-       <img src="https://growinghealthierchurches.com/wp-content/uploads/2020/12/Default-Locations-1024x829.png" />
+        <h2How do I select extraction sources?</h2>
+       <p>When you make a copy select the corresponding extraction source from the list.</p>
+       <img src="https://growinghealthierchurches.com/wp-content/uploads/2023/07/linking-extraction-sources.gif" alt="selecting extraction sources" />
         `
     },
     {
@@ -517,6 +575,7 @@ const helpModalContent = [
         <h2>I forgot my google group email address</h2>
         <p>Go to <a href="https://groups.google.com/my-groups">groups.google.com/my-groups</a> from there you can see all the groups you administer and those of which you are a member.</p>
         <p>If you are group admin you can click on the group and edit its members, or add new ones.</p>
+       
         `
     }
 
@@ -551,6 +610,8 @@ function renderStep() {
         document.getElementById("step3").classList.remove("closed")
         document.getElementById("step4").classList.remove("closed")
         document.getElementById("step5").classList.remove("closed")
+		//show prompt - only for reusable
+        if (document.getElementById("shortcut-step2")) {document.getElementById("shortcut-step2").style.display = "block"}
     } else if (step == "6") {
         document.getElementById("step1").classList.add("done", "completed-closed")
         document.getElementById("step2").classList.add("done", "completed-closed")
@@ -568,10 +629,10 @@ function renderStep() {
     doneItems = document.querySelectorAll(".timeline-item.done")
 	
 	//if user has a google group preference
-    if (googleGroup == 'google_group') {
+    if (googleGroup !== '') {
         document.getElementById("accountEmails").style.display = "none"
     }
-	
+
 	// hide google email info box if no google group email stored for user
 	if (googleGroupEmail !== '') {
 		document.querySelector('#share-select option[value="already-google"]').selected = true
@@ -609,7 +670,9 @@ function filterData(data) {
 
     // create array of all dashboard urls
     // check for pasting into input field
-    masterDashboardUrls = newData.map(item => item.dashboard_link)
+    masterDashboardUrls = newData.map(item => {
+        return ([item.dashboard_link, item.turbo_link])
+    }).flat()
 
     //filter data for subscription-type
     if (userSubscription === "free") {
@@ -619,7 +682,10 @@ function filterData(data) {
     // remove non-dashboard tools
     newData = newData.filter(dashboard => dashboard.plan !== "Separate subscription") 
 
-    // Filter data for CHMS
+    // remove non-turbo tools
+    newData = newData.filter(dashboard => dashboard.turbo_type !== null ) 
+	
+	// Filter data for CHMS
     filterChms(userCHMS, newData)
 
 }
@@ -661,7 +727,7 @@ function filterChms(userType, newData) {
 function renderData(data) {
     
     // Loop through JSON data to return html for select options
-    const selectHtml = data.filter(item => item.name !== "GHC Stats").map(item => {
+    const selectHtml = data.map(item => {
         return (
             `
             <option value="${item.wp_post_id}" ${dashboardSelected == item.wp_post_id ? "selected" : ""}>${item.name}</option>
@@ -829,6 +895,8 @@ dashboardInput.forEach(element => {
     })
 })
 
+
+
 </script>
 
 <!-- OXYGEN BLOCK --> 
@@ -845,4 +913,3 @@ dashboardInput.forEach(element => {
             </div>
     </div>
   </div>
-
